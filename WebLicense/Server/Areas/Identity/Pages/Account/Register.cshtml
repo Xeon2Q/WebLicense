@@ -1,0 +1,91 @@
+@page
+@model RegisterModel
+
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<RegisterModel> ResL
+@inject IStringLocalizer<WebLicense.Server.Global> ResG
+
+@{
+    ViewData["Title"] = ResL["Title"];
+    var externalLogins = Model.ExternalLogins ?? new List<AuthenticationScheme>(0);
+}
+
+<div class="col-md-4">
+    <h4>@ResL["Text.CreateNewAccount"]</h4>
+    <hr />
+    <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+        <div asp-validation-summary="ModelOnly"></div>
+        <div class="form-floating mb-3">
+            <input asp-for="Input.UserName" class="form-control" placeholder="placeholder" />
+            <label asp-for="Input.UserName"></label>
+            <span asp-validation-for="Input.UserName"></span>
+        </div>
+        <div class="form-floating mb-3">
+            <input asp-for="Input.Email" class="form-control" placeholder="placeholder" />
+            <label asp-for="Input.Email"></label>
+            <span asp-validation-for="Input.Email"></span>
+        </div>
+        <div class="form-floating mb-3">
+            <input asp-for="Input.Password" class="form-control" placeholder="placeholder" />
+            <label asp-for="Input.Password"></label>
+            <span asp-validation-for="Input.Password"></span>
+        </div>
+        <div class="form-floating mb-3">
+            <input asp-for="Input.ConfirmPassword" class="form-control" placeholder="placeholder" />
+            <label asp-for="Input.ConfirmPassword"></label>
+            <span asp-validation-for="Input.ConfirmPassword"></span>
+        </div>
+        <div class="form-floating mb-3">
+            <input asp-for="Input.CustomerReferenceId" class="form-control" placeholder="placeholder" />
+            <label asp-for="Input.CustomerReferenceId"></label>
+            <span asp-validation-for="Input.CustomerReferenceId"></span>
+        </div>
+        <div class="form-check mb-3">
+            <input asp-for="Input.GDPR" class="form-check-input" />
+            <label asp-for="Input.GDPR"></label>
+            <span asp-validation-for="Input.GDPR" class="d-block"></span>
+        </div>
+        <div class="form-check mb-3">
+            <input asp-for="Input.EULA" class="form-check-input" />
+            <label asp-for="Input.EULA"></label>
+            <span asp-validation-for="Input.EULA" class="d-block"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">@ResG["Text.Register"]</button>
+    </form>
+</div>
+<div class="col-md-6 offset-md-1">
+    <section>
+        <h4>@ResL["Text.UseExternalAuthenticationToRegister"]</h4>
+        <hr />
+        @{
+            if (externalLogins.Count == 0)
+            {
+                <div>
+                    <p>@ResL["Text.NoExternalAuthenticationProvidersConfigured"]</p>
+                </div>
+            }
+            else
+            {
+                <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                    <div>
+                        <p>
+                            @foreach (var provider in externalLogins)
+                            {
+                                <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="@ResL["Format.LoginUsingExternalAuthenticationAccount", provider.DisplayName ?? ""]">
+                                    <i class="@BrandIcon.Get(provider.Name) me-3"></i>
+                                    @provider.DisplayName
+                                </button>
+                            }
+                        </p>
+                    </div>
+                </form>
+            }
+        }
+    </section>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

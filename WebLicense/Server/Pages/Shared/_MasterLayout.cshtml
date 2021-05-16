@@ -1,0 +1,71 @@
+@using Microsoft.AspNetCore.Hosting
+@using Microsoft.AspNetCore.Mvc.ViewEngines
+@using Microsoft.Extensions.Localization
+@using WebLicense.Server
+@inject IWebHostEnvironment Environment
+@inject ICompositeViewEngine Engine
+@inject IStringLocalizer<Global> ResG
+
+@{
+    var pageTitle = ViewData["Title"] != null ? $" - {ViewData["Title"]}" : string.Empty;
+    var nl = System.Environment.NewLine;
+
+    const string pvNameLogin = "_LoginPartial";
+    var isLoginPartialFound = Engine.FindView(ViewContext, pvNameLogin, false);
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ResG["ApplicationName"] @pageTitle</title>
+    <base href="/" />
+    <environment include="Development">
+        <link rel="stylesheet" href="~/server/lib/bootstrap/css/bootstrap.css" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="~/server/lib/bootstrap/css/bootstrap.min.css" />
+    </environment>
+    <link rel="stylesheet" href="~/server/lib/bootstrap-icons/bootstrap-icons.css" />
+    <link rel="stylesheet" href="~/server/css/server.css" />
+    <link rel="stylesheet" href="~/server/css/server-theme-dark.css" />
+</head>
+<body>
+    <header class="container px-4">
+        <a href="~/" class="m-0 p-0">
+            <img src="server/image/logo-main.png" alt="Web License" />
+        </a>
+
+        <div>
+            @if (isLoginPartialFound.Success)
+            {
+                await Html.RenderPartialAsync(pvNameLogin);
+            }
+            else
+            {
+                throw new InvalidOperationException($"Partial view '{pvNameLogin}' was not found.{nl}We have looked at it in the following locations: {nl}{string.Join(nl, isLoginPartialFound.SearchedLocations)}.");
+            }
+        </div>
+    </header>
+
+    <main role="main" class="container px-4 py-3">
+        @RenderBody()
+    </main>
+
+    <footer class="container px-3">
+        &copy; 2021 | Peter Bogojawlenskij |2022
+    </footer>
+
+    <environment include="Development">
+        <script src="~/server/lib/jquery/jquery.js"></script>
+        <script src="~/server/lib/bootstrap/js/bootstrap.bundle.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/server/lib/jquery/jquery.min.js"></script>
+        <script src="~/server/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    </environment>
+    @await RenderSectionAsync("Scripts", false)
+    <script src="~/server/js/server.js" asp-append-version="true"></script>
+</body>
+</html>

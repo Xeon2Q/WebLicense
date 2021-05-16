@@ -1,0 +1,23 @@
+﻿@using WebLicense.Server.Auxiliary.PageModels
+@using Microsoft.Extensions.Localization
+@using WebLicense.Server
+@model string
+@inject IStringLocalizer<Global> ResG
+
+@{
+    var theModel = StatusMessageModel.FromJson(Model);
+    if (theModel.IsEmpty() && !string.IsNullOrWhiteSpace(Model))
+    {
+        theModel = new StatusMessageModel(Model, !Model.StartsWith("error", StringComparison.OrdinalIgnoreCase));
+    }
+}
+
+@if (theModel.NotIsEmpty())
+{
+    var statusMessageClass = theModel.IsSuccess ? "success" : "danger";
+
+    <div class="alert alert-@statusMessageClass alert-dismissible fade show" role="alert">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="@ResG["Text.Close"]"></button>
+        @Html.Raw(theModel.Message)
+    </div>
+}

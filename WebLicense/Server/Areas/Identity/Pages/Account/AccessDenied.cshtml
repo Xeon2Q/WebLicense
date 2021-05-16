@@ -1,0 +1,16 @@
+﻿@page
+@model AccessDeniedModel
+@using Microsoft.Extensions.Localization
+@using WebLicense.Server.Auxiliary.PageModels
+@inject IStringLocalizer<AccessDeniedModel> ResL
+
+@{
+    Layout = "_MasterLayout";
+    ViewData["Title"] = ResL["Title"];
+}
+
+<h1 class="text-danger">@ViewData["Title"]</h1>
+
+<div class="mt-5">
+    <partial name="_StatusMessage" model="new StatusMessageModel(@ResL["Message.AccessDenied"].Value, false).ToJson()" />
+</div>

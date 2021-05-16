@@ -1,0 +1,24 @@
+﻿@page
+@model ResetAuthenticatorModel
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<ResetAuthenticatorModel> ResL
+
+@{
+    ViewData["Title"] = ResL["Title"];
+    ViewData["ActivePage"] = ManageNavPages.TwoFactorAuthentication;
+}
+
+<h4 class="mb-4">@ViewData["Title"]</h4>
+<partial name="Account/_StatusMessage" for="StatusMessage" />
+<div class="alert alert-warning mb-3" role="alert">
+    <p>
+        <span class="oi oi-warning"></span>
+        <strong>@ResL["Warning-1"]</strong>
+    </p>
+    <p>
+        @ResL["Warning-2"]
+    </p>
+</div>
+<form id="reset-authenticator-form" method="post">
+    <button id="reset-authenticator-button" class="btn btn-danger" type="submit">@ResL["Text.ResetAuthenticatorKey"]</button>
+</form>

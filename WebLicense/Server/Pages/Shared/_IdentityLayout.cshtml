@@ -1,0 +1,14 @@
+﻿@{
+    Layout = "_MasterLayout";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="row mt-5">
+    @RenderBody()
+</div>
+
+@section Scripts
+{
+    @await RenderSectionAsync("Scripts", false)
+}

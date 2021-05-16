@@ -1,0 +1,19 @@
+﻿@page
+@using Microsoft.Extensions.Localization
+@model LogoutModel
+@inject IStringLocalizer<LogoutModel> ResL
+
+@{
+    ViewData["Title"] = ResL["Title"];
+}
+
+@if (User.Identity != null && User.Identity.IsAuthenticated)
+{
+    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+        <button type="submit" class="btn btn-link nav-link">@ResL["Text.ClickHereToLogout"]</button>
+    </form>
+}
+else
+{
+    <partial name="_StatusMessage" model="@ResL["Text.YouLoggedOut"].Value"/>
+}

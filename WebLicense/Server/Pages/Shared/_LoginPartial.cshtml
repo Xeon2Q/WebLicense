@@ -1,0 +1,48 @@
+@using WebLicense.Core.Models.Identity
+@using Microsoft.Extensions.Localization
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@inject IStringLocalizer<WebLicense.Server.Global> ResG
+
+@{
+    var isSignedIn = SignInManager.IsSignedIn(User);
+    var returnUrl = Context.Request.Query.TryGetValue("returnUrl", out var existingUrl) ? existingUrl.ToString() : "/";
+}
+
+@if (isSignedIn)
+{
+    <div class="row align-items-end">
+        <div class="col-auto align-self-center">
+            <a asp-area="Identity" asp-page="/Account/Manage/Index" title="@ResG["Text.Manage"]" class="btn btn-link nav-link">
+                <i class="bi bi-person-fill"></i>
+                @ResG["Format.LoggedInWelcome", UserManager.GetUserName(User)]
+            </a>
+        </div>
+        <div class="col-auto align-self-center pe-0">
+            <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="/" method="post">
+                <button type="submit" class="btn btn-sm btn-arise-warning" style="min-width: auto">
+                    <i class="bi bi-power"></i>
+                    @ResG["Text.Logout"]
+                </button>
+            </form>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row align-items-end">
+        <div class="col-auto gx-0">
+            <a asp-area="Identity" asp-page="/Account/Register" asp-route-returnUrl="@returnUrl" class="btn btn-link nav-link">
+                <i class="bi bi-person-plus-fill"></i>
+                @ResG["Text.Register"]
+            </a>
+        </div>
+        <div class="col-auto gx-0">
+            <a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@returnUrl" class="btn btn-link nav-link">
+                <i class="bi bi-box-arrow-in-right"></i>
+                @ResG["Text.Login"]
+            </a>
+        </div>
+    </div>
+}

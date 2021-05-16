@@ -1,0 +1,10 @@
+@page
+@model RegisterConfirmationModel
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<RegisterConfirmationModel> ResL
+
+@{
+    ViewData["Title"] = ResL["Title"];
+}
+
+<partial name="_StatusMessage" model="@ResL["Message.CheckEmailToConfirmAccount"].Value" />

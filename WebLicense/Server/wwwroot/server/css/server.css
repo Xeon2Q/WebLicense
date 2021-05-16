@@ -1,0 +1,93 @@
+﻿.nav-link {
+    font-size: 1rem;
+}
+
+a.navbar-brand {
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
+}
+
+/* Layout styles
+-------------------------------------------------- */
+html {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    min-height: 100%;
+    position: relative;
+}
+
+body {
+    background: #010203;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+@media (max-width: 767px) {
+    html {
+        font-size: 14px;
+    }
+}
+
+body > header {
+    align-items: center;
+    display: flex;
+    height: 3.5rem;
+    justify-content: space-between;
+}
+
+body > header a {
+    white-space: nowrap;
+    margin-left: 1.5rem;
+}
+
+body > main {
+    flex: 1;
+}
+
+body > footer {
+    cursor: default;
+    display: flex;
+    font-size: 10px;
+    justify-content: flex-start;
+    text-transform: uppercase;
+    padding: 0.5rem;
+}
+
+.validation-summary-errors {
+    position: relative;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+}
+
+.pricing-header {
+    max-width: 700px;
+}
+
+button.accept-policy {
+    font-size: 1rem;
+    line-height: inherit;
+}
+
+.btn {
+    min-width: 150px;
+}
+.nav-link {
+    min-width: auto;
+}
+
+.input-group > .form-floating + .input-group-text {
+    z-index: 1;
+    margin-left: -3px !important;
+}
+
+.list-group-flush {
+    border-radius: 0.2rem;
+}
+
+.logout {
+    font-size: 0.85rem;
+    padding: 0.25rem 1rem;
+}

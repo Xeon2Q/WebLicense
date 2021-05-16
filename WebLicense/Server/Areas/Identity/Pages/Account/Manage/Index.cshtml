@@ -1,0 +1,35 @@
+@page
+@model IndexModel
+@using Microsoft.Extensions.Localization
+@using WebLicense.Server
+@inject IStringLocalizer<Global> ResG;
+
+@{
+    ViewData["Title"] = ResG["Text.Profile"];
+    ViewData["ActivePage"] = ManageNavPages.Index;
+}
+
+<h4 class="mb-4">@ViewData["Title"]</h4>
+<partial name="Account/_StatusMessage" model="Model.StatusMessage" />
+<div class="row">
+    <div class="col-md-8">
+        <form id="profile-form" method="post">
+            <div asp-validation-summary="ModelOnly"></div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.UserName" class="form-control" placeholder="placeholder" />
+                <label asp-for="Input.UserName"></label>
+                <span asp-validation-for="Input.UserName"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.PhoneNumber" class="form-control" placeholder="placeholder" />
+                <label asp-for="Input.PhoneNumber"></label>
+                <span asp-validation-for="Input.PhoneNumber"></span>
+            </div>
+            <button id="update-profile-button" type="submit" class="btn btn-primary">@ResG["Text.Save"]</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

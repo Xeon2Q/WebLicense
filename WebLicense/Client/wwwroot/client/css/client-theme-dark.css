@@ -1,0 +1,69 @@
+﻿html, body {
+    background: #010203;
+    color: #ffffff;
+}
+
+.page > .main {
+    background: #212121;
+}
+
+.top-row {
+    background-color: #424242;
+    border-bottom: 1px solid #010203;
+}
+
+a, .btn-link {
+    color: #82B1FF !important;
+}
+
+/* #region Bootstrap overrides */
+
+/* #region Alerts */
+.alert {
+    color: #F0F0F0;
+    border-color: #010203;
+}
+.alert-primary {
+    background-color: #5C6BC0;
+}
+
+.alert-secondary {
+    background-color: #0277BD;
+}
+
+.alert-success {
+    background-color: #388E3C;
+}
+
+.alert-danger {
+    background-color: #BF360C;
+}
+
+.alert-warning {
+    background-color: #F9A825;
+    color: #010203;
+}
+
+.alert-info {
+    background-color: #00B8D4;
+    color: #010203;
+}
+
+.alert-light {
+    background-color: #BDBDBD;
+    color: #010203;
+}
+
+.alert-dark {
+    background-color: #424242;
+}
+
+/* #endregion*/
+
+/* #region Containers */
+/* #endregion */
+
+/* #endregion */
+
+/* #region  */
+/* #endregion */

@@ -1,0 +1,25 @@
+﻿@page
+@model GenerateRecoveryCodesModel
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<GenerateRecoveryCodesModel> ResL
+@{
+    ViewData["Title"] = ResL["Title"];
+    ViewData["ActivePage"] = ManageNavPages.TwoFactorAuthentication;
+}
+
+<h4 class="mb-4">@ViewData["Title"]</h4>
+<partial name="Account/_StatusMessage" for="StatusMessage" />
+<div class="alert alert-warning" role="alert">
+    <div class="fw-bold mb-3">
+        <span class="oi oi-warning"></span> @ResL["Message.1"]
+    </div>
+    <p>@ResL["Message.2"]</p>
+    <p class="mb-0">
+        @ResL["Message.3.1"] <a asp-page="./ResetAuthenticator" class="link-primary">@ResL["Message.3.2"]</a>@ResL["Message.3.3"]
+    </p>
+</div>
+<div>
+    <form method="post">
+        <button class="btn btn-primary" type="submit">@ResL["Text.GenerateRecoveryCodes"]</button>
+    </form>
+</div>

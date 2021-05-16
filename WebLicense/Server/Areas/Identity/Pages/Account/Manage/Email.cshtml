@@ -1,0 +1,40 @@
+@page
+@model EmailModel
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<EmailModel> ResL
+@{
+    ViewData["Title"] = ResL["Title"];
+    ViewData["ActivePage"] = ManageNavPages.Email;
+}
+
+<h4 class="mb-4">@ViewData["Title"]</h4>
+<partial name="Account/_StatusMessage" model="Model.StatusMessage" />
+<div class="row">
+    <div class="col-md-8">
+        <form id="email-form" method="post">
+            <div asp-validation-summary="ModelOnly"></div>
+            <label asp-for="Email"></label>
+            <div class="input-group mb-3">
+                <input asp-for="Email" class="form-control" disabled />
+                @if (Model.IsEmailConfirmed)
+                {
+                    <span class="input-group-text text-success"><span class="oi oi-check"></span></span>
+                }
+                else
+                {
+                    <button id="email-verification" type="submit" asp-page-handler="SendVerificationEmail" class="btn btn-outline-info">@ResL["Text.SendVerificationEmail"]</button>
+                }
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.NewEmail" class="form-control" placeholder="placeholder" />
+                <label asp-for="Input.NewEmail"></label>
+                <span asp-validation-for="Input.NewEmail"></span>
+            </div>
+            <button id="change-email-button" type="submit" asp-page-handler="ChangeEmail" class="btn btn-primary">@ResL["Text.ChangeEmail"]</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

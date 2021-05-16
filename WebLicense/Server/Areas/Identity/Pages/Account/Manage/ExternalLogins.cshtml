@@ -1,0 +1,64 @@
+﻿@page
+@model ExternalLoginsModel
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<ExternalLoginsModel> ResL
+@{
+    ViewData["Title"] = ResL["Title"];
+    ViewData["ActivePage"] = ManageNavPages.ExternalLogins;
+}
+
+<h4 class="mb-4">@ResL["Text.RegisteredLogins"]</h4>
+<partial name="Account/_StatusMessage" for="StatusMessage" />
+@if (Model.CurrentLogins?.Count > 0)
+{
+    <div class="table-responsive">
+        <table class="table table-sm table-hover">
+            <tbody>
+                @foreach (var login in Model.CurrentLogins)
+                {
+                    <tr>
+                        <td class="ps-3" id="@($"login-provider-{login.LoginProvider}")">@login.ProviderDisplayName</td>
+                        <td class="col-1 py-3 pe-3">
+                            @if (Model.ShowRemoveButton)
+                            {
+                                <form id="@($"remove-login-{login.LoginProvider}")" asp-page-handler="RemoveLogin" method="post">
+                                    <div>
+                                        <input asp-for="@login.LoginProvider" name="LoginProvider" type="hidden" />
+                                        <input asp-for="@login.ProviderKey" name="ProviderKey" type="hidden" />
+                                        <button type="submit" class="btn btn-sm btn-warning" title="@ResL["Message.RemoveThisNamedLogin", @login.ProviderDisplayName]">@ResL["Text.Remove"]</button>
+                                    </div>
+                                </form>
+                            }
+                            else
+                            {
+                                @: &nbsp;
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="text-info">@ResL["Message.YouDontHaveLogins"]</div>
+}
+
+@if (Model.OtherLogins?.Count > 0)
+{
+    <h4 class="mt-5 mb-4">@ResL["Message.AddAnotherLogin"]</h4>
+    <form id="link-login-form" asp-page-handler="LinkLogin" method="post">
+        <div id="socialLoginList">
+            <p>
+                @foreach (var provider in Model.OtherLogins)
+                {
+                <button id="@($"link-login-button-{provider.Name}")" type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="@ResL["Message.LoginUsingNamedAccount", provider.DisplayName ?? string.Empty]">
+                    <i class="@BrandIcon.Get(provider.Name) me-3"></i>
+                    @provider.DisplayName
+                </button>
+                }
+            </p>
+        </div>
+    </form>
+}

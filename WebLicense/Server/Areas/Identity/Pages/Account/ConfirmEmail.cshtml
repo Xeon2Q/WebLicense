@@ -1,0 +1,11 @@
+@page
+@using Microsoft.Extensions.Localization
+@model ConfirmEmailModel
+
+@inject IStringLocalizer<ConfirmEmailModel> ResL
+
+@{
+    ViewData["Title"] = ResL["Title"];
+}
+
+<partial name="_StatusMessage" model="Model.Status" />

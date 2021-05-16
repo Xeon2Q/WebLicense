@@ -1,0 +1,27 @@
+﻿@using Microsoft.Extensions.Localization
+@using WebLicense.Server
+@{
+    if (!ViewData.TryGetValue("ParentLayout", out var parentLayout)) { parentLayout = "_IdentityLayout"; }
+    
+    Layout = parentLayout.ToString();
+}
+@inject IStringLocalizer<Global> ResG;
+
+<h2>@ResG["Text.ManageYourAccount"]</h2>
+
+<div>
+    <h4>@ResG["Text.ChangeYourAccountSettings"]</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-3">
+            <partial name="_ManageNav" />
+        </div>
+        <div class="col-md-8 offset-1">
+            @RenderBody()
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await RenderSectionAsync("Scripts", false)
+}

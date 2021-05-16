@@ -1,0 +1,63 @@
+﻿@import url('bootstrap-dark.css');
+
+/* Variables
+-------------------------------------------------- */
+:root {
+    --background-header: #424242;
+    --background-main: #212121;
+    --background-footer: #263238;
+    --foreground-footer: #F3E5F5;
+    --border-focus: #BDBDBD;
+    --border-error: #B71C1C;
+}
+
+html, body {
+    background: var(--black);
+    color: var(--white);
+}
+
+a {
+    color: var(--link);
+}
+
+.box-shadow {
+    box-shadow: 0 .25rem .75rem #ffffff;
+    box-shadow: 0 .25rem .75rem rgba(255, 255, 255, .15);
+}
+
+body > header {
+    background-color: var(--background-header);
+    border-bottom: 1px solid var(--black);
+}
+
+body > main {
+    background: var(--background-main);
+}
+
+body > footer {
+    background-color: var(--background-footer);
+    border-top: 1px solid var(--black) !important;
+    color: var(--foreground-footer);
+}
+
+div.container.content {
+    background-color: var(--background-main);
+}
+
+.field-validation-error {
+    color: var(--warning);
+    font-size: smaller;
+}
+.input-validation-error {
+    background-color: var(--warning) !important;
+    border-color: var(--border-error) !important;
+    color: var(--danger) !important;
+}
+.validation-summary-errors {
+    background-color: var(--warning);
+    border-color: var(--black);
+    color: var(--black);
+}
+.validation-summary-errors > ul {
+    margin-bottom: 0;
+}

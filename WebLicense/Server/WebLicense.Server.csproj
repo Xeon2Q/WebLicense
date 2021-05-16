@@ -1,0 +1,315 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <UserSecretsId>WebLicense.Server-A46222B2-7D60-4A77-8898-4871B9E3FF01</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="WebLicense.Server.csproj.DotSettings" />
+    <None Remove="z-watch.bat" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="5.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="5.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.6">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="5.0.6" />
+    <PackageReference Include="Serilog.AspNetCore" Version="4.1.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
+    <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="5.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Access\Access.csproj" />
+    <ProjectReference Include="..\..\Logic\Logic.csproj" />
+    <ProjectReference Include="..\Client\WebLicense.Client.csproj" />
+    <ProjectReference Include="..\Shared\WebLicense.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" Version="5.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.6">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\Areas - Copy.Identity.Pages.Account.RegisterModel.Designer.cs">
+      <DependentUpon>Areas.Identity.Pages.Account.RegisterModel.Designer.cs</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Resources\Areas.Identity.Pages.Account.Manage.ChangePasswordModel.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Areas.Identity.Pages.Account.Manage.ChangePasswordModel.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Areas.Identity.Pages.Account.Manage.DeletePersonalDataModel.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Areas.Identity.Pages.Account.Manage.DeletePersonalDataModel.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Areas.Identity.Pages.Account.Manage.Disable2faModel.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Areas.Identity.Pages.Account.Manage.Disable2faModel.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Areas.Identity.Pages.Account.Manage.DownloadPersonalDataModel.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Areas.Identity.Pages.Account.Manage.DownloadPersonalDataModel.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Areas.Identity.Pages.Account.Manage.EmailModel.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Areas.Identity.Pages.Account.Manage.EmailModel.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Areas.Identity.Pages.Account.Manage.EnableAuthenticatorModel.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Areas.Identity.Pages.Account.Manage.EnableAuthenticatorModel.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Areas.Identity.Pages.Account.Manage.ExternalLoginsModel.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Areas.Identity.Pages.Account.Manage.ExternalLoginsModel.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Areas.Identity.Pages.Account.Manage.GenerateRecoveryCodesModel.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Areas.Identity.Pages.Account.Manage.GenerateRecoveryCodesModel.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Areas.Identity.Pages.Account.Manage.Index.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Areas.Identity.Pages.Account.Manage.Index.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Areas.Identity.Pages.Account.AccessDeniedModel.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Areas.Identity.Pages.Account.AccessDeniedModel.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Areas.Identity.Pages.Account.ConfirmEmailChangeModel.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Areas.Identity.Pages.Account.ConfirmEmailChangeModel.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Areas.Identity.Pages.Account.ConfirmEmailModel.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Areas.Identity.Pages.Account.ConfirmEmailModel.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Areas.Identity.Pages.Account.ForgotPasswordConfirmation.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Areas.Identity.Pages.Account.ForgotPasswordConfirmation.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Areas.Identity.Pages.Account.ForgotPasswordModel.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Areas.Identity.Pages.Account.ForgotPasswordModel.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Areas.Identity.Pages.Account.LockoutModel.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Areas.Identity.Pages.Account.LockoutModel.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Areas.Identity.Pages.Account.LoginModel.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Areas.Identity.Pages.Account.LoginModel.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Areas.Identity.Pages.Account.LogoutModel.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Areas.Identity.Pages.Account.LogoutModel.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Areas.Identity.Pages.Account.Manage.PersonalDataModel.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Areas.Identity.Pages.Account.Manage.PersonalDataModel.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Areas.Identity.Pages.Account.Manage.ResetAuthenticatorModel.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Areas.Identity.Pages.Account.Manage.ResetAuthenticatorModel.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Areas.Identity.Pages.Account.Manage.SetPasswordModel.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Areas.Identity.Pages.Account.Manage.SetPasswordModel.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Areas.Identity.Pages.Account.Manage.ShowRecoveryCodesModel.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Areas.Identity.Pages.Account.Manage.ShowRecoveryCodesModel.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Areas.Identity.Pages.Account.Manage.TwoFactorAuthenticationModel.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Areas.Identity.Pages.Account.Manage.TwoFactorAuthenticationModel.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Areas.Identity.Pages.Account.RegisterConfirmationModel.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Areas.Identity.Pages.Account.RegisterConfirmationModel.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Areas.Identity.Pages.Account.RegisterModel.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Areas.Identity.Pages.Account.RegisterModel.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Areas.Identity.Pages.Account.ResendEmailConfirmationModel.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Areas.Identity.Pages.Account.ResendEmailConfirmationModel.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Areas.Identity.Pages.Account.ResetPasswordConfirmationModel.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Areas.Identity.Pages.Account.ResetPasswordConfirmationModel.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Areas.Identity.Pages.Account.ResetPasswordModel.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Areas.Identity.Pages.Account.ResetPasswordModel.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Global.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Global.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\email-templates\password-reset-confirmation - Copy.de.html">
+      <DependentUpon>password-reset-confirmation.de.html</DependentUpon>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Areas.Identity.Pages.Account.Manage.ChangePasswordModel.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Areas.Identity.Pages.Account.Manage.ChangePasswordModel.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Areas.Identity.Pages.Account.Manage.DeletePersonalDataModel.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Areas.Identity.Pages.Account.Manage.DeletePersonalDataModel.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Areas.Identity.Pages.Account.Manage.Disable2faModel.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Areas.Identity.Pages.Account.Manage.Disable2faModel.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Areas.Identity.Pages.Account.Manage.DownloadPersonalDataModel.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Areas.Identity.Pages.Account.Manage.DownloadPersonalDataModel.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Areas.Identity.Pages.Account.Manage.EmailModel.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Areas.Identity.Pages.Account.Manage.EmailModel.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Areas.Identity.Pages.Account.Manage.EnableAuthenticatorModel.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Areas.Identity.Pages.Account.Manage.EnableAuthenticatorModel.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Areas.Identity.Pages.Account.Manage.ExternalLoginsModel.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Areas.Identity.Pages.Account.Manage.ExternalLoginsModel.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Areas.Identity.Pages.Account.Manage.GenerateRecoveryCodesModel.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Areas.Identity.Pages.Account.Manage.GenerateRecoveryCodesModel.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Areas.Identity.Pages.Account.Manage.Index.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Areas.Identity.Pages.Account.Manage.Index.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Areas.Identity.Pages.Account.AccessDeniedModel.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Areas.Identity.Pages.Account.AccessDeniedModel.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Areas.Identity.Pages.Account.ConfirmEmailChangeModel.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Areas.Identity.Pages.Account.ConfirmEmailChangeModel.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Areas.Identity.Pages.Account.ConfirmEmailModel.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Areas.Identity.Pages.Account.ConfirmEmailModel.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Areas.Identity.Pages.Account.ForgotPasswordConfirmation.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Areas.Identity.Pages.Account.ForgotPasswordConfirmation.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Areas.Identity.Pages.Account.ForgotPasswordModel.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Areas.Identity.Pages.Account.ForgotPasswordModel.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Areas.Identity.Pages.Account.LockoutModel.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Areas.Identity.Pages.Account.LockoutModel.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Areas.Identity.Pages.Account.LoginModel.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Areas.Identity.Pages.Account.LoginModel.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Areas.Identity.Pages.Account.LogoutModel.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Areas.Identity.Pages.Account.LogoutModel.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Areas.Identity.Pages.Account.Manage.PersonalDataModel.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Areas.Identity.Pages.Account.Manage.PersonalDataModel.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Areas.Identity.Pages.Account.Manage.ResetAuthenticatorModel.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Areas.Identity.Pages.Account.Manage.ResetAuthenticatorModel.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Areas.Identity.Pages.Account.Manage.SetPasswordModel.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Areas.Identity.Pages.Account.Manage.SetPasswordModel.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Areas.Identity.Pages.Account.Manage.ShowRecoveryCodesModel.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Areas.Identity.Pages.Account.Manage.ShowRecoveryCodesModel.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Areas.Identity.Pages.Account.Manage.TwoFactorAuthenticationModel.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Areas.Identity.Pages.Account.Manage.TwoFactorAuthenticationModel.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Areas.Identity.Pages.Account.RegisterConfirmationModel.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Areas.Identity.Pages.Account.RegisterConfirmationModel.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Areas.Identity.Pages.Account.RegisterModel.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Areas.Identity.Pages.Account.RegisterModel.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Areas.Identity.Pages.Account.ResendEmailConfirmationModel.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Areas.Identity.Pages.Account.ResendEmailConfirmationModel.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Areas.Identity.Pages.Account.ResetPasswordConfirmationModel.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Areas.Identity.Pages.Account.ResetPasswordConfirmationModel.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Areas.Identity.Pages.Account.ResetPasswordModel.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Areas.Identity.Pages.Account.ResetPasswordModel.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Global.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Global.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

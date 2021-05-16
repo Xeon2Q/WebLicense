@@ -1,0 +1,33 @@
+﻿@page
+@model DeletePersonalDataModel
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<DeletePersonalDataModel> ResL
+@{
+    ViewData["Title"] = ResL["Title"];
+    ViewData["ActivePage"] = ManageNavPages.PersonalData;
+}
+
+<h4 class="mb-4">@ViewData["Title"]</h4>
+
+<div class="alert alert-warning fw-bold" role="alert">
+    @ResL["Message.Warning"]
+</div>
+
+<div>
+    <form id="delete-user" method="post">
+        <div asp-validation-summary="ModelOnly"></div>
+        @if (Model.RequirePassword)
+        {
+            <div class="form-floating col-md-6 mb-3">
+                <input asp-for="Input.Password" class="form-control" autocomplete="off" placeholder="placeholder" />
+                <label asp-for="Input.Password"></label>
+                <span asp-validation-for="Input.Password"></span>
+            </div>
+        }
+        <button class="btn btn-danger" type="submit">@ResL["Text.DeleteDataAndCloseAccount"]</button>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

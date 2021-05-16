@@ -1,0 +1,77 @@
+@page
+@using Microsoft.Extensions.Localization
+@using Microsoft.AspNetCore.Authentication
+@model LoginModel
+
+@inject IStringLocalizer<LoginModel> ResL
+@inject IStringLocalizer<WebLicense.Server.Global> ResG
+
+@{
+    ViewData["Title"] = ResL["Title"];
+    var externalLogins = Model.ExternalLogins ?? new List<AuthenticationScheme>(0);
+}
+
+<div class="col-md-4">
+    <h4>@ResL["Text.UseLocalAccountToLogin"]</h4>
+    <hr />
+    <form method="post">
+        <div asp-validation-summary="ModelOnly"></div>
+        <div class="form-floating mb-3">
+            <input asp-for="Input.Email" class="form-control" placeholder="placeholder" />
+            <label asp-for="Input.Email"></label>
+            <span asp-validation-for="Input.Email"></span>
+        </div>
+        <div class="form-floating mb-3">
+            <input asp-for="Input.Password" class="form-control" placeholder="placeholder" />
+            <label asp-for="Input.Password"></label>
+            <span asp-validation-for="Input.Password"></span>
+        </div>
+        <div class="form-check mb-3">
+            <input asp-for="Input.RememberMe" class="form-check-input" />
+            <label asp-for="Input.RememberMe" class="form-check-label">
+                @Html.DisplayNameFor(m => m.Input.RememberMe)
+            </label>
+        </div>
+        <button type="submit" class="btn btn-primary">@ResG["Text.Login"]</button>
+    </form>
+
+    <hr />
+
+    <p class="text-end"><a asp-page="./ForgotPassword">@ResL["Question.ForgotPassword"]</a></p>
+    <p class="text-end"><a asp-page="./ResendEmailConfirmation">@ResL["Text.ResetEmailConfirmation"]</a></p>
+    <p class="text-end"><a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">@ResL["Text.RegisterAsNewUser"]</a></p>
+</div>
+<div class="col-md-6 offset-1">
+    <section>
+        <h4>@ResL["Text.UseExternalServiceToLogin"]</h4>
+        <hr />
+        @{
+            if (externalLogins.Count == 0)
+            {
+                <div>
+                    <p>@ResL["Text.NoExternalAuthenticationProvidersConfigured"]</p>
+                </div>
+            }
+            else
+            {
+                <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                    <div>
+                        <p>
+                            @foreach (var provider in Model.ExternalLogins)
+                            {
+                                <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="@ResL["Format.LoginByUsingYourAccount", provider.DisplayName ?? ""]">
+                                    <i class="@BrandIcon.Get(provider.Name) me-3"></i>
+                                    @provider.DisplayName
+                                </button>
+                            }
+                        </p>
+                    </div>
+                </form>
+            }
+        }
+    </section>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

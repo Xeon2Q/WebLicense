@@ -1,0 +1,46 @@
+﻿@inherits LayoutComponentBase
+
+<div class="page">
+    <AuthorizeView>
+        <Authorized>
+            <div class="sidebar-left">
+                <NavMenu />
+            </div>
+
+            <div class="main">
+                <div class="top-row px-4 auth">
+                    <LoginDisplay />
+
+                    <NavLink class="nav-link" href="https://docs.microsoft.com/aspnet/" target="_blank">
+                        <span class="oi oi-info" aria-hidden="true"></span> About
+                    </NavLink>
+                </div>
+
+                <div class="content px-4">
+                    @Body
+                </div>
+            </div>
+
+            <div class="sidebar-right">
+                <NavMenu />
+            </div>
+        </Authorized>
+
+        <NotAuthorized>
+            <div class="main container px-0">
+                <div class="top-row px-4 auth">
+                    <a href="/" class="logo">
+                        <img src="logo-main.png" alt="Web License" />
+                    </a>
+                    <LoginDisplay />
+
+                    <NavLink class="nav-link" href="https://docs.microsoft.com/aspnet/" target="_blank">About</NavLink>
+                </div>
+
+                <div class="content px-4">
+                    @Body
+                </div>
+            </div>
+        </NotAuthorized>
+    </AuthorizeView>
+</div>

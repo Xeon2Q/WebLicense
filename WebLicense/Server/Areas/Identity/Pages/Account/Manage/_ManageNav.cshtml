@@ -1,0 +1,19 @@
+@using WebLicense.Core.Models.Identity
+@using Microsoft.Extensions.Localization
+@using WebLicense.Server
+@inject IStringLocalizer<Global> ResG
+@inject SignInManager<User> SignInManager
+@{
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+}
+<ul class="nav nav-pills flex-column">
+    <li class="nav-item"><a class="btn-link nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index">@ResG["Text.Profile"]</a></li>
+    <li class="nav-item"><a class="btn-link nav-link @ManageNavPages.EmailNavClass(ViewContext)" id="email" asp-page="./Email">@ResG["Text.Email"]</a></li>
+    <li class="nav-item"><a class="btn-link nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">@ResG["Text.Password"]</a></li>
+    @if (hasExternalLogins)
+    {
+        <li id="external-logins" class="nav-item"><a id="external-login" class="btn-link nav-link @ManageNavPages.ExternalLoginsNavClass(ViewContext)" asp-page="./ExternalLogins">@ResG["Text.ExternalLogins"]</a></li>
+    }
+    <li class="nav-item"><a class="btn-link nav-link @ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)" id="two-factor" asp-page="./TwoFactorAuthentication">@ResG["Text.TwoFactorAuthentication"]</a></li>
+    <li class="nav-item"><a class="btn-link nav-link @ManageNavPages.PersonalDataNavClass(ViewContext)" id="personal-data" asp-page="./PersonalData">@ResG["Text.PersonalData"]</a></li>
+</ul>

@@ -1,0 +1,61 @@
+﻿@page
+@model TwoFactorAuthenticationModel
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<TwoFactorAuthenticationModel> ResL
+@{
+    ViewData["Title"] = ResL["Title"];
+    ViewData["ActivePage"] = ManageNavPages.TwoFactorAuthentication;
+}
+
+<h4 class="mb-4">@ViewData["Title"]</h4>
+<partial name="Account/_StatusMessage" for="StatusMessage" />
+@if (Model.Is2faEnabled)
+{
+    if (Model.RecoveryCodesLeft == 0)
+    {
+        <div class="alert alert-danger">
+            <strong>@ResL["Message.ZeroRecoveryCodes"]</strong>
+            <p class="mb-0">@ResL["Message.Zero.1"] <a asp-page="./GenerateRecoveryCodes">@ResL["Message.GenerateCodes"]</a> @ResL["Message.Zero.2"]</p>
+        </div>
+    }
+    else if (Model.RecoveryCodesLeft == 1)
+    {
+        <div class="alert alert-danger">
+            <strong>@ResL["Message.OneRecoveryCode"]</strong>
+            <p class="mb-0">@ResL["Message.One.1"] <a asp-page="./GenerateRecoveryCodes">@ResL["Message.GenerateCodes"]</a>.</p>
+        </div>
+    }
+    else if (Model.RecoveryCodesLeft <= 3)
+    {
+        <div class="alert alert-warning">
+            <strong>@ResL["Message.FewRecoveryCodes.1"] @Model.RecoveryCodesLeft @ResL["Message.FewRecoveryCodes.2"]</strong>
+            <p class="mb-0">@ResL["Message.Few.1"] <a asp-page="./GenerateRecoveryCodes" class="text-dark">@ResL["Message.GenerateCodes"]</a>.</p>
+        </div>
+    }
+
+    if (Model.IsMachineRemembered)
+    {
+        <form method="post" style="display: inline-block">
+            <button type="submit" class="btn btn-outline-secondary me-3">@ResL["Text.ForgetThisBrowser"]</button>
+        </form>
+    }
+    <a asp-page="./GenerateRecoveryCodes" class="btn btn-outline-secondary me-3">@ResL["Text.ResetRecoveryCodes"]</a>
+    <a asp-page="./Disable2fa" class="btn btn-outline-danger float-end">@ResL["Text.Disable2FA"]</a>
+}
+
+<hr class="my-4" />
+
+<h5 class="mb-4">@ResL["Text.AuthentificatorApp"]</h5>
+@if (!Model.HasAuthenticator)
+{
+    <a id="enable-authenticator" asp-page="./EnableAuthenticator" class="btn btn-success">@ResL["Text.AddAuthentificatorApp"]</a>
+}
+else
+{
+    <a id="enable-authenticator" asp-page="./EnableAuthenticator" class="btn btn-primary me-3">@ResL["Text.SetupAuthentificatorApp"]</a>
+    <a id="reset-authenticator" asp-page="./ResetAuthenticator" class="btn btn-warning me-3">@ResL["Text.ResetAuthentificatorApp"]</a>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

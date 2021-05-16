@@ -1,0 +1,33 @@
+﻿@page
+@model PersonalDataModel
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<PersonalDataModel> ResL
+@{
+    ViewData["Title"] = ResL["Title"];
+    ViewData["ActivePage"] = ManageNavPages.PersonalData;
+}
+
+<h4 class="mb-4">@ViewData["Title"]</h4>
+<div class="row">
+    <div class="col-md-11">
+        <div class="alert alert-warning">
+            @ResL["Message.Download"]
+        </div>
+        <form id="download-data" asp-page="DownloadPersonalData" method="post">
+            <button class="btn btn-primary" type="submit">@ResL["Text.Download"]</button>
+        </form>
+
+        <hr class="my-5" />
+
+        <div class="alert alert-danger fw-bold">
+            @ResL["Message.Delete"]
+        </div>
+        <p>
+            <a id="delete" asp-page="DeletePersonalData" class="btn btn-outline-danger">@ResL["Text.Delete"]</a>
+        </p>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

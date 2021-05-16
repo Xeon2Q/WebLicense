@@ -1,0 +1,25 @@
+﻿@page
+@model ShowRecoveryCodesModel
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<ShowRecoveryCodesModel> ResL
+@{
+    ViewData["Title"] = ResL["Title"];
+    ViewData["ActivePage"] = "TwoFactorAuthentication";
+}
+
+<h4 class="mb-4">@ViewData["Title"]</h4>
+<partial name="Account/_StatusMessage" for="StatusMessage" />
+<div class="alert alert-warning" role="alert">
+    <p><strong>@ResL["Message.KeepCodesSafe"]</strong></p>
+    <p class="mb-0">@ResL["Message.LooseCodesWarning"]</p>
+</div>
+<div class="row">
+    <div class="col-md-12 mt-3 fs-5">
+        @for (var row = 0; row < Model.RecoveryCodes.Length; row += 2)
+        {
+            <code class="text-warning">@Model.RecoveryCodes[row]</code>
+            <text>&nbsp;&nbsp;&nbsp;</text>
+            <code class="text-warning">@Model.RecoveryCodes[row + 1]</code><br />
+        }
+    </div>
+</div>

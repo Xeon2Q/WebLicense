@@ -1,0 +1,14 @@
+﻿@page
+@model DownloadPersonalDataModel
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<DownloadPersonalDataModel> ResL
+@{
+    ViewData["Title"] = ResL["Title"];
+    ViewData["ActivePage"] = ManageNavPages.PersonalData;
+}
+
+<h4 class="mb-4">@ViewData["Title"]</h4>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
