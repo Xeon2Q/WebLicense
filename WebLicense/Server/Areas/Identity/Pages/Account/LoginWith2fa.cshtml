@@ -1,39 +1,38 @@
 ﻿@page
 @model LoginWith2faModel
+@using Microsoft.Extensions.Localization
+@using WebLicense.Server
+@inject IStringLocalizer<Global> ResG
+@inject IStringLocalizer<LoginWith2faModel> ResL
 @{
-    ViewData["Title"] = "Two-factor authentication";
+    ViewData["Title"] = ResL["Title"];
 }
 
-<h1>@ViewData["Title"]</h1>
-<hr />
-<p>Your login is protected with an authenticator app. Enter your authenticator code below.</p>
-<div class="row">
+<p>@ResL["Message1"]</p>
+<div class="row mt-4">
     <div class="col-md-4">
         <form method="post" asp-route-returnUrl="@Model.ReturnUrl">
             <input asp-for="RememberMe" type="hidden" />
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
+            <div asp-validation-summary="ModelOnly"></div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.TwoFactorCode" class="form-control" autocomplete="off" placeholder="placeholder" />
                 <label asp-for="Input.TwoFactorCode"></label>
-                <input asp-for="Input.TwoFactorCode" class="form-control" autocomplete="off" />
-                <span asp-validation-for="Input.TwoFactorCode" class="text-danger"></span>
+                <span asp-validation-for="Input.TwoFactorCode"></span>
             </div>
-            <div class="form-group">
-                <div class="checkbox">
-                    <label asp-for="Input.RememberMachine">
-                        <input asp-for="Input.RememberMachine" />
-                        @Html.DisplayNameFor(m => m.Input.RememberMachine)
-                    </label>
-                </div>
+            <div class="form-check mb-3">
+                <input asp-for="Input.RememberMachine" class="form-check-input" />
+                <label asp-for="Input.RememberMachine" class="form-check-label">
+                    @Html.DisplayNameFor(m => m.Input.RememberMachine)
+                </label>
             </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">Log in</button>
-            </div>
+            <button type="submit" class="btn btn-primary">@ResG["Text.Login"]</button>
         </form>
     </div>
 </div>
-<p>
-    Don't have access to your authenticator device? You can
-    <a id="recovery-code-login" asp-page="./LoginWithRecoveryCode" asp-route-returnUrl="@Model.ReturnUrl">log in with a recovery code</a>.
+<p class="mt-5">
+    @ResL["Message2"]
+    @ResL["Message3"]
+    <a id="recovery-code-login" asp-page="./LoginWithRecoveryCode" asp-route-returnUrl="@Model.ReturnUrl">@ResL["Message4"]</a>@ResL["Message5"]
 </p>
 
 @section Scripts {

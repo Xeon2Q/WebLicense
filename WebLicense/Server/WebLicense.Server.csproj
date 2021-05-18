@@ -49,6 +49,16 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="Resources\Areas.Identity.Pages.Account.ExternalLoginModel.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Areas.Identity.Pages.Account.ExternalLoginModel.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Areas.Identity.Pages.Account.LoginWith2faModel.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Areas.Identity.Pages.Account.LoginWith2faModel.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\Areas.Identity.Pages.Account.Manage.ChangePasswordModel.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -198,6 +208,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Resources\Areas.Identity.Pages.Account.ExternalLoginModel.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Areas.Identity.Pages.Account.ExternalLoginModel.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Areas.Identity.Pages.Account.LoginWith2faModel.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Areas.Identity.Pages.Account.LoginWith2faModel.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Areas.Identity.Pages.Account.Manage.ChangePasswordModel.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Areas.Identity.Pages.Account.Manage.ChangePasswordModel.Designer.cs</LastGenOutput>

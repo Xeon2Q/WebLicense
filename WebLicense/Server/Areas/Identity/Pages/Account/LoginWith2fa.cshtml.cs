@@ -6,21 +6,33 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using WebLicense.Core.Enums;
 using WebLicense.Core.Models.Identity;
+using WebLicense.Server.Auxiliary.Extensions;
+using ResL = WebLicense.Server.Resources.Areas_Identity_Pages_Account_LoginWith2faModel;
 
 namespace WebLicense.Server.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class LoginWith2faModel : PageModel
     {
-        private readonly SignInManager<User> _signInManager;
-        private readonly ILogger<LoginWith2faModel> _logger;
+        #region InputModel
 
-        public LoginWith2faModel(SignInManager<User> signInManager, ILogger<LoginWith2faModel> logger)
+        public class InputModel
         {
-            _signInManager = signInManager;
-            _logger = logger;
+            [Required]
+            [StringLength(7, MinimumLength = 6, ErrorMessageResourceType = typeof(ResL), ErrorMessageResourceName = "Validation_StringLength")]
+            [DataType(DataType.Text)]
+            [Display(Name = "Model_TwoFactorCode", ResourceType = typeof(ResL))]
+            public string TwoFactorCode { get; set; }
+
+            [Display(Name = "Model_RememberMachine", ResourceType = typeof(ResL))]
+            public bool RememberMachine { get; set; }
         }
+
+        #endregion
+
+        #region Properties
 
         [BindProperty]
         public InputModel Input { get; set; }
@@ -29,27 +41,14 @@ namespace WebLicense.Server.Areas.Identity.Pages.Account
 
         public string ReturnUrl { get; set; }
 
-        public class InputModel
+        #endregion
+
+        #region Actions
+
+        public async Task<IActionResult> OnGetAsync([FromServices] SignInManager<User> signInManager, bool rememberMe, string returnUrl = null)
         {
-            [Required]
-            [StringLength(7, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
-            [DataType(DataType.Text)]
-            [Display(Name = "Authenticator code")]
-            public string TwoFactorCode { get; set; }
-
-            [Display(Name = "Remember this machine")]
-            public bool RememberMachine { get; set; }
-        }
-
-        public async Task<IActionResult> OnGetAsync(bool rememberMe, string returnUrl = null)
-        {
-            // Ensure the user has gone through the username & password screen first
-            var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
-
-            if (user == null)
-            {
-                throw new InvalidOperationException("Unable to load two-factor authentication user.");
-            }
+            // ensure the user has gone through the username & password screen first
+            var _ = await signInManager.GetTwoFactorAuthenticationUserAsync() ?? throw new InvalidOperationException(ResL.Error1);
 
             ReturnUrl = returnUrl;
             RememberMe = rememberMe;
@@ -57,41 +56,39 @@ namespace WebLicense.Server.Areas.Identity.Pages.Account
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(bool rememberMe, string returnUrl = null)
+        public async Task<IActionResult> OnPostAsync([FromServices] SignInManager<User> signInManager, [FromServices] ILogger<LoginWith2faModel> logger, bool rememberMe, string returnUrl = null)
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
+            // return with errors
+            if (!ModelState.IsValid) return Page();
 
-            returnUrl = returnUrl ?? Url.Content("~/");
+            returnUrl ??= Url.Content("~/");
 
-            var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
-            if (user == null)
-            {
-                throw new InvalidOperationException($"Unable to load two-factor authentication user.");
-            }
+            var user = await signInManager.GetTwoFactorAuthenticationUserAsync() ?? throw new InvalidOperationException(ResL.Error1);
 
             var authenticatorCode = Input.TwoFactorCode.Replace(" ", string.Empty).Replace("-", string.Empty);
 
-            var result = await _signInManager.TwoFactorAuthenticatorSignInAsync(authenticatorCode, rememberMe, Input.RememberMachine);
-
+            var result = await signInManager.TwoFactorAuthenticatorSignInAsync(authenticatorCode, rememberMe, Input.RememberMachine);
             if (result.Succeeded)
             {
-                _logger.LogInformation("User with ID '{UserId}' logged in with 2fa.", user.Id);
+                logger.With(LogAction.Account.LoginAttempt2FA, user).LogInformation(ResL.Log1);
+
                 return LocalRedirect(returnUrl);
             }
-            else if (result.IsLockedOut)
+            
+            if (result.IsLockedOut)
             {
-                _logger.LogWarning("User with ID '{UserId}' account locked out.", user.Id);
+                logger.With(LogAction.Account.LoginAttempt2FA, user).LogWarning(ResL.Log2);
+
                 return RedirectToPage("./Lockout");
             }
-            else
-            {
-                _logger.LogWarning("Invalid authenticator code entered for user with ID '{UserId}'.", user.Id);
-                ModelState.AddModelError(string.Empty, "Invalid authenticator code.");
-                return Page();
-            }
+
+            // return with errors
+            logger.With(LogAction.Account.LoginAttempt2FA, user).LogWarning(ResL.Log3);
+            ModelState.AddModelError(string.Empty, ResL.Error2);
+
+            return Page();
         }
+
+        #endregion
     }
 }

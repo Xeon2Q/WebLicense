@@ -2,6 +2,19 @@
 {
     public static class LogAction
     {
+        public static class Account
+        {
+            public const string LoginAttempt = "Login attempt";
+
+            public const string LoginAttemptExternal = "Login attempt (external)";
+
+            public const string LoginAttempt2FA = "Login attempt (2FA)";
+
+            public const string Registration = "Registration";
+
+            public const string RegistrationExternal = "Registration (external)";
+        }
+
         public const string LoginAttempt = "Login attempt";
 
         public const string UpdateOwnProfile = "Update profile (self)";

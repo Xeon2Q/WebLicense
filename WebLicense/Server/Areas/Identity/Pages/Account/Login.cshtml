@@ -11,7 +11,7 @@
     var externalLogins = Model.ExternalLogins ?? new List<AuthenticationScheme>(0);
 }
 
-<div class="col-md-4">
+<div class="col-md-6">
     <h4>@ResL["Text.UseLocalAccountToLogin"]</h4>
     <hr />
     <form method="post">
@@ -41,7 +41,7 @@
     <p class="text-end"><a asp-page="./ResendEmailConfirmation">@ResL["Text.ResetEmailConfirmation"]</a></p>
     <p class="text-end"><a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">@ResL["Text.RegisterAsNewUser"]</a></p>
 </div>
-<div class="col-md-6 offset-1">
+<div class="col-md-4 offset-1">
     <section>
         <h4>@ResL["Text.UseExternalServiceToLogin"]</h4>
         <hr />
