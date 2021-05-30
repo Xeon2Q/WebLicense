@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
+using WebLicense.Core.Models.Customers;
 using WebLicense.Core.Models.Identity;
 using UserClaim = WebLicense.Core.Models.Identity.UserClaim;
 
@@ -36,6 +37,9 @@ namespace WebLicense.Access
 
         private OperationalStoreOptions OperationalOptions { get; }
 
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<CustomerSettings> CustomerSettings { get; set; }
+
         //public DbSet<Log> Logs { get; set; }
 
         #endregion
@@ -54,6 +58,8 @@ namespace WebLicense.Access
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.UseCollation("SQL_Latin1_General_CP1_CS_AS");
 
             builder.ConfigurePersistedGrantContext(OperationalOptions);
 
