@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using WebLicense.Core.Models.Identity;
 
@@ -6,32 +7,62 @@ namespace WebLicense.Server.Auxiliary.Extensions
 {
     public static class LoggerExtensions
     {
-        public static ILogger With(this ILogger logger, string action, long? userId, string userName)
+        private static Dictionary<string, object> GetScopeParameters(string logAction, User byUser, User onUser)
         {
-            var dic = new Dictionary<string, object>(3);
-            if (!string.IsNullOrWhiteSpace(action)) dic["Action"] = action?.Trim();
-            if (userId > 0) dic["UserId"] = userId.Value;
-            if (!string.IsNullOrWhiteSpace(userName)) dic["UserName"] = userName.Trim();
+            return new()
+            {
+                {"Action", logAction?.Trim()},
 
-            if (dic.Count == 0) return logger;
+                {"ByUserId", byUser?.Id},
+                {"ByUserName", byUser?.UserName?.Trim()},
 
-            logger.BeginScope(dic);
-            return logger;
+                {"OnUserId", onUser?.Id},
+                {"OnUserName", onUser?.UserName?.Trim()}
+            };
         }
 
-        public static ILogger With(this ILogger logger, string action, User user)
+        #region Log methods
+
+        public static void LogInformationWith(this ILogger logger, string logAction, User byUser, User onUser, string information, params object[] arguments)
         {
-            return logger.With(action, user?.Id, user?.UserName);
+            logger.BeginScope(GetScopeParameters(logAction, byUser, onUser));
+
+            var message = arguments != null && arguments.Length > 0 ? string.Format(information, arguments) : information;
+            logger.LogInformation(message);
         }
 
-        public static ILogger With(this ILogger logger, string action)
+        public static void LogInformationWith(this ILogger logger, string logAction, User byUser, string information, params object[] arguments) => logger.LogInformationWith(logAction, byUser, null, information, arguments);
+
+        public static void LogWarningWith(this ILogger logger, string logAction, User byUser, User onUser, string warning, params object[] arguments)
         {
-            return logger.With(action, null, null);
+            logger.BeginScope(GetScopeParameters(logAction, byUser, onUser));
+
+            var message = arguments != null && arguments.Length > 0 ? string.Format(warning, arguments) : warning;
+            logger.LogWarning(message);
         }
 
-        public static ILogger With(this ILogger logger, User user)
+        public static void LogWarningWith(this ILogger logger, string logAction, User byUser, string warning, params object[] arguments) => logger.LogWarningWith(logAction, byUser, null, warning, arguments);
+
+        public static void LogErrorWith(this ILogger logger, string logAction, User byUser, User onUser, Exception exception, string error, params object[] arguments)
         {
-            return logger.With(null, user?.Id, user?.UserName);
+            logger.BeginScope(GetScopeParameters(logAction, byUser, onUser));
+
+            var message = arguments != null && arguments.Length > 0 ? string.Format(error, arguments) : error;
+            logger.LogError(exception, error);
         }
+
+        public static void LogErrorWith(this ILogger logger, string logAction, User byUser, Exception exception, string error, params object[] arguments) => logger.LogErrorWith(logAction, byUser, null, exception, error, arguments);
+
+        public static void LogCriticalWith(this ILogger logger, string logAction, User byUser, User onUser, Exception exception, string critical, params object[] arguments)
+        {
+            logger.BeginScope(GetScopeParameters(logAction, byUser, onUser));
+
+            var message = arguments != null && arguments.Length > 0 ? string.Format(critical, arguments) : critical;
+            logger.LogCritical(exception, message);
+        }
+
+        public static void LogCriticalWith(this ILogger logger, string logAction, User byUser, Exception exception, string critical, params object[] arguments) => logger.LogCriticalWith(logAction, byUser, null, exception, critical, arguments);
+
+        #endregion
     }
 }

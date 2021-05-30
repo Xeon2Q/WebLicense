@@ -79,7 +79,7 @@ namespace WebLicense.Server.Areas.Identity.Pages.Account.Manage
             {
                 foreach (var error in result.Errors)
                 {
-                    logger.With(LogAction.SetOwnPassword, user).LogError(error.Description);
+                    logger.LogErrorWith(LogAction.Account.Profile.SetPassword, user, null, error.Description);
 
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
@@ -89,9 +89,9 @@ namespace WebLicense.Server.Areas.Identity.Pages.Account.Manage
 
             await signInManager.RefreshSignInAsync(user);
 
-            logger.With(LogAction.SetOwnPassword, user).LogInformation(string.Format(ResL.Log_Success, user.Id));
+            logger.LogInformationWith(LogAction.Account.Profile.SetPassword, user, ResL.Log_Success, user.Id);
 
-            StatusMessage = "Your password has been set.";
+            StatusMessage = ResL.Message_PasswordSet;
 
             return RedirectToPage();
         }

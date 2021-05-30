@@ -68,7 +68,7 @@ namespace WebLicense.Server.Areas.Identity.Pages.Account.Manage
 
             await signInManager.ForgetTwoFactorClientAsync();
 
-            logger.With(LogAction.ForgetBrowser2Fa, user).LogInformation(ResL.Message_2FA_BrowserHasForgotten);
+            logger.LogInformationWith(LogAction.Account.Profile.ForgetBrowser2FA, user, ResL.Message_2FA_BrowserHasForgotten);
             StatusMessage = new StatusMessageModel(ResL.Message_2FA_BrowserHasForgotten, true).ToJson();
 
             return RedirectToPage();

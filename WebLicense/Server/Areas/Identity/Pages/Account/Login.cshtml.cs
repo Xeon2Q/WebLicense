@@ -88,17 +88,19 @@ namespace WebLicense.Server.Areas.Identity.Pages.Account
             var (result, user) = await TrySignInUser();
             if (result.Succeeded)
             {
-                logger.With(LogAction.LoginAttempt, user).LogInformation("User logged in");
+                logger.LogInformationWith(LogAction.Account.Login.Credentials, user, "User logged in");
 
                 return LocalRedirect(ReturnUrl);
             }
             if (result.RequiresTwoFactor)
             {
+                logger.LogWarningWith(LogAction.Account.Login.Credentials, user, "User account requires 2FA. Redirecting...");
+
                 return RedirectToPage("./LoginWith2fa", new { ReturnUrl, Input.RememberMe });
             }
             if (result.IsLockedOut)
             {
-                logger.With(LogAction.LoginAttempt, user).LogWarning("User account is locked out");
+                logger.LogWarningWith(LogAction.Account.Login.Credentials, user, "User account is locked out");
 
                 return RedirectToPage("./Lockout");
             }

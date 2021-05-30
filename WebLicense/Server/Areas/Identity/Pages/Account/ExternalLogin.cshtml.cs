@@ -83,7 +83,7 @@ namespace WebLicense.Server.Areas.Identity.Pages.Account
             if (result.Succeeded)
             {
                 var userName = info.Principal?.Identity?.Name ?? string.Empty;
-                logger.With(LogAction.Account.LoginAttemptExternal, null, userName).LogInformation(string.Format(ResL.Log1, userName, info.LoginProvider));
+                logger.LogInformationWith(LogAction.Account.Login.External, new User {UserName = userName}, ResL.Log1, userName, info.LoginProvider);
 
                 return LocalRedirect(returnUrl);
             }
@@ -129,7 +129,7 @@ namespace WebLicense.Server.Areas.Identity.Pages.Account
                     result = await userManager.AddLoginAsync(user, info);
                     if (result.Succeeded)
                     {
-                        logger.With(LogAction.Account.RegistrationExternal, user).LogInformation(string.Format(ResL.Log2, info.LoginProvider));
+                        logger.LogInformationWith(LogAction.Account.Registration.External, user, ResL.Log2, info.LoginProvider);
 
                         await SendEmailConfirmation(mediator, userManager, user);
 

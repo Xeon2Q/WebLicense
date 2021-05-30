@@ -59,7 +59,7 @@ namespace WebLicense.Server.Areas.Identity.Pages.Account.Manage
 
             RecoveryCodes = (await userManager.GenerateNewTwoFactorRecoveryCodesAsync(user, 10)).ToArray();
 
-            logger.With(LogAction.Generate2FARecoveryCodes, user).LogInformation(string.Format(ResL.Log_CodesGenerated, user.Id));
+            logger.LogInformationWith(LogAction.Account.Profile.GenerateRecoveryCodes2FA, user, ResL.Log_CodesGenerated, user.Id);
 
             StatusMessage = new StatusMessageModel(ResL.Message_CodesGenerated, true).ToJson();
 

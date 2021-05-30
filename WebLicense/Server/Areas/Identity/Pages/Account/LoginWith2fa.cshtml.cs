@@ -70,20 +70,20 @@ namespace WebLicense.Server.Areas.Identity.Pages.Account
             var result = await signInManager.TwoFactorAuthenticatorSignInAsync(authenticatorCode, rememberMe, Input.RememberMachine);
             if (result.Succeeded)
             {
-                logger.With(LogAction.Account.LoginAttempt2FA, user).LogInformation(ResL.Log1);
+                logger.LogInformationWith(LogAction.Account.Login.TwoFactor, user, ResL.Log1);
 
                 return LocalRedirect(returnUrl);
             }
             
             if (result.IsLockedOut)
             {
-                logger.With(LogAction.Account.LoginAttempt2FA, user).LogWarning(ResL.Log2);
+                logger.LogWarningWith(LogAction.Account.Login.TwoFactor, user, ResL.Log2);
 
                 return RedirectToPage("./Lockout");
             }
 
             // return with errors
-            logger.With(LogAction.Account.LoginAttempt2FA, user).LogWarning(ResL.Log3);
+            logger.LogWarningWith(LogAction.Account.Login.TwoFactor, user, ResL.Log3);
             ModelState.AddModelError(string.Empty, ResL.Error2);
 
             return Page();

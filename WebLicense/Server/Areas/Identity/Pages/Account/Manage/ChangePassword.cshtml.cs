@@ -92,8 +92,7 @@ namespace WebLicense.Server.Areas.Identity.Pages.Account.Manage
             {
                 foreach (var error in result.Errors)
                 {
-                    logger.With(LogAction.ChangeOwnPassword, user).LogError(error.Description);
-
+                    logger.LogErrorWith(LogAction.Account.Profile.ChangePassword, user, null, error.Description);
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
 
@@ -103,7 +102,7 @@ namespace WebLicense.Server.Areas.Identity.Pages.Account.Manage
             // attempt > successful
             await signInManager.RefreshSignInAsync(user);
 
-            logger.With(LogAction.ChangeOwnPassword, user).LogInformation(ResL.Message_PasswordChangeSuccessful);
+            logger.LogInformationWith(LogAction.Account.Profile.ChangePassword, user, ResL.Message_PasswordChangeSuccessful);
 
             StatusMessage = new StatusMessageModel(ResL.Message_PasswordChanged, true).ToJson();
 

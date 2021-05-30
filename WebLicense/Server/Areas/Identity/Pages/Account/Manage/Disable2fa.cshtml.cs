@@ -55,12 +55,12 @@ namespace WebLicense.Server.Areas.Identity.Pages.Account.Manage
             var result = await userManager.SetTwoFactorEnabledAsync(user, false);
             if (!result.Succeeded)
             {
-                logger.With(LogAction.Disable2FA, user).LogError(string.Format(ResL.Error_Unexpected, user.Id));
+                logger.LogErrorWith(LogAction.Account.Profile.Disable2FA, user, null, ResL.Error_Unexpected, user.Id);
 
                 throw new InvalidOperationException(string.Format(ResL.Error_Unexpected, user.Id));
             }
 
-            logger.With(LogAction.Disable2FA, user).LogInformation(string.Format(ResL.Message_2FADisableSuccessful, user.Id));
+            logger.LogInformationWith(LogAction.Account.Profile.Disable2FA, user, ResL.Message_2FADisableSuccessful, user.Id);
 
             StatusMessage = new StatusMessageModel(ResL.Message_2FADisabledSuccessful_2, true).ToJson();
 

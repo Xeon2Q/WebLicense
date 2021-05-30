@@ -75,12 +75,12 @@ namespace WebLicense.Server.Areas.Identity.Pages.Account.Manage
             var result = await userManager.DeleteAsync(user);
             if (!result.Succeeded)
             {
-                logger.With(LogAction.DeleteAccount, user).LogError(string.Format(ResL.Error_UnexpectedError, userId));
+                logger.LogErrorWith(LogAction.Account.Delete, user, null, ResL.Error_UnexpectedError, userId);
 
                 throw new InvalidOperationException(string.Format(ResL.Error_UnexpectedError, userId));
             }
 
-            logger.With(LogAction.DeleteAccount, user).LogInformation(string.Format(ResL.Message_UserDeleted, userId));
+            logger.LogInformationWith(LogAction.Account.Delete, user, null, ResL.Message_UserDeleted, userId);
 
             await signInManager.SignOutAsync();
 

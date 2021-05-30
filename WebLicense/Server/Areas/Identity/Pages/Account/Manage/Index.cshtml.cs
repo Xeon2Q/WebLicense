@@ -89,7 +89,7 @@ namespace WebLicense.Server.Areas.Identity.Pages.Account.Manage
             {
                 foreach (var error in result.Errors)
                 {
-                    logger.With(LogAction.UpdateOwnProfile, user).LogError(error.Description);
+                    logger.LogErrorWith(LogAction.Account.Profile.Update, user, null, error.Description);
                 }
 
                 StatusMessage = new StatusMessageModel(ResL.Error_UpdateProfileFailed, false).ToJson();

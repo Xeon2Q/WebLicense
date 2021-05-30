@@ -71,7 +71,7 @@ namespace WebLicense.Server.Areas.Identity.Pages.Account.Manage
             var result = await userManager.RemoveLoginAsync(user, loginProvider, providerKey);
             if (!result.Succeeded)
             {
-                logger.With(LogAction.RemoveExternalLogin, user).LogError(string.Format(ResL.Log_LoginNotRemoved, loginProvider));
+                logger.LogErrorWith(LogAction.Account.Profile.RemoveExternalLogin, user, null, ResL.Log_LoginNotRemoved, loginProvider);
                 StatusMessage = new StatusMessageModel(ResL.Message_LoginNotRemoved, false).ToJson();
 
                 return RedirectToPage();
@@ -79,7 +79,7 @@ namespace WebLicense.Server.Areas.Identity.Pages.Account.Manage
 
             await signInManager.RefreshSignInAsync(user);
 
-            logger.With(LogAction.RemoveExternalLogin, user).LogInformation(string.Format(ResL.Log_LoginRemoved, loginProvider));
+            logger.LogInformationWith(LogAction.Account.Profile.RemoveExternalLogin, user, ResL.Log_LoginRemoved, loginProvider);
             StatusMessage = new StatusMessageModel(ResL.Message_LoginNotRemoved, true).ToJson();
 
             return RedirectToPage();
@@ -105,7 +105,7 @@ namespace WebLicense.Server.Areas.Identity.Pages.Account.Manage
             var info = await signInManager.GetExternalLoginInfoAsync(user.Id.ToString());
             if (info == null)
             {
-                logger.With(LogAction.LinkExternalLogin, user).LogError(string.Format(ResL.Error_CannotLoadExternalLoginForUser, user.Id));
+                logger.LogErrorWith(LogAction.Account.Profile.LinkExternalLogin, user, null, ResL.Error_CannotLoadExternalLoginForUser, user.Id);
 
                 throw new InvalidOperationException(string.Format(ResL.Error_CannotLoadExternalLoginForUser, user.Id));
             }
@@ -113,7 +113,7 @@ namespace WebLicense.Server.Areas.Identity.Pages.Account.Manage
             var result = await userManager.AddLoginAsync(user, info);
             if (!result.Succeeded)
             {
-                logger.With(LogAction.LinkExternalLogin, user).LogError(string.Format(ResL.Log_LoginNotAdded, info.LoginProvider));
+                logger.LogErrorWith(LogAction.Account.Profile.LinkExternalLogin, user, null, ResL.Log_LoginNotAdded, info.LoginProvider);
                 StatusMessage = new StatusMessageModel(ResL.Message_LoginNotAdded, false).ToJson();
 
                 return RedirectToPage();
@@ -122,7 +122,7 @@ namespace WebLicense.Server.Areas.Identity.Pages.Account.Manage
             // clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
-            logger.With(LogAction.LinkExternalLogin, user).LogError(string.Format(ResL.Log_LoginAdded, info.LoginProvider));
+            logger.LogErrorWith(LogAction.Account.Profile.LinkExternalLogin, user, null, ResL.Log_LoginAdded, info.LoginProvider);
             StatusMessage = new StatusMessageModel(ResL.Message_LoginAdded, true).ToJson();
 
             return RedirectToPage();

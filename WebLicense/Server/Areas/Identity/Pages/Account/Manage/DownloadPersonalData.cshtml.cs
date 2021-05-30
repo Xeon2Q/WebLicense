@@ -25,7 +25,7 @@ namespace WebLicense.Server.Areas.Identity.Pages.Account.Manage
             var user = await userManager.GetUserAsync(User);
             if (user == null) return NotFound(string.Format(ResG.Error_Format_UnableLoadUserWithId, userManager.GetUserId(User)));
 
-            logger.With(LogAction.DownloadPersonalData, user).LogInformation(ResL.Message_UserDownloadingPersonalData, userManager.GetUserId(User));
+            logger.LogInformationWith(LogAction.Account.Profile.DownloadPersonalData, user, ResL.Message_UserDownloadingPersonalData, userManager.GetUserId(User));
 
             var personalData = await GetPersonalData(userManager, user);
             var bytes = JsonSerializer.SerializeToUtf8Bytes(personalData);

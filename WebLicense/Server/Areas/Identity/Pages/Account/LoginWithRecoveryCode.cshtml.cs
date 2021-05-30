@@ -6,83 +6,78 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using WebLicense.Core.Enums;
 using WebLicense.Core.Models.Identity;
+using WebLicense.Server.Auxiliary.Extensions;
+using ResL = WebLicense.Server.Resources.Areas_Identity_Pages_Account_LoginWithRecoveryCodeModel;
 
 namespace WebLicense.Server.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class LoginWithRecoveryCodeModel : PageModel
     {
-        private readonly SignInManager<User> _signInManager;
-        private readonly ILogger<LoginWithRecoveryCodeModel> _logger;
-
-        public LoginWithRecoveryCodeModel(SignInManager<User> signInManager, ILogger<LoginWithRecoveryCodeModel> logger)
-        {
-            _signInManager = signInManager;
-            _logger = logger;
-        }
-
-        [BindProperty]
-        public InputModel Input { get; set; }
-
-        public string ReturnUrl { get; set; }
+        #region InputModel
 
         public class InputModel
         {
             [BindProperty]
             [Required]
             [DataType(DataType.Text)]
-            [Display(Name = "Recovery Code")]
+            [Display(Name = "Model_RecoveryCode", ResourceType = typeof(ResL))]
             public string RecoveryCode { get; set; }
         }
 
-        public async Task<IActionResult> OnGetAsync(string returnUrl = null)
+        #endregion
+
+        #region Properties
+
+        [BindProperty]
+        public InputModel Input { get; set; }
+
+        public string ReturnUrl { get; set; }
+
+        #endregion
+
+        #region Actions
+
+        public async Task<IActionResult> OnGetAsync([FromServices] SignInManager<User> signInManager, string returnUrl = null)
         {
-            // Ensure the user has gone through the username & password screen first
-            var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
-            if (user == null)
-            {
-                throw new InvalidOperationException($"Unable to load two-factor authentication user.");
-            }
+            // ensure the user has gone through the username & password screen first
+            var _ = await signInManager.GetTwoFactorAuthenticationUserAsync() ?? throw new InvalidOperationException(ResL.Error1);
 
             ReturnUrl = returnUrl;
 
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+        public async Task<IActionResult> OnPostAsync([FromServices] SignInManager<User> signInManager, [FromServices] ILogger<LoginWithRecoveryCodeModel> logger, string returnUrl = null)
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
+            // return with errors
+            if (!ModelState.IsValid) return Page();
 
-            var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
-            if (user == null)
-            {
-                throw new InvalidOperationException($"Unable to load two-factor authentication user.");
-            }
+            var user = await signInManager.GetTwoFactorAuthenticationUserAsync() ?? throw new InvalidOperationException(ResL.Error1);
 
-            var recoveryCode = Input.RecoveryCode.Replace(" ", string.Empty);
+            var recoveryCode = Input.RecoveryCode.Replace(" ", string.Empty).Replace("-", string.Empty);
 
-            var result = await _signInManager.TwoFactorRecoveryCodeSignInAsync(recoveryCode);
+            var result = await signInManager.TwoFactorRecoveryCodeSignInAsync(recoveryCode);
 
             if (result.Succeeded)
             {
-                _logger.LogInformation("User with ID '{UserId}' logged in with a recovery code.", user.Id);
+                logger.LogInformationWith(LogAction.Account.Login.RecoveryCode, user, ResL.Log_1);
                 return LocalRedirect(returnUrl ?? Url.Content("~/"));
             }
+
             if (result.IsLockedOut)
             {
-                _logger.LogWarning("User with ID '{UserId}' account locked out.", user.Id);
+                logger.LogWarningWith(LogAction.Account.Login.RecoveryCode, user, ResL.Log_2);
                 return RedirectToPage("./Lockout");
             }
-            else
-            {
-                _logger.LogWarning("Invalid recovery code entered for user with ID '{UserId}' ", user.Id);
-                ModelState.AddModelError(string.Empty, "Invalid recovery code entered.");
-                return Page();
-            }
+
+            logger.LogWarningWith(LogAction.Account.Login.RecoveryCode, user, ResL.Log_3);
+            ModelState.AddModelError(string.Empty, ResL.Validation_InvalidRecoveryCode);
+            return Page();
         }
+
+        #endregion
     }
 }
