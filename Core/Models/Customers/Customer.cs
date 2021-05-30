@@ -1,6 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using WebLicense.Core.Models.Identity;
 
 namespace WebLicense.Core.Models.Customers
 {
@@ -27,5 +29,14 @@ namespace WebLicense.Core.Models.Customers
 
         // navigation
         public CustomerSettings Settings { get; set; }
+
+        public ICollection<User> Administrators { get; set; }
+        public ICollection<CustomerAdministrator> CustomerAdministrators { get; set; }
+
+        public ICollection<User> Managers { get; set; }
+        public ICollection<CustomerManager> CustomerManagers { get; set; }
+
+        [InverseProperty(nameof(User.Customer))]
+        public ICollection<User> Users { get; set; }
     }
 }
