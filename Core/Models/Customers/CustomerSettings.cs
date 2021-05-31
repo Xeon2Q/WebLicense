@@ -17,10 +17,10 @@ namespace WebLicense.Core.Models.Customers
         public int CustomerId { get; set; }
 
         [Range(0, int.MaxValue)]
-        public int MaxActiveLicensesCount { get; set; }
+        public int MaxActiveLicensesCount { get; set; } = 1;
 
         [Range(0, int.MaxValue)]
-        public int MaxTotalLicensesCount { get; set; }
+        public int MaxTotalLicensesCount { get; set; } = 1;
 
         [DefaultValue(false)]
         public bool CreateActiveLicenses { get; set; } = false;
@@ -48,6 +48,6 @@ namespace WebLicense.Core.Models.Customers
         public string NotificationsEmail { get; set; }
 
         [Comment("Must be TRUE if Customer wants to receive notifications about his licenses.")]
-        public bool ReceiveNotifications { get; set; }
+        public bool ReceiveNotifications { get; set; } = true;
     }
 }
