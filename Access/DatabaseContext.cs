@@ -39,6 +39,7 @@ namespace WebLicense.Access
 
         public DbSet<Customer> Customers { get; set; }
         public DbSet<CustomerSettings> CustomerSettings { get; set; }
+        public DbSet<CustomerUpdate> CustomerUpdates { get; set; }
 
         //public DbSet<Log> Logs { get; set; }
 

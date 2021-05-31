@@ -19,7 +19,7 @@ namespace WebLicense.Access.Configuration
         {
             var admin = new User
             {
-                Id = 1,
+                Id = long.MaxValue,
                 UserName = "Administrator",
                 NormalizedUserName = "Administrator".ToUpper(),
                 Email = "admin-one@weblicense.com",

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using WebLicense.Core.Models.Auxiliary;
 using WebLicense.Core.Models.Identity;
 
 namespace WebLicense.Core.Models.Customers
@@ -23,6 +24,7 @@ namespace WebLicense.Core.Models.Customers
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTimeOffset Created { get; set; }
 
-        public ICollection<> Type { get; set; }
+        [Column(TypeName = "NVARCHAR(MAX)")]
+        public ICollection<ValueUpdateInfo> Changes { get; set; }
     }
 }

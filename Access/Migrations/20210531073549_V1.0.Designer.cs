@@ -10,13 +10,14 @@ using WebLicense.Access;
 namespace WebLicense.Access.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20210516193300_V1.0")]
+    [Migration("20210531073549_V1.0")]
     partial class V10
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CS_AS")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.6")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -124,6 +125,153 @@ namespace WebLicense.Access.Migrations
                     b.ToTable("PersistedGrants");
                 });
 
+            modelBuilder.Entity("WebLicense.Core.Models.Customers.Customer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)")
+                        .HasComment("Secure ID of the Customer.");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)")
+                        .HasComment("The Name of the Customer");
+
+                    b.Property<string>("ReferenceId")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)")
+                        .HasComment("Reference ID is using to register new users for the Customer.");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.HasIndex("ReferenceId")
+                        .IsUnique();
+
+                    b.ToTable("Customers");
+                });
+
+            modelBuilder.Entity("WebLicense.Core.Models.Customers.CustomerAdministrator", b =>
+                {
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("CustomerId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CustomerAdministrator");
+                });
+
+            modelBuilder.Entity("WebLicense.Core.Models.Customers.CustomerManager", b =>
+                {
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("CustomerId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CustomerManager");
+                });
+
+            modelBuilder.Entity("WebLicense.Core.Models.Customers.CustomerSettings", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("CanActivateLicenses")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanActivateMachine")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanDeactivateLicenses")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanDeactivateMachine")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanDeleteLicenses")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanDeleteMachine")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CreateActiveLicenses")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaxActiveLicensesCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaxTotalLicensesCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NotificationsEmail")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)")
+                        .HasComment("Email address used for notifications.");
+
+                    b.Property<bool>("ReceiveNotifications")
+                        .HasColumnType("bit")
+                        .HasComment("Must be TRUE if Customer wants to receive notifications about his licenses.");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId")
+                        .IsUnique();
+
+                    b.ToTable("CustomerSettings");
+                });
+
+            modelBuilder.Entity("WebLicense.Core.Models.Customers.CustomerUpdate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Changes")
+                        .HasColumnType("NVARCHAR(MAX)");
+
+                    b.Property<DateTimeOffset>("Created")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CustomerUpdates");
+                });
+
             modelBuilder.Entity("WebLicense.Core.Models.Identity.Role", b =>
                 {
                     b.Property<long>("Id")
@@ -155,29 +303,29 @@ namespace WebLicense.Access.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1L,
-                            ConcurrencyStamp = "68d27851-632c-4ede-a90a-df36f218513c",
+                            Id = 9223372036854775807L,
+                            ConcurrencyStamp = "790cd832-ff49-4a0b-8c91-72f1d10e0479",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = 100L,
-                            ConcurrencyStamp = "5f9ddbe6-66c8-43c6-9e45-3af9bdb632a4",
+                            Id = 9223372036854775806L,
+                            ConcurrencyStamp = "80d34efa-dbbf-42a5-bbeb-1c7423309e83",
                             Name = "Customer Admin",
                             NormalizedName = "CUSTOMER ADMIN"
                         },
                         new
                         {
-                            Id = 200L,
-                            ConcurrencyStamp = "c625ff79-efab-49f8-855e-a396d527937c",
+                            Id = 9223372036854775805L,
+                            ConcurrencyStamp = "26be03aa-9bbd-4396-96cf-ae57b86e087b",
                             Name = "Customer Manager",
                             NormalizedName = "CUSTOMER MANAGER"
                         },
                         new
                         {
-                            Id = 300L,
-                            ConcurrencyStamp = "67918a99-3265-4297-aef9-b4232e2e57b4",
+                            Id = 9223372036854775804L,
+                            ConcurrencyStamp = "e07c0289-5e00-4118-9083-f2e5d221ea8f",
                             Name = "Customer User",
                             NormalizedName = "CUSTOMER USER"
                         });
@@ -208,171 +356,171 @@ namespace WebLicense.Access.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            Id = 2147483647,
                             ClaimType = "https://weblicense/account/password/change",
                             ClaimValue = "true",
-                            RoleId = 1L
+                            RoleId = 9223372036854775807L
                         },
                         new
                         {
-                            Id = 2,
+                            Id = 2147483646,
                             ClaimType = "https://weblicense/account/2fa/disable",
                             ClaimValue = "true",
-                            RoleId = 1L
+                            RoleId = 9223372036854775807L
                         },
                         new
                         {
-                            Id = 3,
+                            Id = 2147483645,
                             ClaimType = "https://weblicense/account/2fa/enable",
                             ClaimValue = "true",
-                            RoleId = 1L
+                            RoleId = 9223372036854775807L
                         },
                         new
                         {
-                            Id = 4,
+                            Id = 2147483644,
                             ClaimType = "https://weblicense/account/login/external",
                             ClaimValue = "true",
-                            RoleId = 1L
+                            RoleId = 9223372036854775807L
                         },
                         new
                         {
-                            Id = 5,
+                            Id = 2147483643,
                             ClaimType = "https://weblicense/account/password/reset",
                             ClaimValue = "true",
-                            RoleId = 1L
+                            RoleId = 9223372036854775807L
                         },
                         new
                         {
-                            Id = 6,
+                            Id = 2147483642,
                             ClaimType = "https://weblicense/administration/account/password/change",
                             ClaimValue = "true",
-                            RoleId = 1L
+                            RoleId = 9223372036854775807L
                         },
                         new
                         {
-                            Id = 7,
+                            Id = 2147483641,
                             ClaimType = "https://weblicense/administration/account/2fa/disable",
                             ClaimValue = "true",
-                            RoleId = 1L
+                            RoleId = 9223372036854775807L
                         },
                         new
                         {
-                            Id = 8,
+                            Id = 2147483640,
                             ClaimType = "https://weblicense/administration/account/2fa/enable",
                             ClaimValue = "true",
-                            RoleId = 1L
+                            RoleId = 9223372036854775807L
                         },
                         new
                         {
-                            Id = 9,
+                            Id = 2147483639,
                             ClaimType = "https://weblicense/administration/account/password/reset",
                             ClaimValue = "true",
-                            RoleId = 1L
+                            RoleId = 9223372036854775807L
                         },
                         new
                         {
-                            Id = 100,
+                            Id = 2147483547,
                             ClaimType = "https://weblicense/account/password/change",
                             ClaimValue = "true",
-                            RoleId = 100L
+                            RoleId = 9223372036854775806L
                         },
                         new
                         {
-                            Id = 101,
+                            Id = 2147483546,
                             ClaimType = "https://weblicense/account/2fa/disable",
                             ClaimValue = "true",
-                            RoleId = 100L
+                            RoleId = 9223372036854775806L
                         },
                         new
                         {
-                            Id = 102,
+                            Id = 2147483545,
                             ClaimType = "https://weblicense/account/2fa/enable",
                             ClaimValue = "true",
-                            RoleId = 100L
+                            RoleId = 9223372036854775806L
                         },
                         new
                         {
-                            Id = 103,
+                            Id = 2147483544,
                             ClaimType = "https://weblicense/account/login/external",
                             ClaimValue = "true",
-                            RoleId = 100L
+                            RoleId = 9223372036854775806L
                         },
                         new
                         {
-                            Id = 104,
+                            Id = 2147483543,
                             ClaimType = "https://weblicense/account/password/reset",
                             ClaimValue = "true",
-                            RoleId = 100L
+                            RoleId = 9223372036854775806L
                         },
                         new
                         {
-                            Id = 200,
+                            Id = 2147483447,
                             ClaimType = "https://weblicense/account/password/change",
                             ClaimValue = "true",
-                            RoleId = 200L
+                            RoleId = 9223372036854775805L
                         },
                         new
                         {
-                            Id = 201,
+                            Id = 2147483446,
                             ClaimType = "https://weblicense/account/2fa/disable",
                             ClaimValue = "true",
-                            RoleId = 200L
+                            RoleId = 9223372036854775805L
                         },
                         new
                         {
-                            Id = 202,
+                            Id = 2147483445,
                             ClaimType = "https://weblicense/account/2fa/enable",
                             ClaimValue = "true",
-                            RoleId = 200L
+                            RoleId = 9223372036854775805L
                         },
                         new
                         {
-                            Id = 203,
+                            Id = 2147483444,
                             ClaimType = "https://weblicense/account/login/external",
                             ClaimValue = "true",
-                            RoleId = 200L
+                            RoleId = 9223372036854775805L
                         },
                         new
                         {
-                            Id = 204,
+                            Id = 2147483443,
                             ClaimType = "https://weblicense/account/password/reset",
                             ClaimValue = "true",
-                            RoleId = 200L
+                            RoleId = 9223372036854775805L
                         },
                         new
                         {
-                            Id = 300,
+                            Id = 2147483347,
                             ClaimType = "https://weblicense/account/password/change",
                             ClaimValue = "true",
-                            RoleId = 300L
+                            RoleId = 9223372036854775804L
                         },
                         new
                         {
-                            Id = 301,
+                            Id = 2147483346,
                             ClaimType = "https://weblicense/account/2fa/disable",
                             ClaimValue = "true",
-                            RoleId = 300L
+                            RoleId = 9223372036854775804L
                         },
                         new
                         {
-                            Id = 302,
+                            Id = 2147483345,
                             ClaimType = "https://weblicense/account/2fa/enable",
                             ClaimValue = "true",
-                            RoleId = 300L
+                            RoleId = 9223372036854775804L
                         },
                         new
                         {
-                            Id = 303,
+                            Id = 2147483344,
                             ClaimType = "https://weblicense/account/login/external",
                             ClaimValue = "true",
-                            RoleId = 300L
+                            RoleId = 9223372036854775804L
                         },
                         new
                         {
-                            Id = 304,
+                            Id = 2147483343,
                             ClaimType = "https://weblicense/account/password/reset",
                             ClaimValue = "true",
-                            RoleId = 300L
+                            RoleId = 9223372036854775804L
                         });
                 });
 
@@ -389,6 +537,9 @@ namespace WebLicense.Access.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CustomerId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -438,6 +589,8 @@ namespace WebLicense.Access.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CustomerId");
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -451,9 +604,9 @@ namespace WebLicense.Access.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1L,
+                            Id = 9223372036854775807L,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "c42f7bae-3e0e-4f13-9aa3-4f28f5849887",
+                            ConcurrencyStamp = "d7768320-8828-46f0-b93c-da5d4e8df382",
                             Email = "admin-one@weblicense.com",
                             EmailConfirmed = true,
                             EulaAccepted = true,
@@ -461,9 +614,9 @@ namespace WebLicense.Access.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN-ONE@WEBLICENSE.COM",
                             NormalizedUserName = "ADMINISTRATOR",
-                            PasswordHash = "AQAAAAEAACcQAAAAEAFoNUw0jsS/ev3FkMANTCK+ufkFJZokg4NRVLbRWQswVUJ49ecSmwiOF77XYVTQlg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEDkUo0hPVHN0Lz+wuFd+kfJruhNeFVDx/9MXUtrbucc3Z/7P4lGxFAw9FiBFKEInMQ==",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "04B0F1FE428C42888CDC392DC7200804F3B4F3EC274C46DABE005BB080E627D1782CAF53E8384023A6FF10F0D3FC0A63",
+                            SecurityStamp = "E994B312DC56440FBD6058358A9B93EAECFBDCCD9C4443A196C42B81B59D5BE5F9A8CD5EE9F94A7A9EE7CECA77CD4B71",
                             TwoFactorEnabled = false,
                             UserName = "Administrator"
                         });
@@ -532,8 +685,8 @@ namespace WebLicense.Access.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = 1L,
-                            RoleId = 1L
+                            UserId = 9223372036854775807L,
+                            RoleId = 9223372036854775807L
                         });
                 });
 
@@ -558,6 +711,64 @@ namespace WebLicense.Access.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("WebLicense.Core.Models.Customers.CustomerAdministrator", b =>
+                {
+                    b.HasOne("WebLicense.Core.Models.Customers.Customer", "Customer")
+                        .WithMany("CustomerAdministrators")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebLicense.Core.Models.Identity.User", "User")
+                        .WithMany("CustomerAdministrators")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("WebLicense.Core.Models.Customers.CustomerManager", b =>
+                {
+                    b.HasOne("WebLicense.Core.Models.Customers.Customer", "Customer")
+                        .WithMany("CustomerManagers")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebLicense.Core.Models.Identity.User", "User")
+                        .WithMany("CustomerManagers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("WebLicense.Core.Models.Customers.CustomerSettings", b =>
+                {
+                    b.HasOne("WebLicense.Core.Models.Customers.Customer", null)
+                        .WithOne("Settings")
+                        .HasForeignKey("WebLicense.Core.Models.Customers.CustomerSettings", "CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("WebLicense.Core.Models.Customers.CustomerUpdate", b =>
+                {
+                    b.HasOne("WebLicense.Core.Models.Identity.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("WebLicense.Core.Models.Identity.RoleClaim", b =>
                 {
                     b.HasOne("WebLicense.Core.Models.Identity.Role", null)
@@ -565,6 +776,15 @@ namespace WebLicense.Access.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("WebLicense.Core.Models.Identity.User", b =>
+                {
+                    b.HasOne("WebLicense.Core.Models.Customers.Customer", "Customer")
+                        .WithMany("Users")
+                        .HasForeignKey("CustomerId");
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("WebLicense.Core.Models.Identity.UserClaim", b =>
@@ -607,6 +827,24 @@ namespace WebLicense.Access.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("WebLicense.Core.Models.Customers.Customer", b =>
+                {
+                    b.Navigation("CustomerAdministrators");
+
+                    b.Navigation("CustomerManagers");
+
+                    b.Navigation("Settings");
+
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("WebLicense.Core.Models.Identity.User", b =>
+                {
+                    b.Navigation("CustomerAdministrators");
+
+                    b.Navigation("CustomerManagers");
                 });
 #pragma warning restore 612, 618
         }

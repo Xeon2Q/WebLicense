@@ -14,7 +14,7 @@ namespace WebLicense.Access.Configuration
 
         private void Seed(EntityTypeBuilder<UserRole> builder)
         {
-            var adminRole = new UserRole {RoleId = Roles.AdminId, UserId = 1};
+            var adminRole = new UserRole {RoleId = Roles.AdminId, UserId = long.MaxValue};
 
             builder.HasData(adminRole);
         }
