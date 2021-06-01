@@ -1,27 +1,50 @@
-﻿namespace WebLicense.Shared.Customers
+﻿using WebLicense.Core.Models.Customers;
+
+namespace WebLicense.Shared.Customers
 {
     public sealed class CustomerSettingsInfo
     {
-        public int? MaxActiveLicensesCount { get; init; } = null;
+        public int? MaxActiveLicensesCount { get; init; }
 
-        public int? MaxTotalLicensesCount { get; init; } = null;
+        public int? MaxTotalLicensesCount { get; init; }
 
-        public bool? CreateActiveLicenses { get; init; } = null;
+        public bool? CreateActiveLicenses { get; init; }
 
-        public bool? CanActivateLicenses { get; init; } = null;
+        public bool? CanActivateLicenses { get; init; }
 
-        public bool? CanDeactivateLicenses { get; init; } = null;
+        public bool? CanDeactivateLicenses { get; init; }
 
-        public bool? CanDeleteLicenses { get; init; } = null;
+        public bool? CanDeleteLicenses { get; init; }
 
-        public bool? CanActivateMachine { get; init; } = null;
+        public bool? CanActivateMachines { get; init; }
 
-        public bool? CanDeactivateMachine { get; init; } = null;
+        public bool? CanDeactivateMachines { get; init; }
 
-        public bool? CanDeleteMachine { get; init; } = null;
+        public bool? CanDeleteMachines { get; init; }
 
         public string NotificationsEmail { get; init; }
 
-        public bool? ReceiveNotifications { get; init; } = null;
+        public bool? ReceiveNotifications { get; init; }
+
+        #region C-tor
+
+        public CustomerSettingsInfo(CustomerSettings settings)
+        {
+            if (settings == null) return;
+
+            MaxActiveLicensesCount = settings.MaxActiveLicensesCount;
+            MaxTotalLicensesCount = settings.MaxTotalLicensesCount;
+            CreateActiveLicenses = settings.CreateActiveLicenses;
+            CanActivateLicenses = settings.CanActivateLicenses;
+            CanDeactivateLicenses = settings.CanDeactivateLicenses;
+            CanDeleteLicenses = settings.CanDeleteLicenses;
+            CanActivateMachines = settings.CanActivateMachines;
+            CanDeactivateMachines = settings.CanDeactivateMachines;
+            CanDeleteMachines = settings.CanDeleteMachines;
+            NotificationsEmail = settings.NotificationsEmail;
+            ReceiveNotifications = settings.ReceiveNotifications;
+        }
+
+        #endregion
     }
 }

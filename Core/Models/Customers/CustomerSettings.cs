@@ -35,13 +35,13 @@ namespace WebLicense.Core.Models.Customers
         public bool CanDeleteLicenses { get; set; } = false;
 
         [DefaultValue(false)]
-        public bool CanActivateMachine { get; set; } = false;
+        public bool CanActivateMachines { get; set; } = false;
 
         [DefaultValue(false)]
-        public bool CanDeactivateMachine { get; set; } = false;
+        public bool CanDeactivateMachines { get; set; } = false;
 
         [DefaultValue(false)]
-        public bool CanDeleteMachine { get; set; } = false;
+        public bool CanDeleteMachines { get; set; } = false;
 
         [MaxLength(200)]
         [Comment("Email address used for notifications.")]

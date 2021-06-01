@@ -33,7 +33,7 @@ namespace WebLicense.Logic.UseCases.Customers
         {
             try
             {
-                var customer = await db.Customers.Where(q => q.Id == request.Id)
+                var customer = await db.Customers.AsNoTrackingWithIdentityResolution().Where(q => q.Id == request.Id)
                                        .Include(q => q.Administrators)
                                        .Include(q => q.Managers)
                                        .Include(q => q.Users)
