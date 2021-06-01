@@ -11,12 +11,13 @@ namespace WebLicense.Core.Models.Identity
         public bool GdprAccepted { get; set; }
 
         // navigation
-        public Customer Customer { get; set; }
-
         public ICollection<Customer> AdministeredCustomers { get; set; }
         public ICollection<CustomerAdministrator> CustomerAdministrators { get; set; }
 
         public ICollection<Customer> ManagedCustomers { get; set; }
         public ICollection<CustomerManager> CustomerManagers { get; set; }
+
+        public ICollection<Customer> MemberOfCustomers { get; set; }
+        public ICollection<CustomerUser> CustomerUsers { get; set; }
     }
 }

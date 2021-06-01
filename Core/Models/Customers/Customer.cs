@@ -36,7 +36,7 @@ namespace WebLicense.Core.Models.Customers
         public ICollection<User> Managers { get; set; }
         public ICollection<CustomerManager> CustomerManagers { get; set; }
 
-        [InverseProperty(nameof(User.Customer))]
         public ICollection<User> Users { get; set; }
+        public ICollection<CustomerUser> CustomerUsers{ get; set; }
     }
 }

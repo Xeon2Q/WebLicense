@@ -24,7 +24,6 @@ namespace WebLicense.Core.Models.Customers
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTimeOffset Created { get; set; }
 
-        [Column(TypeName = "NVARCHAR(MAX)")]
         public ICollection<ValueUpdateInfo> Changes { get; set; }
     }
 }

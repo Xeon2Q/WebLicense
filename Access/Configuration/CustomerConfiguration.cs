@@ -23,6 +23,13 @@ namespace WebLicense.Access.Configuration
                        q => q.HasOne(w => w.User).WithMany(w => w.CustomerManagers).HasForeignKey(w => w.UserId),
                        q => q.HasOne(w => w.Customer).WithMany(w => w.CustomerManagers).HasForeignKey(w => w.CustomerId),
                        q => q.HasKey(w => new {w.CustomerId, w.UserId}));
+
+            builder.HasMany(q => q.Users)
+                   .WithMany(q => q.MemberOfCustomers)
+                   .UsingEntity<CustomerUser>(
+                       q => q.HasOne(w => w.User).WithMany(w => w.CustomerUsers).HasForeignKey(w => w.UserId),
+                       q => q.HasOne(w => w.Customer).WithMany(w => w.CustomerUsers).HasForeignKey(w => w.CustomerId),
+                       q => q.HasKey(w => new {w.CustomerId, w.UserId}));
         }
     }
 }

@@ -127,8 +127,13 @@ namespace WebLicense.Server
         {
             const string connectionName = "GlobalConnection";
 
-            services.AddDbContext<DatabaseContext>(options => options.UseSqlServer($"name={connectionName}"));
-            services.AddDbContext<DbContext, DatabaseContext>(options => options.UseSqlServer($"name={connectionName}"));
+            // mssql server
+            //services.AddDbContext<DatabaseContext>(options => options.UseSqlServer($"name={connectionName}"));
+            //services.AddDbContext<DbContext, DatabaseContext>(options => options.UseSqlServer($"name={connectionName}"));
+
+            // sqlite
+            services.AddDbContext<DatabaseContext>(options => options.UseSqlite("Filename=webLicense.db"));
+            services.AddDbContext<DbContext, DatabaseContext>(options => options.UseSqlite("Filename=webLicense.db"));
         }
 
         private void ConfigureLocalization(IServiceCollection services)

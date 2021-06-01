@@ -14,7 +14,8 @@ namespace WebLicense.Access.Configuration
             builder.Property(q => q.Changes)
                    .HasConversion(
                        q => JsonSerializer.Serialize(q, null),
-                       q => JsonSerializer.Deserialize<ICollection<ValueUpdateInfo>>(q, null));
+                       q => JsonSerializer.Deserialize<ICollection<ValueUpdateInfo>>(q, null))
+                   .HasMaxLength(int.MaxValue);
         }
     }
 }
