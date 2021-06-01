@@ -125,13 +125,12 @@ namespace WebLicense.Server
 
         private void ConfigureDatabase(IServiceCollection services)
         {
-            const string connectionName = "GlobalConnection";
-
-            // mssql server
+            // MSSQL
+            //const string connectionName = "GlobalConnection";
             //services.AddDbContext<DatabaseContext>(options => options.UseSqlServer($"name={connectionName}"));
             //services.AddDbContext<DbContext, DatabaseContext>(options => options.UseSqlServer($"name={connectionName}"));
 
-            // sqlite
+            // SQLite
             services.AddDbContext<DatabaseContext>(options => options.UseSqlite("Filename=webLicense.db"));
             services.AddDbContext<DbContext, DatabaseContext>(options => options.UseSqlite("Filename=webLicense.db"));
         }
