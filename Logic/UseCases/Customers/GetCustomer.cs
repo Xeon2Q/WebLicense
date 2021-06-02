@@ -1,16 +1,16 @@
-﻿using System;
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
 using WebLicense.Access;
-using WebLicense.Core.Models.Customers;
 using WebLicense.Logic.Auxiliary;
+using WebLicense.Shared.Customers;
 
 namespace WebLicense.Logic.UseCases.Customers
 {
-    public sealed class GetCustomer : IRequest<CaseResult<Customer>>
+    public sealed class GetCustomer : IRequest<CaseResult<CustomerInfo>>
     {
         internal int Id { get; }
 
@@ -20,7 +20,7 @@ namespace WebLicense.Logic.UseCases.Customers
         }
     }
 
-    internal sealed class GetCustomerHandler : IRequestHandler<GetCustomer, CaseResult<Customer>>
+    internal sealed class GetCustomerHandler : IRequestHandler<GetCustomer, CaseResult<CustomerInfo>>
     {
         private readonly DatabaseContext db;
 
@@ -29,7 +29,7 @@ namespace WebLicense.Logic.UseCases.Customers
             this.db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
-        public async Task<CaseResult<Customer>> Handle(GetCustomer request, CancellationToken cancellationToken)
+        public async Task<CaseResult<CustomerInfo>> Handle(GetCustomer request, CancellationToken cancellationToken)
         {
             try
             {
@@ -39,11 +39,11 @@ namespace WebLicense.Logic.UseCases.Customers
                                        .Include(q => q.Users)
                                        .Include(q => q.Settings)
                                        .FirstOrDefaultAsync(cancellationToken);
-                return new CaseResult<Customer>(customer);
+                return new CaseResult<CustomerInfo>(new CustomerInfo(customer));
             }
             catch (Exception e)
             {
-                return new CaseResult<Customer>(e);
+                return new CaseResult<CustomerInfo>(e);
             }
         }
     }

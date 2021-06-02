@@ -7,10 +7,11 @@ using WebLicense.Access;
 using WebLicense.Core.Models.Customers;
 using WebLicense.Logic.Auxiliary;
 using WebLicense.Logic.Auxiliary.Extensions;
+using WebLicense.Shared.Customers;
 
 namespace WebLicense.Logic.UseCases.Customers
 {
-    public sealed class AddCustomer : IRequest<CaseResult<Customer>>
+    public sealed class AddCustomer : IRequest<CaseResult<CustomerInfo>>
     {
         internal string Name { get; }
         internal string Email { get; }
@@ -26,7 +27,7 @@ namespace WebLicense.Logic.UseCases.Customers
         }
     }
 
-    internal sealed class AddCustomerHandler : IRequestHandler<AddCustomer, CaseResult<Customer>>
+    internal sealed class AddCustomerHandler : IRequestHandler<AddCustomer, CaseResult<CustomerInfo>>
     {
         private readonly DatabaseContext db;
         private readonly ISender sender;
@@ -37,7 +38,7 @@ namespace WebLicense.Logic.UseCases.Customers
             this.sender = sender ?? throw new ArgumentNullException(nameof(sender));
         }
 
-        public async Task<CaseResult<Customer>> Handle(AddCustomer request, CancellationToken cancellationToken)
+        public async Task<CaseResult<CustomerInfo>> Handle(AddCustomer request, CancellationToken cancellationToken)
         {
             try
             {
@@ -59,7 +60,7 @@ namespace WebLicense.Logic.UseCases.Customers
             }
             catch (Exception e)
             {
-                return new CaseResult<Customer>(e);
+                return new CaseResult<CustomerInfo>(e);
             }
         }
     }

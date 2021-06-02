@@ -28,6 +28,10 @@ namespace WebLicense.Shared.Customers
 
         #region C-tor
 
+        public CustomerSettingsInfo()
+        {
+        }
+
         public CustomerSettingsInfo(CustomerSettings settings)
         {
             if (settings == null) return;

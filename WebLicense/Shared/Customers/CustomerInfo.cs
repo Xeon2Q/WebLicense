@@ -24,6 +24,10 @@ namespace WebLicense.Shared.Customers
 
         #region C-tor
 
+        public CustomerInfo()
+        {
+        }
+
         public CustomerInfo(Customer customer)
         {
             if (customer == null) return;

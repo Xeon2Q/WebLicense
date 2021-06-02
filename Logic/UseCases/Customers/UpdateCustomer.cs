@@ -12,7 +12,7 @@ using WebLicense.Shared.Customers;
 
 namespace WebLicense.Logic.UseCases.Customers
 {
-    public sealed class UpdateCustomer : IRequest<CaseResult<Customer>>
+    public sealed class UpdateCustomer : IRequest<CaseResult<CustomerInfo>>
     {
         internal CustomerInfo Customer { get; }
 
@@ -20,11 +20,11 @@ namespace WebLicense.Logic.UseCases.Customers
         {
             Customer = customer ?? throw new ArgumentNullException(nameof(customer), "'customer' cannot be null");
 
-            if (!Customer.Id.HasValue) throw new ArgumentNullException(nameof(customer), "'customer.Id' cannot be null");
+            if (!Customer.Id.HasValue || Customer.Id < 1) throw new ArgumentNullException(nameof(customer), "'customer.Id' cannot be null");
         }
     }
 
-    internal sealed class UpdateCustomerHandler : IRequestHandler<UpdateCustomer, CaseResult<Customer>>
+    internal sealed class UpdateCustomerHandler : IRequestHandler<UpdateCustomer, CaseResult<CustomerInfo>>
     {
         private readonly DatabaseContext db;
         private readonly ISender sender;
@@ -35,7 +35,7 @@ namespace WebLicense.Logic.UseCases.Customers
             this.sender = sender ?? throw new ArgumentNullException(nameof(sender));
         }
 
-        public async Task<CaseResult<Customer>> Handle(UpdateCustomer request, CancellationToken cancellationToken)
+        public async Task<CaseResult<CustomerInfo>> Handle(UpdateCustomer request, CancellationToken cancellationToken)
         {
             try
             {
@@ -55,7 +55,7 @@ namespace WebLicense.Logic.UseCases.Customers
             }
             catch (Exception e)
             {
-                return new CaseResult<Customer>(e);
+                return new CaseResult<CustomerInfo>(e);
             }
         }
 
@@ -86,34 +86,36 @@ namespace WebLicense.Logic.UseCases.Customers
             {
                 model.CustomerAdministrators ??= new List<CustomerAdministrator>();
                 model.CustomerAdministrators = model.CustomerAdministrators.Where(q => info.Administrators.Any(w => w.Id == q.UserId)).ToList();
-                var newItems = info.Administrators.Where(q => q.Id.HasValue && model.CustomerAdministrators.All(w => w.UserId != q.Id)).ToList();
-                foreach (var newItem in newItems)
-                {
-                    model.CustomerAdministrators.Add(new CustomerAdministrator {CustomerId = model.Id, UserId = newItem.Id.Value});
-                }
+
+                GetNewUsers(info.Administrators, model.CustomerAdministrators.Select(q => q.UserId)).ForEach(q => model.CustomerAdministrators.Add(new CustomerAdministrator {CustomerId = model.Id, UserId = q}));
             }
 
             if (info.Managers != null)
             {
                 model.CustomerManagers ??= new List<CustomerManager>();
                 model.CustomerManagers = model.CustomerManagers.Where(q => info.Managers.Any(w => w.Id == q.UserId)).ToList();
-                var newItems = info.Managers.Where(q => q.Id.HasValue && model.CustomerManagers.All(w => w.UserId != q.Id)).ToList();
-                foreach (var newItem in newItems)
-                {
-                    model.CustomerManagers.Add(new CustomerManager {CustomerId = model.Id, UserId = newItem.Id.Value});
-                }
+
+                GetNewUsers(info.Managers, model.CustomerManagers.Select(q => q.UserId)).ForEach(q => model.CustomerManagers.Add(new CustomerManager {CustomerId = model.Id, UserId = q}));
             }
 
             if (info.Users != null)
             {
                 model.CustomerUsers ??= new List<CustomerUser>();
                 model.CustomerUsers = model.CustomerUsers.Where(q => info.Users.Any(w => w.Id == q.UserId)).ToList();
-                var newItems = info.Users.Where(q => q.Id.HasValue && model.CustomerUsers.All(w => w.UserId != q.Id)).ToList();
-                foreach (var newItem in newItems)
-                {
-                    model.CustomerUsers.Add(new CustomerUser {CustomerId = model.Id, UserId = newItem.Id.Value});
-                }
+                
+                GetNewUsers(info.Users, model.CustomerUsers.Select(q => q.UserId)).ForEach(q => model.CustomerUsers.Add(new CustomerUser {CustomerId = model.Id, UserId = q}));
             }
+        }
+
+        private List<long> GetNewUsers(IEnumerable<CustomerUserInfo> changedUsers, IEnumerable<long> existingUsers)
+        {
+            var cId = changedUsers.Where(q => q.Id.HasValue).Select(q => q.Id.Value).Distinct().ToList();
+            if (!cId.Any()) return new List<long>(0);
+
+            var eId = existingUsers.ToList();
+            if (!eId.Any()) return cId;
+
+            return cId.Where(q => !eId.Contains(q)).ToList();
         }
 
         #endregion

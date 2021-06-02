@@ -20,7 +20,7 @@ using Xunit.Abstractions;
 
 namespace UnitTests.Auxiliary
 {
-    public abstract class TestBaseAx : IDisposable
+    public abstract class TestBaseAx<T> : IDisposable
     {
         protected const string DOT = "·";
 
@@ -119,6 +119,8 @@ namespace UnitTests.Auxiliary
                 .Returns((GetCustomer request, CancellationToken cancellationToken) => new GetCustomerHandler(db).Handle(request, cancellationToken));
             mock.Setup(q => q.Send(It.IsAny<AddCustomer>(), It.IsAny<CancellationToken>()))
                 .Returns((AddCustomer request, CancellationToken cancellationToken) => new AddCustomerHandler(db, mock.Object).Handle(request, cancellationToken));
+            mock.Setup(q => q.Send(It.IsAny<UpdateCustomer>(), It.IsAny<CancellationToken>()))
+                .Returns((UpdateCustomer request, CancellationToken cancellationToken) => new UpdateCustomerHandler(db, mock.Object).Handle(request, cancellationToken));
 
             return mock.Object;
         }
@@ -126,6 +128,11 @@ namespace UnitTests.Auxiliary
         #endregion
 
         #region Support methods
+
+        protected virtual void CompareModels(T @new, T info, T old)
+        {
+            throw new NotSupportedException();
+        }
 
         protected void WriteErrors(IEnumerable<CaseError> errors, ITestOutputHelper output)
         {
