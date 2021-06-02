@@ -134,20 +134,20 @@ namespace UnitTests.Auxiliary
             throw new NotSupportedException();
         }
 
-        protected void WriteErrors(IEnumerable<CaseError> errors, ITestOutputHelper output)
+        protected void WriteErrors(IEnumerable<CaseException> errors, ITestOutputHelper output)
         {
             if (output == null || errors == null) return;
 
             errors.ToList().ForEach(q => WriteError(q, output));
         }
 
-        protected void WriteError(CaseError error, ITestOutputHelper output)
+        protected void WriteError(CaseException error, ITestOutputHelper output)
         {
             if (output == null || error == null) return;
 
             if (!string.IsNullOrWhiteSpace(error.Message)) output.WriteLine($"{DOT} {error.Message.Trim()}");
 
-            WriteError(error.Exception, output);
+            WriteError(error.InnerException, output);
 
             output.WriteLine("");
         }

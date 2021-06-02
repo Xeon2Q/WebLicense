@@ -36,7 +36,14 @@ namespace UnitTests
             await using var db = GetMemoryContext();
             var med = GetMediator(db);
 
-            var model = await med.Send(new AddCustomer(name, email, userId, adminId));
+            var model = await med.Send(new AddCustomer(new CustomerInfo
+            {
+                Name = name,
+                Settings = new CustomerSettingsInfo {NotificationsEmail = email},
+                Users = new List<CustomerUserInfo> {new() {Id = userId}},
+                Managers = new List<CustomerUserInfo> {new() {Id = userId}},
+                Administrators = new List<CustomerUserInfo> {new() {Id = adminId}}
+            }));
 
             model.Should().NotBeNull();
 
@@ -67,7 +74,14 @@ namespace UnitTests
             await using var db = GetMemoryContext();
             var med = GetMediator(db);
 
-            var model = await med.Send(new AddCustomer(name, email, userId, adminId));
+            var model = await med.Send(new AddCustomer(new CustomerInfo
+            {
+                Name = name,
+                Settings = new CustomerSettingsInfo {NotificationsEmail = email},
+                Users = new List<CustomerUserInfo> {new() {Id = userId}},
+                Managers = new List<CustomerUserInfo> {new() {Id = userId}},
+                Administrators = new List<CustomerUserInfo> {new() {Id = adminId}}
+            }));
 
             model.Should().BeOfType<CaseResult<CustomerInfo>>();
             model.Succeeded.Should().BeFalse();
@@ -89,7 +103,13 @@ namespace UnitTests
             await using var db = GetMemoryContext();
             var med = GetMediator(db);
 
-            Func<Task> action = async () => await med.Send(new AddCustomer(name, email, userId));
+            Func<Task> action = async () => await med.Send(new AddCustomer(new CustomerInfo
+            {
+                Name = name,
+                Settings = new CustomerSettingsInfo {NotificationsEmail = email},
+                Users = new List<CustomerUserInfo> {new() {Id = userId}},
+                Managers = new List<CustomerUserInfo> {new() {Id = userId}}
+            }));
 
             action.Should().Throw<Exception>().Where(q => q is ArgumentNullException || q is ArgumentOutOfRangeException);
         }

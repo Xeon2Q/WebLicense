@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WebLicense.Access;
@@ -13,17 +14,11 @@ namespace WebLicense.Logic.UseCases.Customers
 {
     public sealed class AddCustomer : IRequest<CaseResult<CustomerInfo>>
     {
-        internal string Name { get; }
-        internal string Email { get; }
-        internal long UserId { get; }
-        internal long AdminId { get; }
+        internal CustomerInfo Customer { get; }
 
-        public AddCustomer(string name, string email, long userId, long adminId = 0)
+        public AddCustomer(CustomerInfo customer)
         {
-            Name = !string.IsNullOrWhiteSpace(name) ? name.Trim() : throw new ArgumentNullException(nameof(name), "'Name' cannot be null");
-            Email = !string.IsNullOrWhiteSpace(email) ? email.Trim() : throw new ArgumentNullException(nameof(name), "'Email' cannot be null");
-            UserId = userId > 0 ? userId : throw new ArgumentOutOfRangeException(nameof(userId), "'UserId' must be greater than 0");
-            AdminId = adminId > 0 ? adminId : 0;
+            Customer = customer;
         }
     }
 
@@ -42,15 +37,23 @@ namespace WebLicense.Logic.UseCases.Customers
         {
             try
             {
+                ValidateRequest(request);
+
+                var users = request.Customer.Users.Where(q => q?.Id > 0).Select(q => q.Id.Value).Distinct().Select(q => new CustomerUser {UserId = q}).ToList();
+                var managers = request.Customer.Managers?.Where(q => q?.Id > 0).Select(q => q.Id.Value).Distinct().Select(q => new CustomerManager {UserId = q}).ToList() ?? new List<CustomerManager>();
+                var administrators = request.Customer.Administrators?.Where(q => q?.Id > 0).Select(q => q.Id.Value).Distinct().Select(q => new CustomerAdministrator {UserId = q}).ToList() ?? new List<CustomerAdministrator>(0);
+
+                if (managers.Count == 0) managers = new List<CustomerManager> {new() {UserId = users.First().UserId}};
+
                 var customer = new Customer
                 {
-                    Name = request.Name,
+                    Name = request.Customer.Name,
                     Code = string.Empty.GetRandom(50),
                     ReferenceId = Guid.NewGuid().ToString("N"),
-                    Settings = new CustomerSettings {NotificationsEmail = request.Email},
-                    CustomerUsers = new List<CustomerUser> {new() {UserId = request.UserId}},
-                    CustomerManagers = new List<CustomerManager> {new() {UserId = request.UserId}},
-                    CustomerAdministrators = request.AdminId > 0 ? new List<CustomerAdministrator> {new() {UserId = request.AdminId}} : new List<CustomerAdministrator>()
+                    Settings = new CustomerSettings {NotificationsEmail = request.Customer.Settings.NotificationsEmail},
+                    CustomerUsers = users,
+                    CustomerManagers = managers,
+                    CustomerAdministrators = administrators
                 };
 
                 var result = await db.Customers.AddAsync(customer, cancellationToken);
@@ -63,5 +66,18 @@ namespace WebLicense.Logic.UseCases.Customers
                 return new CaseResult<CustomerInfo>(e);
             }
         }
+
+        #region Methods
+
+        private void ValidateRequest(AddCustomer request)
+        {
+            if (request?.Customer == null) throw new CaseException("*Request is null", "Request is null");
+            if (string.IsNullOrWhiteSpace(request.Customer.Settings?.NotificationsEmail)) throw new CaseException("*'Email' cannot be null", "'Email' is null");
+            if (string.IsNullOrWhiteSpace(request.Customer.Name)) throw new CaseException("*'Name' cannot be null", "'Name is null'");
+            if (request.Customer.Users == null || request.Customer.Users.Count == 0) throw new CaseException("*'Users' cannot be null or empty", "'Users' is null or empty");
+            if (request.Customer.Users.All(q => q == null || !q.Id.HasValue || q.Id < 1)) throw new CaseException("*'Users' must have 'Id' > 0", "'Users' have 'Id' < 1");
+        }
+
+        #endregion
     }
 }

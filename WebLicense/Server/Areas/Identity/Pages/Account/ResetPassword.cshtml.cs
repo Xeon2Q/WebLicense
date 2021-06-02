@@ -109,7 +109,7 @@ namespace WebLicense.Server.Areas.Identity.Pages.Account
             {
                 foreach (var error in result.Errors)
                 {
-                    logger.LogErrorWith(LogAction.Account.Profile.ChangePassword, user, error.Exception, error.Message);
+                    logger.LogErrorWith(LogAction.Account.Profile.ChangePassword, user, error, error.Message);
                 }
             }
 

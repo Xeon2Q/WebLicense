@@ -18,9 +18,7 @@ namespace WebLicense.Logic.UseCases.Customers
 
         public UpdateCustomer(CustomerInfo customer)
         {
-            Customer = customer ?? throw new ArgumentNullException(nameof(customer), "'customer' cannot be null");
-
-            if (!Customer.Id.HasValue || Customer.Id < 1) throw new ArgumentNullException(nameof(customer), "'customer.Id' cannot be null");
+            Customer = customer;
         }
     }
 
@@ -39,13 +37,15 @@ namespace WebLicense.Logic.UseCases.Customers
         {
             try
             {
+                ValidateRequest(request);
+
                 var info = request.Customer;
                 var model = await db.Set<Customer>().AsTracking().Where(q => q.Id == info.Id.Value)
                                     .Include(q => q.Settings)
                                     .Include(q => q.CustomerAdministrators)
                                     .Include(q => q.CustomerManagers)
                                     .Include(q => q.CustomerUsers).FirstOrDefaultAsync(cancellationToken);
-                if (model == null) throw new Exception("Customer not found or deleted");
+                if (model == null) throw new CaseException("*Customer not found or deleted", "Customer not found or deleted");
 
                 UpdateModel(model, info);
 
@@ -60,6 +60,13 @@ namespace WebLicense.Logic.UseCases.Customers
         }
 
         #region Methods
+
+        private void ValidateRequest(UpdateCustomer request)
+        {
+            if (request?.Customer == null) throw new CaseException("*Request is null", "Request is null");
+            if (!request.Customer.Id.HasValue) throw new CaseException("*'Id' is null", "'Id' is null");
+            if (request.Customer.Id < 1) throw new CaseException("*'Id' must be greater than 0", "'Id' < 1");
+        }
 
         private void UpdateModel(Customer model, CustomerInfo info)
         {

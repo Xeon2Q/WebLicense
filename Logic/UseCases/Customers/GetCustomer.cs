@@ -16,7 +16,7 @@ namespace WebLicense.Logic.UseCases.Customers
 
         public GetCustomer(int id)
         {
-            Id = id > 0 ? id : throw new ArgumentOutOfRangeException(nameof(id), "'id' must be greater than 0");
+            Id = id;
         }
     }
 
@@ -33,6 +33,8 @@ namespace WebLicense.Logic.UseCases.Customers
         {
             try
             {
+                ValidateRequest(request);
+
                 var customer = await db.Customers.AsNoTrackingWithIdentityResolution().Where(q => q.Id == request.Id)
                                        .Include(q => q.Administrators)
                                        .Include(q => q.Managers)
@@ -46,5 +48,15 @@ namespace WebLicense.Logic.UseCases.Customers
                 return new CaseResult<CustomerInfo>(e);
             }
         }
+
+        #region Methods
+
+        private void ValidateRequest(GetCustomer request)
+        {
+            if (request == null) throw new CaseException("*Request is null", "Request is null");
+            if (request.Id < 1) throw new CaseException("*'Id' must be greater than 0", "'Id' < 0");
+        }
+
+        #endregion
     }
 }

@@ -12,7 +12,7 @@ namespace WebLicense.Logic.Auxiliary
 
         public readonly bool Succeeded;
 
-        public readonly IReadOnlyCollection<CaseError> Errors;
+        public readonly IReadOnlyCollection<CaseException> Errors;
 
         #endregion
 
@@ -24,18 +24,22 @@ namespace WebLicense.Logic.Auxiliary
             Errors = null;
         }
 
-        internal CaseResult([NotNull] string error) : this(error, new Exception(error))
+        internal CaseResult([NotNull] string error) : this(new CaseException(error))
         {
         }
 
-        internal CaseResult([NotNull] Exception exception) : this(exception.Message, exception)
+        internal CaseResult([NotNull] Exception exception) : this(exception is CaseException cex ? cex : new CaseException(exception))
         {
         }
 
-        internal CaseResult([NotNull] string error, [NotNull] Exception exception)
+        internal CaseResult([NotNull] string error, [NotNull] Exception exception) : this(new CaseException(error, exception))
+        {
+        }
+
+        internal CaseResult([NotNull] CaseException exception)
         {
             Succeeded = false;
-            Errors = new List<CaseError> {new(error, exception)};
+            Errors = new List<CaseException> {exception};
         }
 
         internal CaseResult([NotNull] IdentityResult result)
@@ -48,7 +52,7 @@ namespace WebLicense.Logic.Auxiliary
             else
             {
                 Succeeded = false;
-                Errors = result.Errors != null && result.Errors.Any() ? result.Errors.Select(q => new CaseError(q.Description)).ToList() : null;
+                Errors = result.Errors != null && result.Errors.Any() ? result.Errors.Select(q => new CaseException(q.Description)).ToList() : null;
             }
         }
 
@@ -95,40 +99,31 @@ namespace WebLicense.Logic.Auxiliary
 
     #region Auxiliary classes
 
-    public sealed class CaseError
+    public sealed class CaseException : Exception
     {
         #region Fields
 
-        public readonly string Message;
-
-        public readonly Exception Exception;
+        public readonly string LocalizedMessage;
 
         #endregion
 
         #region C-tor
 
-        internal CaseError([NotNull] string message)
+        internal CaseException([NotNull] string message) : this(message, new Exception(message))
         {
-            Message = !string.IsNullOrWhiteSpace(message) ? message.Trim() : null;
-            Exception = !string.IsNullOrWhiteSpace(message) ? new Exception(message.Trim()) : null;
         }
 
-        internal CaseError([NotNull] Exception exception)
+        internal CaseException([NotNull] Exception exception) : this(exception.Message, exception)
         {
-            Message = exception?.Message;
-            Exception = exception;
         }
 
-        internal CaseError([NotNull] string message, [NotNull] string exception)
+        internal CaseException([NotNull] string message, [NotNull] string exception) : this(message, new Exception(exception.Trim()))
         {
-            Message = !string.IsNullOrWhiteSpace(message) ? message.Trim() : null;
-            Exception = !string.IsNullOrWhiteSpace(exception) ? new Exception(exception.Trim()) : null;
         }
 
-        internal CaseError([NotNull] string message, [NotNull] Exception exception)
+        internal CaseException([NotNull] string message, [NotNull] Exception exception) : base(exception.Message.Trim(), exception)
         {
-            Message = !string.IsNullOrWhiteSpace(message) ? message.Trim() : null;
-            Exception = exception;
+            LocalizedMessage = !string.IsNullOrWhiteSpace(message) ? message.Trim() : exception.Message;
         }
 
         #endregion
