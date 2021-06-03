@@ -22,7 +22,18 @@ namespace UnitTests.Auxiliary
 {
     public abstract class TestBaseAx<T> : IDisposable
     {
-        protected const string DOT = "·";
+        #region C-tor | Fields
+
+        private const string Dot = "·";
+
+        private readonly ITestOutputHelper output;
+
+        protected TestBaseAx(ITestOutputHelper output)
+        {
+            this.output = output ?? throw new ArgumentNullException(nameof(output));
+        }
+
+        #endregion
 
         #region DbContexts
 
@@ -117,10 +128,14 @@ namespace UnitTests.Auxiliary
             // customers
             mock.Setup(q => q.Send(It.IsAny<GetCustomer>(), It.IsAny<CancellationToken>()))
                 .Returns((GetCustomer request, CancellationToken cancellationToken) => new GetCustomerHandler(db).Handle(request, cancellationToken));
+            mock.Setup(q => q.Send(It.IsAny<GetCustomers>(), It.IsAny<CancellationToken>()))
+                .Returns((GetCustomers request, CancellationToken cancellationToken) => new GetCustomersHandler(db).Handle(request, cancellationToken));
             mock.Setup(q => q.Send(It.IsAny<AddCustomer>(), It.IsAny<CancellationToken>()))
                 .Returns((AddCustomer request, CancellationToken cancellationToken) => new AddCustomerHandler(db, mock.Object).Handle(request, cancellationToken));
             mock.Setup(q => q.Send(It.IsAny<UpdateCustomer>(), It.IsAny<CancellationToken>()))
                 .Returns((UpdateCustomer request, CancellationToken cancellationToken) => new UpdateCustomerHandler(db, mock.Object).Handle(request, cancellationToken));
+            mock.Setup(q => q.Send(It.IsAny<DeleteCustomer>(), It.IsAny<CancellationToken>()))
+                .Returns((DeleteCustomer request, CancellationToken cancellationToken) => new DeleteCustomerHandler(db).Handle(request, cancellationToken));
 
             return mock.Object;
         }
@@ -134,34 +149,40 @@ namespace UnitTests.Auxiliary
             throw new NotSupportedException();
         }
 
-        protected void WriteErrors(IEnumerable<CaseException> errors, ITestOutputHelper output)
+        protected void WriteErrors(IEnumerable<CaseException> errors, ITestOutputHelper @out = null)
         {
-            if (output == null || errors == null) return;
+            @out ??= output;
 
-            errors.ToList().ForEach(q => WriteError(q, output));
+            if (@out == null || errors == null) return;
+
+            errors.ToList().ForEach(q => WriteError(q, @out));
         }
 
-        protected void WriteError(CaseException error, ITestOutputHelper output)
+        protected void WriteError(CaseException error, ITestOutputHelper @out = null)
         {
-            if (output == null || error == null) return;
+            @out ??= output;
 
-            if (!string.IsNullOrWhiteSpace(error.Message)) output.WriteLine($"{DOT} {error.Message.Trim()}");
+            if (@out == null || error == null) return;
 
-            WriteError(error.InnerException, output);
+            if (!string.IsNullOrWhiteSpace(error.Message)) @out.WriteLine($"{Dot} {error.Message.Trim()}");
 
-            output.WriteLine("");
+            WriteError(error.InnerException, @out);
+
+            @out.WriteLine("");
         }
 
-        protected void WriteError(Exception exception, ITestOutputHelper output)
+        protected void WriteError(Exception exception, ITestOutputHelper @out = null)
         {
-            if (output == null || exception == null) return;
+            @out ??= output;
+
+            if (@out == null || exception == null) return;
 
             var ex = exception;
             while (ex != null)
             {
-                output.WriteLine("--------------------");
-                if (!string.IsNullOrWhiteSpace(ex.Message)) output.WriteLine($"{DOT}{DOT} {ex.Message}");
-                if (!string.IsNullOrWhiteSpace(ex.StackTrace)) output.WriteLine($"{DOT}{DOT} {ex.StackTrace}");
+                @out.WriteLine("--------------------");
+                if (!string.IsNullOrWhiteSpace(ex.Message)) @out.WriteLine($"{Dot}{Dot} {ex.Message}");
+                if (!string.IsNullOrWhiteSpace(ex.StackTrace)) @out.WriteLine($"{Dot}{Dot} {ex.StackTrace}");
 
                 ex = ex.InnerException;
             }

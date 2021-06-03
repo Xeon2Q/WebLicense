@@ -1,10 +1,12 @@
-using FluentAssertions;
 using System;
+using FluentAssertions;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using UnitTests.Auxiliary;
+using WebLicense.Core.Models.Customers;
 using WebLicense.Logic.Auxiliary;
 using WebLicense.Logic.UseCases.Customers;
 using WebLicense.Shared.Customers;
@@ -15,22 +17,118 @@ namespace UnitTests
 {
     public class CustomerTests : TestBaseAx<CustomerInfo>
     {
-        #region C-tor | Fields
+        #region C-tor | Fields | Properties
 
-        private readonly ITestOutputHelper output;
-
-        public CustomerTests(ITestOutputHelper output)
+        public CustomerTests(ITestOutputHelper output) : base(output)
         {
-            this.output = output;
         }
 
+        private static readonly IDictionary<string, Expression<Func<Customer, bool>>> FiltersValid = new Dictionary<string, Expression<Func<Customer, bool>>>
+        {
+            {"", null},
+            {"id-101", q => q.Id == 101},
+            {"name-102", q => q.Name == "Customer 102"},
+            {"miss", q => q.Code == "missing code"}
+        };
+
         #endregion
+
+        [Theory]
+        [InlineData(100)]
+        [InlineData(102)]
+        [Trait("Customer", "Get")]
+        public async Task Get_Success(int id)
+        {
+            await using var db = GetMemoryContext();
+            var med = GetMediator(db);
+
+            var model = await med.Send(new GetCustomer(id));
+
+            model.Should().NotBeNull();
+            model.Succeeded.Should().BeTrue();
+            model.Data.Should().NotBeNull().And.BeOfType<CustomerInfo>();
+            model.Errors.Should().BeNull();
+        }
+
+        [Theory]
+        [InlineData(-9999)]
+        [InlineData(0)]
+        [InlineData(9999)]
+        [Trait("Customer", "Get")]
+        public async Task Get_Fail(int id)
+        {
+            await using var db = GetMemoryContext();
+            var med = GetMediator(db);
+
+            var model = await med.Send(new GetCustomer(id));
+
+            model.Should().NotBeNull();
+            model.Succeeded.Should().BeFalse();
+            model.Data.Should().BeNull();
+            model.Errors.Should().NotBeNullOrEmpty();
+
+            WriteErrors(model.Errors);
+        }
+
+        [Theory]
+        [InlineData(0, 25, "id", true, "")]
+        [InlineData(0, 1, "", true, "")]
+        [InlineData(1, 1, "", true, "")]
+        [InlineData(1, 25, "name", false, "")]
+        [InlineData(0, 25, "name", true, "id-101")]
+        [InlineData(0, 3, "name", true, "name-102")]
+        [InlineData(0, 3, "name", true, "miss")]
+        [Trait("Customer", "Get")]
+        public async Task GetAll_Success(int skip, int take, string sort, bool asc, string filterName)
+        {
+            await using var db = GetMemoryContext();
+            var med = GetMediator(db);
+
+            var filter = FiltersValid[filterName];
+            var model = await med.Send(new GetCustomers(skip, take, sort, asc, filter));
+
+            model.Should().NotBeNull();
+            model.Succeeded.Should().BeTrue();
+            if (filterName != "miss")
+                model.Data.Should().NotBeNullOrEmpty().And.BeAssignableTo<IList<CustomerInfo>>();
+            else
+                model.Data.Should().BeNullOrEmpty().And.BeAssignableTo<IList<CustomerInfo>>();
+            model.Errors.Should().BeNull();
+            model.Data.Should().HaveCountLessOrEqualTo(new[] {take, 3 - skip}.Min());
+
+            if (!string.IsNullOrWhiteSpace(sort))
+            {
+                if ("id".Equals(sort, StringComparison.OrdinalIgnoreCase))
+                {
+                    if (asc)
+                        model.Data.Should().BeInAscendingOrder(q => q.Id);
+                    else
+                        model.Data.Should().BeInDescendingOrder(q => q.Id);
+                }
+                else if ("name".Equals(sort, StringComparison.OrdinalIgnoreCase))
+                {
+                    if (asc)
+                        model.Data.Should().BeInAscendingOrder(q => q.Name);
+                    else
+                        model.Data.Should().BeInDescendingOrder(q => q.Name);
+                }
+                else
+                {
+                    model.Data.Should().BeInAscendingOrder(q => q.Name);
+                }
+            }
+            else
+            {
+                model.Data.Should().BeInAscendingOrder(q => q.Name);
+            }
+        }
 
         [Theory]
         [InlineData("Customer 1", "xeon99@gmail.com", 100, 102)]
         [InlineData("Customer 2", "a@g.com", 101, 101)]
         [InlineData("Customer 3", "xeon99@gmail.com", 102, 0)]
         [InlineData("Customer 4", "a@g.com", 100, long.MinValue)]
+        [Trait("Customer", "Add/Update")]
         public async Task Add_Success(string name, string email, long userId, long adminId)
         {
             await using var db = GetMemoryContext();
@@ -69,6 +167,13 @@ namespace UnitTests
         [InlineData("Customer 1", "dum@not.exists", 100, 1)]
         [InlineData("Customer 1", "dum@not.exists", 1, 100)]
         [InlineData("Customer 1", "dum@not.exists", 1, 1)]
+        [InlineData("", "dum@not.exists", 100, 0)]
+        [InlineData(null, "dum@not.exists", 100, 0)]
+        [InlineData("Customer 1", "", 100, 0)]
+        [InlineData("Customer 1", null, 100, 0)]
+        [InlineData("Customer 1", "dum@not.exists", -1, 0)]
+        [InlineData("Customer 1", "dum@not.exists", 0, 0)]
+        [Trait("Customer", "Add/Update")]
         public async Task Add_Fail(string name, string email, long userId, long adminId)
         {
             await using var db = GetMemoryContext();
@@ -88,30 +193,7 @@ namespace UnitTests
             model.Data.Should().BeNull();
             model.Errors.Should().NotBeEmpty();
 
-            WriteErrors(model.Errors, output);
-        }
-
-        [Theory]
-        [InlineData("", "dum@not.exists", 100)]
-        [InlineData(null, "dum@not.exists", 100)]
-        [InlineData("Customer 1", "", 100)]
-        [InlineData("Customer 1", null, 100)]
-        [InlineData("Customer 1", "dum@not.exists", -1)]
-        [InlineData("Customer 1", "dum@not.exists", 0)]
-        public async Task Add_Exception(string name, string email, long userId)
-        {
-            await using var db = GetMemoryContext();
-            var med = GetMediator(db);
-
-            Func<Task> action = async () => await med.Send(new AddCustomer(new CustomerInfo
-            {
-                Name = name,
-                Settings = new CustomerSettingsInfo {NotificationsEmail = email},
-                Users = new List<CustomerUserInfo> {new() {Id = userId}},
-                Managers = new List<CustomerUserInfo> {new() {Id = userId}}
-            }));
-
-            action.Should().Throw<Exception>().Where(q => q is ArgumentNullException || q is ArgumentOutOfRangeException);
+            WriteErrors(model.Errors);
         }
 
         [Theory]
@@ -146,19 +228,41 @@ namespace UnitTests
             model.Data.Should().BeNull();
             model.Errors.Should().NotBeNullOrEmpty();
 
-            WriteErrors(model.Errors, output);
+            WriteErrors(model.Errors);
         }
 
         [Theory]
-        [ClassData(typeof(CustomersExceptionData))]
-        public async Task Update_Exception(CustomerInfo info)
+        [InlineData(100)]
+        [InlineData(101)]
+        [InlineData(102)]
+        public async Task Delete_Success(int id)
         {
             await using var db = GetMemoryContext();
             var med = GetMediator(db);
 
-            Func<Task> action = async () => await med.Send(new UpdateCustomer(info));
+            var model = await med.Send(new DeleteCustomer(id));
 
-            action.Should().Throw<Exception>();
+            model.Should().NotBeNull();
+            model.Succeeded.Should().BeTrue();
+            model.Errors.Should().BeNullOrEmpty();
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-5)]
+        [InlineData(1100)]
+        public async Task Delete_Fail(int id)
+        {
+            await using var db = GetMemoryContext();
+            var med = GetMediator(db);
+
+            var model = await med.Send(new DeleteCustomer(id));
+
+            model.Should().NotBeNull();
+            model.Succeeded.Should().BeFalse();
+            model.Errors.Should().NotBeNullOrEmpty();
+
+            WriteErrors(model.Errors);
         }
 
         #region Methods
@@ -275,15 +379,6 @@ namespace UnitTests
                 yield return new object[] {new CustomerInfo {Id = 100, Managers = new List<CustomerUserInfo> {new() {Id = 601}, new() {Id = 102}}}};
                 yield return new object[] {new CustomerInfo {Id = 100, Users = new List<CustomerUserInfo> {new() {Id = 501}, new() {Id = 102}}}};
                 yield return new object[] {new CustomerInfo {Id = 108, Settings = new CustomerSettingsInfo {MaxActiveLicensesCount = 9}}};
-            }
-
-            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-        }
-
-        public class CustomersExceptionData : IEnumerable<object[]>
-        {
-            public IEnumerator<object[]> GetEnumerator()
-            {
                 yield return new object[] {new CustomerInfo()};
                 yield return new object[] {new CustomerInfo {Id = 0, Name = "Name X"}};
                 yield return new object[] {new CustomerInfo {Id = -333, Code = "Code X"}};

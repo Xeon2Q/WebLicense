@@ -41,6 +41,9 @@ namespace WebLicense.Logic.UseCases.Customers
                                        .Include(q => q.Users)
                                        .Include(q => q.Settings)
                                        .FirstOrDefaultAsync(cancellationToken);
+
+                if (customer == null) throw new CaseException("*Customer not found or deleted", "Customer not found or deleted");
+
                 return new CaseResult<CustomerInfo>(new CustomerInfo(customer));
             }
             catch (Exception e)
@@ -54,7 +57,7 @@ namespace WebLicense.Logic.UseCases.Customers
         private void ValidateRequest(GetCustomer request)
         {
             if (request == null) throw new CaseException("*Request is null", "Request is null");
-            if (request.Id < 1) throw new CaseException("*'Id' must be greater than 0", "'Id' < 0");
+            if (request.Id < 1) throw new CaseException("*'Id' must be greater than 0", "'Id' < 1");
         }
 
         #endregion
