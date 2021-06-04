@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Resources;
 using WebLicense.Access;
 using WebLicense.Core.Models.Identity;
 using WebLicense.Logic.Auxiliary;
@@ -31,7 +32,7 @@ namespace WebLicense.Logic.UseCases.Users
 
         public void Validate()
         {
-            if (User == null && Role == null) throw new CaseException("*Either 'User' or 'Role' must be not null", "Either 'User' or 'Role' must be not null");
+            if (User == null && Role == null) throw new CaseException(Exceptions.Role_and_User_Null, "Both 'User' and 'Role' are null");
         }
     }
 

@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Access\Access.csproj" />
     <ProjectReference Include="..\Core\Core.csproj" />
+    <ProjectReference Include="..\Resources\Resources.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Resources;
 using WebLicense.Access;
 using WebLicense.Core.Models.Customers;
 using WebLicense.Logic.Auxiliary;
@@ -33,7 +34,7 @@ namespace WebLicense.Logic.UseCases.Customers
 
         public void Validate()
         {
-            if (Criteria == null) throw new CaseException("*'Criteria' must be not null", "'Criteria' must be not null");
+            if (Criteria == null) throw new CaseException(Exceptions.Criteria_Null, "'Criteria' is null");
         }
     }
 

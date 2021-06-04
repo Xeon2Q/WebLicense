@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Resources;
 using WebLicense.Access;
 using WebLicense.Core.Models.Customers;
 using WebLicense.Logic.Auxiliary;
@@ -24,9 +25,9 @@ namespace WebLicense.Logic.UseCases.Customers
 
         public void Validate()
         {
-            if (Customer == null) throw new CaseException("*Request is null", "Request is null");
-            if (!Customer.Id.HasValue) throw new CaseException("*'Id' is null", "'Id' is null");
-            if (Customer.Id < 1) throw new CaseException("*'Id' must be greater than 0", "'Id' < 1");
+            if (Customer == null) throw new CaseException(Exceptions.Customer_Null, "Request is null");
+            if (!Customer.Id.HasValue) throw new CaseException(Exceptions.Customer_Id_Null, "Customer 'Id' is null");
+            if (Customer.Id < 1) throw new CaseException(Exceptions.Customer_Id_LessOne, "Customer 'Id' < 1");
         }
     }
 

@@ -7,6 +7,7 @@ using System.Net.Mail;
 using System.Net.Mime;
 using System.Threading;
 using System.Threading.Tasks;
+using Resources;
 using WebLicense.Logic.Auxiliary;
 using WebLicense.Logic.UseCases.Auxiliary;
 using WebLicense.Shared.Identity;
@@ -28,8 +29,8 @@ namespace WebLicense.Logic.UseCases.Users
 
         public void Validate()
         {
-            if (User == null) throw new CaseException("*'User' must be not null", "'User' must be not null");
-            if (string.IsNullOrWhiteSpace(Email) && string.IsNullOrWhiteSpace(User.Email)) throw new CaseException("*'Email' must be not null", "'Email' must be not null");
+            if (User == null) throw new CaseException(Exceptions.User_Null, "'User' is null");
+            if (string.IsNullOrWhiteSpace(Email) && string.IsNullOrWhiteSpace(User.Email)) throw new CaseException(Exceptions.User_Email_Empty, "User 'Email' is null or empty");
         }
     }
 

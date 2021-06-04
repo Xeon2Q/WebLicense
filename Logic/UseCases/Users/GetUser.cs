@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Resources;
 using WebLicense.Access;
 using WebLicense.Core.Models.Identity;
 using WebLicense.Logic.Auxiliary;
@@ -23,7 +24,7 @@ namespace WebLicense.Logic.UseCases.Users
 
         public void Validate()
         {
-            if (Id < 1) throw new CaseException("*'Id' must be greater than 0", "'Id' < 1");
+            if (Id < 1) throw new CaseException(Exceptions.Id_LessOne, "'Id' < 1");
         }
     }
 

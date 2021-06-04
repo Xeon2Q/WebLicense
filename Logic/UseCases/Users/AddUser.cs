@@ -4,6 +4,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Resources;
 using WebLicense.Access;
 using WebLicense.Core.Enums;
 using WebLicense.Core.Models.Customers;
@@ -36,12 +37,12 @@ namespace WebLicense.Logic.UseCases.Users
 
         public void Validate()
         {
-            if (User == null) throw new CaseException("*User is null", "User is null");
-            if (string.IsNullOrWhiteSpace(User.Email)) throw new CaseException("*Email is empty", "Email is empty");
-            if (string.IsNullOrWhiteSpace(Password)) throw new CaseException("*Password is empty", "Password is empty");
-            if (string.IsNullOrWhiteSpace(User.UserName)) throw new CaseException("*UserName is empty", "UserName is empty");
-            if (User.EulaAccepted != true) throw new CaseException("*EULA is not accepted", "EULA is not accepted");
-            if (User.GdprAccepted != true) throw new CaseException("*GDPR is not accepted", "GDPR is not accepted");
+            if (User == null) throw new CaseException(Exceptions.User_Null, "User is null");
+            if (string.IsNullOrWhiteSpace(User.Email)) throw new CaseException(Exceptions.User_Email_Empty, "User 'Email' is null or empty");
+            if (string.IsNullOrWhiteSpace(Password)) throw new CaseException(Exceptions.User_Password_Empty, "User 'Password' is null or empty");
+            if (string.IsNullOrWhiteSpace(User.UserName)) throw new CaseException(Exceptions.User_Name_Empty, "User 'Name' is null or empty");
+            if (User.EulaAccepted != true) throw new CaseException(Exceptions.User_Eula_NotAccepted, "User 'EULA' is not accepted");
+            if (User.GdprAccepted != true) throw new CaseException(Exceptions.User_Gdpr_NotAccepted, "User 'GDPR' is not accepted");
         }
     }
 

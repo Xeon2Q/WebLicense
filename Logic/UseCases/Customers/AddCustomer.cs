@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Resources;
 using WebLicense.Access;
 using WebLicense.Core.Models.Customers;
 using WebLicense.Logic.Auxiliary;
@@ -24,11 +25,10 @@ namespace WebLicense.Logic.UseCases.Customers
 
         public void Validate()
         {
-            if (Customer == null) throw new CaseException("*Request is null", "Request is null");
-            if (string.IsNullOrWhiteSpace(Customer.Settings?.NotificationsEmail)) throw new CaseException("*'Email' cannot be null", "'Email' is null");
-            if (string.IsNullOrWhiteSpace(Customer.Name)) throw new CaseException("*'Name' cannot be null", "'Name is null'");
-            if (Customer.Users == null || Customer.Users.Count == 0) throw new CaseException("*'Users' cannot be null or empty", "'Users' is null or empty");
-            if (Customer.Users.All(q => q == null || !q.Id.HasValue || q.Id < 1)) throw new CaseException("*'Users' must have 'Id' > 0", "'Users' have 'Id' < 1");
+            if (string.IsNullOrWhiteSpace(Customer.Settings?.NotificationsEmail)) throw new CaseException(Exceptions.Customer_NotificationsEmail_Empty, "Customer 'NotificationsEmail' is empty");
+            if (string.IsNullOrWhiteSpace(Customer.Name)) throw new CaseException(Exceptions.Customer_Name_Empty, "Customer 'Name' is empty");
+            if (Customer.Users == null || Customer.Users.Count == 0) throw new CaseException(Exceptions.Customer_Users_Empty, "Customer 'Users' is empty");
+            if (Customer.Users.All(q => q == null || !q.Id.HasValue || q.Id < 1)) throw new CaseException(Exceptions.Customer_Users_Invalid, "Customer 'Users' are invalid");
         }
     }
 

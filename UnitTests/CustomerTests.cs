@@ -85,7 +85,7 @@ namespace UnitTests
             var med = GetMediator(db);
 
             var filter = FiltersValid[filterName];
-            var model = await med.Send(new GetCustomers(skip, take, sort, asc, filter));
+            var model = await med.Send(new GetCustomers(new Criteria<Customer>(skip, take, sort, asc, filter)));
 
             model.Should().NotBeNull();
             model.Succeeded.Should().BeTrue();

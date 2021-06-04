@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Resources;
 using WebLicense.Access;
 using WebLicense.Logic.Auxiliary;
 using WebLicense.Logic.UseCases.Auxiliary;
@@ -22,7 +23,7 @@ namespace WebLicense.Logic.UseCases.Customers
 
         public void Validate()
         {
-            if (Id < 1) throw new CaseException("*'Id' must be greater than 0", "'Id' < 1");
+            if (Id < 1) throw new CaseException(Exceptions.Id_LessOne, "'Id' < 1");
         }
     }
 

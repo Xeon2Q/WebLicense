@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Resources;
 using WebLicense.Access;
 using WebLicense.Logic.Auxiliary;
 using WebLicense.Logic.UseCases.Auxiliary;
@@ -26,9 +27,9 @@ namespace WebLicense.Logic.UseCases.Users
 
         public void Validate()
         {
-            if (User == null) throw new CaseException("*'User' must not be null", "'User' must not be null");
-            if (!User.Id.HasValue) throw new CaseException("*User 'Id' must not be null", "User 'Id' must not be null");
-            if (User.Id < 1) throw new CaseException("*User 'Id' must be greater than 0", "User 'Id' must be greater than 0");
+            if (User == null) throw new CaseException(Exceptions.User_Null, "'User' is null");
+            if (!User.Id.HasValue) throw new CaseException(Exceptions.User_Id_Null, "User 'Id' is null");
+            if (User.Id < 1) throw new CaseException(Exceptions.User_Id_LessOne, "User 'Id' < 1");
         }
     }
 
