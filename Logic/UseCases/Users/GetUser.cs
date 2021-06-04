@@ -12,13 +12,18 @@ using WebLicense.Shared.Identity;
 
 namespace WebLicense.Logic.UseCases.Users
 {
-    public sealed class GetUser : IRequest<CaseResult<UserInfo>>
+    public sealed class GetUser : IRequest<CaseResult<UserInfo>>, IValidate
     {
         internal long Id { get; }
 
         public GetUser(long id)
         {
             Id = id;
+        }
+
+        public void Validate()
+        {
+            if (Id < 1) throw new CaseException("*'Id' must be greater than 0", "'Id' < 1");
         }
     }
 

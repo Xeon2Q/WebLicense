@@ -6,17 +6,23 @@ using System.Threading;
 using System.Threading.Tasks;
 using WebLicense.Access;
 using WebLicense.Logic.Auxiliary;
+using WebLicense.Logic.UseCases.Auxiliary;
 using WebLicense.Shared.Customers;
 
 namespace WebLicense.Logic.UseCases.Customers
 {
-    public sealed class GetCustomer : IRequest<CaseResult<CustomerInfo>>
+    public sealed class GetCustomer : IRequest<CaseResult<CustomerInfo>>, IValidate
     {
         internal int Id { get; }
 
         public GetCustomer(int id)
         {
             Id = id;
+        }
+
+        public void Validate()
+        {
+            if (Id < 1) throw new CaseException("*'Id' must be greater than 0", "'Id' < 1");
         }
     }
 
@@ -33,7 +39,7 @@ namespace WebLicense.Logic.UseCases.Customers
         {
             try
             {
-                ValidateRequest(request);
+                request.Validate();
 
                 var customer = await db.Customers.AsNoTrackingWithIdentityResolution().Where(q => q.Id == request.Id)
                                        .Include(q => q.Administrators)
@@ -51,15 +57,5 @@ namespace WebLicense.Logic.UseCases.Customers
                 return new CaseResult<CustomerInfo>(e);
             }
         }
-
-        #region Methods
-
-        private void ValidateRequest(GetCustomer request)
-        {
-            if (request == null) throw new CaseException("*Request is null", "Request is null");
-            if (request.Id < 1) throw new CaseException("*'Id' must be greater than 0", "'Id' < 1");
-        }
-
-        #endregion
     }
 }

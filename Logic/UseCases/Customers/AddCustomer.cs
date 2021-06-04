@@ -8,17 +8,27 @@ using WebLicense.Access;
 using WebLicense.Core.Models.Customers;
 using WebLicense.Logic.Auxiliary;
 using WebLicense.Logic.Auxiliary.Extensions;
+using WebLicense.Logic.UseCases.Auxiliary;
 using WebLicense.Shared.Customers;
 
 namespace WebLicense.Logic.UseCases.Customers
 {
-    public sealed class AddCustomer : IRequest<CaseResult<CustomerInfo>>
+    public sealed class AddCustomer : IRequest<CaseResult<CustomerInfo>>, IValidate
     {
         internal CustomerInfo Customer { get; }
 
         public AddCustomer(CustomerInfo customer)
         {
             Customer = customer;
+        }
+
+        public void Validate()
+        {
+            if (Customer == null) throw new CaseException("*Request is null", "Request is null");
+            if (string.IsNullOrWhiteSpace(Customer.Settings?.NotificationsEmail)) throw new CaseException("*'Email' cannot be null", "'Email' is null");
+            if (string.IsNullOrWhiteSpace(Customer.Name)) throw new CaseException("*'Name' cannot be null", "'Name is null'");
+            if (Customer.Users == null || Customer.Users.Count == 0) throw new CaseException("*'Users' cannot be null or empty", "'Users' is null or empty");
+            if (Customer.Users.All(q => q == null || !q.Id.HasValue || q.Id < 1)) throw new CaseException("*'Users' must have 'Id' > 0", "'Users' have 'Id' < 1");
         }
     }
 
@@ -37,7 +47,7 @@ namespace WebLicense.Logic.UseCases.Customers
         {
             try
             {
-                ValidateRequest(request);
+                request.Validate();
 
                 var users = request.Customer.Users.Where(q => q?.Id > 0).Select(q => q.Id.Value).Distinct().Select(q => new CustomerUser {UserId = q}).ToList();
                 var managers = request.Customer.Managers?.Where(q => q?.Id > 0).Select(q => q.Id.Value).Distinct().Select(q => new CustomerManager {UserId = q}).ToList() ?? new List<CustomerManager>();
@@ -66,18 +76,5 @@ namespace WebLicense.Logic.UseCases.Customers
                 return new CaseResult<CustomerInfo>(e);
             }
         }
-
-        #region Methods
-
-        private void ValidateRequest(AddCustomer request)
-        {
-            if (request?.Customer == null) throw new CaseException("*Request is null", "Request is null");
-            if (string.IsNullOrWhiteSpace(request.Customer.Settings?.NotificationsEmail)) throw new CaseException("*'Email' cannot be null", "'Email' is null");
-            if (string.IsNullOrWhiteSpace(request.Customer.Name)) throw new CaseException("*'Name' cannot be null", "'Name is null'");
-            if (request.Customer.Users == null || request.Customer.Users.Count == 0) throw new CaseException("*'Users' cannot be null or empty", "'Users' is null or empty");
-            if (request.Customer.Users.All(q => q == null || !q.Id.HasValue || q.Id < 1)) throw new CaseException("*'Users' must have 'Id' > 0", "'Users' have 'Id' < 1");
-        }
-
-        #endregion
     }
 }

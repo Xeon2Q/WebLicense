@@ -8,17 +8,25 @@ using System.Threading.Tasks;
 using WebLicense.Access;
 using WebLicense.Core.Models.Customers;
 using WebLicense.Logic.Auxiliary;
+using WebLicense.Logic.UseCases.Auxiliary;
 using WebLicense.Shared.Customers;
 
 namespace WebLicense.Logic.UseCases.Customers
 {
-    public sealed class UpdateCustomer : IRequest<CaseResult<CustomerInfo>>
+    public sealed class UpdateCustomer : IRequest<CaseResult<CustomerInfo>>, IValidate
     {
         internal CustomerInfo Customer { get; }
 
         public UpdateCustomer(CustomerInfo customer)
         {
             Customer = customer;
+        }
+
+        public void Validate()
+        {
+            if (Customer == null) throw new CaseException("*Request is null", "Request is null");
+            if (!Customer.Id.HasValue) throw new CaseException("*'Id' is null", "'Id' is null");
+            if (Customer.Id < 1) throw new CaseException("*'Id' must be greater than 0", "'Id' < 1");
         }
     }
 
@@ -37,7 +45,7 @@ namespace WebLicense.Logic.UseCases.Customers
         {
             try
             {
-                ValidateRequest(request);
+                request.Validate();
 
                 var info = request.Customer;
                 var model = await db.Set<Customer>().AsTracking().Where(q => q.Id == info.Id.Value)
@@ -60,13 +68,6 @@ namespace WebLicense.Logic.UseCases.Customers
         }
 
         #region Methods
-
-        private void ValidateRequest(UpdateCustomer request)
-        {
-            if (request?.Customer == null) throw new CaseException("*Request is null", "Request is null");
-            if (!request.Customer.Id.HasValue) throw new CaseException("*'Id' is null", "'Id' is null");
-            if (request.Customer.Id < 1) throw new CaseException("*'Id' must be greater than 0", "'Id' < 1");
-        }
 
         private void UpdateModel(Customer model, CustomerInfo info)
         {

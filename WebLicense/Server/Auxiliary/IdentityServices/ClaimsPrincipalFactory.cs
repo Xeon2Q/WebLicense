@@ -8,6 +8,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using WebLicense.Core.Models.Identity;
+using WebLicense.Shared.Identity;
 
 namespace WebLicense.Server.Auxiliary.IdentityServices
 {
@@ -53,7 +54,7 @@ namespace WebLicense.Server.Auxiliary.IdentityServices
             claims.AddRange(roleNames.Select(q => new Claim(JwtClaimTypes.Role, q)));
 
             // claims
-            var result = await mediator.Send(new Logic.UseCases.Users.GetClaims(user));
+            var result = await mediator.Send(new Logic.UseCases.Users.GetClaims(new UserInfo(user)));
             if (result.Succeeded && result.Data.Count > 0) claims.AddRange(result.Data);
 
             return claims;

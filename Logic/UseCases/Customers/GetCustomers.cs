@@ -9,11 +9,12 @@ using Microsoft.EntityFrameworkCore;
 using WebLicense.Access;
 using WebLicense.Core.Models.Customers;
 using WebLicense.Logic.Auxiliary;
+using WebLicense.Logic.UseCases.Auxiliary;
 using WebLicense.Shared.Customers;
 
 namespace WebLicense.Logic.UseCases.Customers
 {
-    public sealed class GetCustomers : IRequest<CaseResult<IList<CustomerInfo>>>
+    public sealed class GetCustomers : IRequest<CaseResult<IList<CustomerInfo>>>, IValidate
     {
         internal Criteria<Customer> Criteria { get; }
 
@@ -26,13 +27,21 @@ namespace WebLicense.Logic.UseCases.Customers
         {
         }
 
-        public GetCustomers() : this(0, 25, nameof(Customer.Name), true, null)
+        public GetCustomers() : this(new Criteria<Customer>(0, 25, nameof(Customer.Name), true, null))
         {
+        }
+
+        public void Validate()
+        {
+            if (Criteria == null) throw new CaseException("*'Criteria' must be not null", "'Criteria' must be not null");
         }
     }
 
     internal sealed class GetCustomersHandler : IRequestHandler<GetCustomers, CaseResult<IList<CustomerInfo>>>
     {
+        private const string SORT_ID = "ID";
+        private const string SORT_NAME = "NAME";
+
         private readonly DatabaseContext db;
 
         public GetCustomersHandler(DatabaseContext db)
@@ -44,6 +53,8 @@ namespace WebLicense.Logic.UseCases.Customers
         {
             try
             {
+                request.Validate();
+
                 var query = db.Set<Customer>().AsNoTrackingWithIdentityResolution();
                 query = ApplyFilter(query, request.Criteria);
                 query = ApplySort(query, request.Criteria);
@@ -65,20 +76,18 @@ namespace WebLicense.Logic.UseCases.Customers
 
         private IQueryable<Customer> ApplyFilter(IQueryable<Customer> query, Criteria<Customer> criteria)
         {
-            return criteria?.Filter != null ? query.Where(criteria.Filter) : query;
+            return criteria.Filter != null ? query.Where(criteria.Filter) : query;
         }
 
         private IQueryable<Customer> ApplySort(IQueryable<Customer> query, Criteria<Customer> criteria)
         {
-            if (criteria == null || string.IsNullOrWhiteSpace(criteria.Sort)) return query;
-
-            return (criteria.SortAsc, criteria.Sort.ToUpper()) switch
+            return (criteria.SortAsc, criteria.Sort?.ToUpper()) switch
             {
-                (true, "ID") => query.OrderBy(q => q.Id),
-                (false, "ID") => query.OrderByDescending(q => q.Id),
+                (true, SORT_ID) => query.OrderBy(q => q.Id),
+                (false, SORT_ID) => query.OrderByDescending(q => q.Id),
 
-                (true, "NAME") => query.OrderBy(q => q.Name),
-                (false, "NAME") => query.OrderByDescending(q => q.Name),
+                (true, SORT_NAME) => query.OrderBy(q => q.Name),
+                (false, SORT_NAME) => query.OrderByDescending(q => q.Name),
 
                 _ => query.OrderBy(q => q.Name)
             };
@@ -86,7 +95,7 @@ namespace WebLicense.Logic.UseCases.Customers
 
         private IQueryable<Customer> ApplySkipTake(IQueryable<Customer> query, Criteria<Customer> criteria)
         {
-            return criteria != null ? query.Skip(criteria.Skip).Take(criteria.Take) : query;
+            return query.Skip(criteria.Skip).Take(criteria.Take);
         }
 
         #endregion

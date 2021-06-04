@@ -10,6 +10,7 @@ using MediatR;
 using WebLicense.Core.Models.Identity;
 using WebLicense.Logic.UseCases.Users;
 using WebLicense.Server.Auxiliary.PageModels;
+using WebLicense.Shared.Identity;
 using ResG = WebLicense.Server.Resources.Global;
 using ResL = WebLicense.Server.Resources.Areas_Identity_Pages_Account_Manage_EmailModel;
 
@@ -155,7 +156,7 @@ namespace WebLicense.Server.Areas.Identity.Pages.Account.Manage
 
         private async Task SendEmailConfirmation(ISender mediator, User user, string newEmail, string callbackUrl)
         {
-            await mediator.Send(new SendEmailUserEmailConfirmation(user, newEmail, callbackUrl));
+            await mediator.Send(new SendEmailUserEmailConfirmation(new UserInfo(user), newEmail, callbackUrl));
         }
 
         #endregion

@@ -14,7 +14,7 @@ using WebLicense.Shared.Identity;
 
 namespace WebLicense.Logic.UseCases.Users
 {
-    public sealed class AddUser : IRequest<CaseResult<UserInfo>>
+    public sealed class AddUser : IRequest<CaseResult<User>>, IValidate
     {
         internal UserInfo User { get; }
         internal readonly string Password;
@@ -33,9 +33,19 @@ namespace WebLicense.Logic.UseCases.Users
                 User.PhoneNumber = !string.IsNullOrWhiteSpace(User.PhoneNumber) ? User.PhoneNumber.Trim() : null;
             }
         }
+
+        public void Validate()
+        {
+            if (User == null) throw new CaseException("*User is null", "User is null");
+            if (string.IsNullOrWhiteSpace(User.Email)) throw new CaseException("*Email is empty", "Email is empty");
+            if (string.IsNullOrWhiteSpace(Password)) throw new CaseException("*Password is empty", "Password is empty");
+            if (string.IsNullOrWhiteSpace(User.UserName)) throw new CaseException("*UserName is empty", "UserName is empty");
+            if (User.EulaAccepted != true) throw new CaseException("*EULA is not accepted", "EULA is not accepted");
+            if (User.GdprAccepted != true) throw new CaseException("*GDPR is not accepted", "GDPR is not accepted");
+        }
     }
 
-    internal sealed class AddUserHandler : IRequestHandler<AddUser, CaseResult<UserInfo>>
+    internal sealed class AddUserHandler : IRequestHandler<AddUser, CaseResult<User>>
     {
         private readonly DatabaseContext db;
         private readonly UserManager<User> userManager;
@@ -46,7 +56,7 @@ namespace WebLicense.Logic.UseCases.Users
             this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         }
 
-        public async Task<CaseResult<UserInfo>> Handle(AddUser request, CancellationToken cancellationToken)
+        public async Task<CaseResult<User>> Handle(AddUser request, CancellationToken cancellationToken)
         {
             try
             {
@@ -62,10 +72,10 @@ namespace WebLicense.Logic.UseCases.Users
                 };
 
                 var result1 = await userManager.CreateAsync(user, request.Password).ConfigureAwait(false);
-                if (!result1.Succeeded) return new CaseResult<UserInfo>(new UserInfo(user), result1);
+                if (!result1.Succeeded) return new CaseResult<User>(user, result1);
 
                 var result2 = await userManager.AddToRoleAsync(user, Roles.CustomerUser).ConfigureAwait(false);
-                if (!result2.Succeeded) return new CaseResult<UserInfo>(new UserInfo(user), result2);
+                if (!result2.Succeeded) return new CaseResult<User>(user, result2);
 
                 if (!string.IsNullOrWhiteSpace(request.CustomerReferenceId))
                 {
@@ -79,7 +89,7 @@ namespace WebLicense.Logic.UseCases.Users
 
                 user = await db.Set<User>().FirstOrDefaultAsync(q => q.Id == user.Id, cancellationToken);
 
-                return new(new UserInfo(user), result1);
+                return new(user, result1);
             }
             catch (Exception e)
             {

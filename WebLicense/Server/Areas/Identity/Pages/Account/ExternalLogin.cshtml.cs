@@ -14,6 +14,7 @@ using WebLicense.Core.Enums;
 using WebLicense.Core.Models.Identity;
 using WebLicense.Logic.UseCases.Users;
 using WebLicense.Server.Auxiliary.Extensions;
+using WebLicense.Shared.Identity;
 using ResL = WebLicense.Server.Resources.Areas_Identity_Pages_Account_ExternalLoginModel;
 
 namespace WebLicense.Server.Areas.Identity.Pages.Account
@@ -170,7 +171,7 @@ namespace WebLicense.Server.Areas.Identity.Pages.Account
             var callbackUrl = Url.Page("/Account/ConfirmEmail", null, new {area = "Identity", userId = user.Id, code, ReturnUrl}, Request.Scheme);
             callbackUrl = HtmlEncoder.Default.Encode(callbackUrl);
 
-            await mediator.Send(new SendEmailUserEmailConfirmation(user, null, callbackUrl));
+            await mediator.Send(new SendEmailUserEmailConfirmation(new UserInfo(user), null, callbackUrl));
         }
 
         #endregion

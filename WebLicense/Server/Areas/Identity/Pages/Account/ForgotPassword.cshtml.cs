@@ -11,6 +11,7 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using WebLicense.Core.Models.Identity;
 using WebLicense.Logic.UseCases.Users;
+using WebLicense.Shared.Identity;
 using ResL = WebLicense.Server.Resources.Areas_Identity_Pages_Account_ForgotPasswordModel;
 
 namespace WebLicense.Server.Areas.Identity.Pages.Account
@@ -70,7 +71,7 @@ namespace WebLicense.Server.Areas.Identity.Pages.Account
             var callbackUrl = Url.Page("/Account/ResetPassword", null, new {area = "Identity", code}, Request.Scheme);
             callbackUrl = HtmlEncoder.Default.Encode(callbackUrl);
 
-            await mediator.Send(new SendEmailUserPasswordResetConfirmation(user, callbackUrl));
+            await mediator.Send(new SendEmailUserPasswordResetConfirmation(new UserInfo(user), callbackUrl));
         }
 
         #endregion

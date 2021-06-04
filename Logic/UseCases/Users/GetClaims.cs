@@ -9,22 +9,29 @@ using Microsoft.EntityFrameworkCore;
 using WebLicense.Access;
 using WebLicense.Core.Models.Identity;
 using WebLicense.Logic.Auxiliary;
+using WebLicense.Logic.UseCases.Auxiliary;
+using WebLicense.Shared.Identity;
 
 namespace WebLicense.Logic.UseCases.Users
 {
-    public sealed class GetClaims : IRequest<CaseResult<IList<Claim>>>
+    public sealed class GetClaims : IRequest<CaseResult<IList<Claim>>>, IValidate
     {
         internal readonly Role Role;
-        internal readonly User User;
+        internal readonly UserInfo User;
 
-        public GetClaims(User user)
+        public GetClaims(UserInfo user)
         {
-            User = user ?? throw new ArgumentNullException(nameof(user));
+            User = user;
         }
 
         public GetClaims(Role role)
         {
-            Role = role ?? throw new ArgumentNullException(nameof(role));
+            Role = role;
+        }
+
+        public void Validate()
+        {
+            if (User == null && Role == null) throw new CaseException("*Either 'User' or 'Role' must be not null", "Either 'User' or 'Role' must be not null");
         }
     }
 
@@ -41,6 +48,8 @@ namespace WebLicense.Logic.UseCases.Users
         {
             try
             {
+                request.Validate();
+
                 if (request.Role != null)
                 {
                     var claims = await GetRoleClaims(request.Role, cancellationToken);
@@ -53,7 +62,7 @@ namespace WebLicense.Logic.UseCases.Users
                     return new CaseResult<IList<Claim>>(claims);
                 }
 
-                throw new Exception("We should not be here");
+                throw new CaseException("We should not be here");
             }
             catch (Exception e)
             {
@@ -68,7 +77,7 @@ namespace WebLicense.Logic.UseCases.Users
             return await db.RoleClaims.Where(q => q.RoleId == role.Id).Select(q => new Claim(q.ClaimType, q.ClaimValue)).ToListAsync(cancellationToken);
         }
 
-        private async Task<IList<Claim>> GetUserClaims(User user, CancellationToken cancellationToken)
+        private async Task<IList<Claim>> GetUserClaims(UserInfo user, CancellationToken cancellationToken)
         {
             // claims given by roles
             var roleClaims = await db.UserRoles.Where(q => q.UserId == user.Id)

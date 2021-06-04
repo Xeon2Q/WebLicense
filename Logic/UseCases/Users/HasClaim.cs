@@ -5,22 +5,30 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WebLicense.Access;
-using WebLicense.Core.Models.Identity;
 using WebLicense.Logic.Auxiliary;
+using WebLicense.Logic.UseCases.Auxiliary;
+using WebLicense.Shared.Identity;
 
 namespace WebLicense.Logic.UseCases.Users
 {
-    public sealed class HasClaim : IRequest<CaseResult<bool>>
+    public sealed class HasClaim : IRequest<CaseResult<bool>>, IValidate
     {
-        internal readonly User User;
+        internal readonly UserInfo User;
         internal readonly string ClaimType;
         internal readonly string AcceptedValue;
 
-        public HasClaim(User user, string claimType, string acceptedValue)
+        public HasClaim(UserInfo user, string claimType, string acceptedValue)
         {
-            User = user ?? throw new ArgumentNullException(nameof(user));
+            User = user;
             ClaimType = claimType;
             AcceptedValue = acceptedValue;
+        }
+
+        public void Validate()
+        {
+            if (User == null) throw new CaseException("*'User' must not be null", "'User' must not be null");
+            if (!User.Id.HasValue) throw new CaseException("*User 'Id' must not be null", "User 'Id' must not be null");
+            if (User.Id < 1) throw new CaseException("*User 'Id' must be greater than 0", "User 'Id' must be greater than 0");
         }
     }
 
@@ -37,7 +45,9 @@ namespace WebLicense.Logic.UseCases.Users
         {
             try
             {
-                if (request.User.Id < 1 || string.IsNullOrWhiteSpace(request.ClaimType)) return new CaseResult<bool>(false, (string) null);
+                request.Validate();
+
+                if (string.IsNullOrWhiteSpace(request.ClaimType)) return new CaseResult<bool>(false, (string) null);
 
                 // check user claim
                 var userClaim = await db.UserClaims.FirstOrDefaultAsync(q => q.UserId == request.User.Id && q.ClaimType == request.ClaimType, cancellationToken);

@@ -7,16 +7,22 @@ using WebLicense.Access;
 using WebLicense.Core.Models.Customers;
 using WebLicense.Logic.Auxiliary;
 using WebLicense.Logic.Auxiliary.Extensions;
+using WebLicense.Logic.UseCases.Auxiliary;
 
 namespace WebLicense.Logic.UseCases.Customers
 {
-    public sealed class DeleteCustomer : IRequest<CaseResult>
+    public sealed class DeleteCustomer : IRequest<CaseResult>, IValidate
     {
         internal int Id { get; }
 
         public DeleteCustomer(int id)
         {
             Id = id;
+        }
+
+        public void Validate()
+        {
+            if (Id < 1) throw new CaseException("*'Id' must be greater than 0", "'Id' < 1");
         }
     }
 
@@ -33,7 +39,7 @@ namespace WebLicense.Logic.UseCases.Customers
         {
             try
             {
-                ValidateRequest(request);
+                request.Validate();
 
                 db.Detach<Customer>(q => q.Id == request.Id);
 
@@ -55,15 +61,5 @@ namespace WebLicense.Logic.UseCases.Customers
                 return new CaseResult(e);
             }
         }
-
-        #region Methods
-
-        private void ValidateRequest(DeleteCustomer request)
-        {
-            if (request == null) throw new CaseException("*Request is null", "Request is null");
-            if (request.Id < 1) throw new CaseException("*'Id' must be greater than 0", "'Id' < 1");
-        }
-
-        #endregion
     }
 }

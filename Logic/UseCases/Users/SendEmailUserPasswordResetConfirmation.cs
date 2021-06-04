@@ -7,20 +7,27 @@ using System.Net.Mail;
 using System.Net.Mime;
 using System.Threading;
 using System.Threading.Tasks;
-using WebLicense.Core.Models.Identity;
 using WebLicense.Logic.Auxiliary;
+using WebLicense.Logic.UseCases.Auxiliary;
+using WebLicense.Shared.Identity;
 
 namespace WebLicense.Logic.UseCases.Users
 {
-    public sealed class SendEmailUserPasswordResetConfirmation : IRequest<CaseResult>
+    public sealed class SendEmailUserPasswordResetConfirmation : IRequest<CaseResult>, IValidate
     {
-        internal readonly User User;
+        internal readonly UserInfo User;
         internal readonly string CallbackUrl;
 
-        public SendEmailUserPasswordResetConfirmation(User user, string callbackUrl)
+        public SendEmailUserPasswordResetConfirmation(UserInfo user, string callbackUrl)
         {
             User = user;
             CallbackUrl = callbackUrl;
+        }
+
+        public void Validate()
+        {
+            if (User == null) throw new CaseException("*'User' must be not null", "'User' must be not null");
+            if (string.IsNullOrWhiteSpace(User.Email)) throw new CaseException("*'Email' must be not null", "'Email' must be not null");
         }
     }
 

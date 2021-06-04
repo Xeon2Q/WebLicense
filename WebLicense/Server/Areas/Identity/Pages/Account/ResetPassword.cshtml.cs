@@ -13,6 +13,7 @@ using WebLicense.Core.Models.Identity;
 using WebLicense.Logic.UseCases.Users;
 using WebLicense.Server.Auxiliary.Extensions;
 using WebLicense.Shared.Auxiliary.Claims;
+using WebLicense.Shared.Identity;
 using ResL = WebLicense.Server.Resources.Areas_Identity_Pages_Account_ResetPasswordModel;
 
 namespace WebLicense.Server.Areas.Identity.Pages.Account
@@ -104,7 +105,7 @@ namespace WebLicense.Server.Areas.Identity.Pages.Account
 
         private async Task<bool> ResetPasswordAllowed(ISender mediator, User user, ILogger logger)
         {
-            var result = await mediator.Send(new HasClaim(user, WLClaims.OwnAccount.CanResetPassword.ClaimType, bool.TrueString));
+            var result = await mediator.Send(new HasClaim(new UserInfo(user), WLClaims.OwnAccount.CanResetPassword.ClaimType, bool.TrueString));
             if (!result.Succeeded)
             {
                 foreach (var error in result.Errors)

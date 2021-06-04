@@ -15,6 +15,7 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using WebLicense.Core.Models.Identity;
 using WebLicense.Logic.UseCases.Users;
+using WebLicense.Shared.Identity;
 using ResL = WebLicense.Server.Resources.Areas_Identity_Pages_Account_RegisterModel;
 
 namespace WebLicense.Server.Areas.Identity.Pages.Account
@@ -134,7 +135,7 @@ namespace WebLicense.Server.Areas.Identity.Pages.Account
 
         private async Task<User> TryCreateUser(ISender mediator)
         {
-            var result = await mediator.Send(new CreateUser(Input.UserName, Input.Password, Input.Email, null, Input.EULA, Input.GDPR, Input.CustomerReferenceId));
+            var result = await mediator.Send(new AddUser(GetUserInfo(Input), Input.Password, Input.CustomerReferenceId));
 
             // success
             if (result.Succeeded) return result.Data;
@@ -147,6 +148,17 @@ namespace WebLicense.Server.Areas.Identity.Pages.Account
             return null;
         }
 
+        private static UserInfo GetUserInfo(InputModel input)
+        {
+            return new()
+            {
+                Email = input.Email,
+                UserName = input.UserName,
+                GdprAccepted = input.GDPR,
+                EulaAccepted = input.EULA
+            };
+        }
+
         private async Task SendEmailConfirmation(ISender mediator, UserManager<User> userManager, User user)
         {
             var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -155,7 +167,7 @@ namespace WebLicense.Server.Areas.Identity.Pages.Account
             var callbackUrl = Url.Page("/Account/ConfirmEmail", null, new {area = "Identity", userId = user.Id, code, ReturnUrl}, Request.Scheme);
             callbackUrl = HtmlEncoder.Default.Encode(callbackUrl);
 
-            await mediator.Send(new SendEmailUserEmailConfirmation(user, null, callbackUrl));
+            await mediator.Send(new SendEmailUserEmailConfirmation(new UserInfo(user), null, callbackUrl));
         }
 
         #endregion
