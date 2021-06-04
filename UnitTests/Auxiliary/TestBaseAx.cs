@@ -16,6 +16,7 @@ using WebLicense.Core.Models.Customers;
 using WebLicense.Core.Models.Identity;
 using WebLicense.Logic.Auxiliary;
 using WebLicense.Logic.UseCases.Customers;
+using WebLicense.Logic.UseCases.Users;
 using Xunit.Abstractions;
 
 namespace UnitTests.Auxiliary
@@ -125,6 +126,14 @@ namespace UnitTests.Auxiliary
 
             var mock = new Mock<IMediator>();
 
+            // users
+            mock.Setup(q => q.Send(It.IsAny<GetUser>(), It.IsAny<CancellationToken>()))
+                .Returns((GetUser request, CancellationToken cancellationToken) => new GetUserHandler(db).Handle(request, cancellationToken));
+            mock.Setup(q => q.Send(It.IsAny<GetUsers>(), It.IsAny<CancellationToken>()))
+                .Returns((GetUsers request, CancellationToken cancellationToken) => new GetUsersHandler(db).Handle(request, cancellationToken));
+            mock.Setup(q => q.Send(It.IsAny<AddUser>(), It.IsAny<CancellationToken>()))
+                .Returns((AddUser request, CancellationToken cancellationToken) => new AddUserHandler(db, userManager:).Handle(request, cancellationToken));
+
             // customers
             mock.Setup(q => q.Send(It.IsAny<GetCustomer>(), It.IsAny<CancellationToken>()))
                 .Returns((GetCustomer request, CancellationToken cancellationToken) => new GetCustomerHandler(db).Handle(request, cancellationToken));
@@ -144,10 +153,7 @@ namespace UnitTests.Auxiliary
 
         #region Support methods
 
-        protected virtual void CompareModels(T @new, T info, T old)
-        {
-            throw new NotSupportedException();
-        }
+        protected abstract void CompareModels(T @new, T info, T old);
 
         protected void WriteErrors(IEnumerable<CaseException> errors, ITestOutputHelper @out = null)
         {
