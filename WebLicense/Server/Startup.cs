@@ -187,15 +187,15 @@ namespace WebLicense.Server
         {
             void AddWLClaims(ICollection<string> claims)
             {
-                claims.Add(WLClaims.OwnAccount.CanLoginExternal.ClaimType);
-                claims.Add(WLClaims.OwnAccount.CanResetPassword.ClaimType);
-                claims.Add(WLClaims.OwnAccount.CanChangePassword.ClaimType);
-                claims.Add(WLClaims.OwnAccount.CanDisable2FA.ClaimType);
-                claims.Add(WLClaims.OwnAccount.CanEnable2FA.ClaimType);
-                claims.Add(WLClaims.Administration.Account.CanResetPassword.ClaimType);
-                claims.Add(WLClaims.Administration.Account.CanChangePassword.ClaimType);
-                claims.Add(WLClaims.Administration.Account.CanDisable2FA.ClaimType);
-                claims.Add(WLClaims.Administration.Account.CanEnable2FA.ClaimType);
+                claims.Add(WLClaims.Account.LoginExternal.ClaimType);
+                claims.Add(WLClaims.Account.ResetPassword.ClaimType);
+                claims.Add(WLClaims.Account.ChangePassword.ClaimType);
+                claims.Add(WLClaims.Account.Disable2FA.ClaimType);
+                claims.Add(WLClaims.Account.Enable2FA.ClaimType);
+                claims.Add(WLClaims.Administration.Account.ResetPassword.ClaimType);
+                claims.Add(WLClaims.Administration.Account.ChangePassword.ClaimType);
+                claims.Add(WLClaims.Administration.Account.Disable2FA.ClaimType);
+                claims.Add(WLClaims.Administration.Account.Enable2FA.ClaimType);
             }
 
             var openId = options.IdentityResources["openid"];
@@ -213,16 +213,16 @@ namespace WebLicense.Server
 
         private void ConfigureAuthorization(AuthorizationOptions options)
         {
-            options.AddPolicy(WLPolicies.OwnAccount.Policies.CanLoginExternal)
-                   .AddPolicy(WLPolicies.OwnAccount.Policies.CanResetPassword)
-                   .AddPolicy(WLPolicies.OwnAccount.Policies.CanChangePassword)
-                   .AddPolicy(WLPolicies.OwnAccount.Policies.CanDisable2FA)
-                   .AddPolicy(WLPolicies.OwnAccount.Policies.CanEnable2FA);
+            options.AddPolicy(WLPolicies.Account.Policies.LoginExternal)
+                   .AddPolicy(WLPolicies.Account.Policies.ResetPassword)
+                   .AddPolicy(WLPolicies.Account.Policies.ChangePassword)
+                   .AddPolicy(WLPolicies.Account.Policies.Disable2FA)
+                   .AddPolicy(WLPolicies.Account.Policies.Enable2FA);
 
-            options.AddPolicy(WLPolicies.Administration.Account.Policies.CanResetPassword)
-                   .AddPolicy(WLPolicies.Administration.Account.Policies.CanChangePassword)
-                   .AddPolicy(WLPolicies.Administration.Account.Policies.CanDisable2FA)
-                   .AddPolicy(WLPolicies.Administration.Account.Policies.CanEnable2FA);
+            options.AddPolicy(WLPolicies.Administration.Account.Policies.ResetPassword)
+                   .AddPolicy(WLPolicies.Administration.Account.Policies.ChangePassword)
+                   .AddPolicy(WLPolicies.Administration.Account.Policies.Disable2FA)
+                   .AddPolicy(WLPolicies.Administration.Account.Policies.Enable2FA);
         }
 
         #endregion

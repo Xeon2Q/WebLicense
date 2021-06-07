@@ -15,7 +15,7 @@ using ResL = WebLicense.Server.Resources.Areas_Identity_Pages_Account_Manage_Cha
 
 namespace WebLicense.Server.Areas.Identity.Pages.Account.Manage
 {
-    [Authorize(Policy = WLPolicies.OwnAccount.Names.CanChangePassword)]
+    [Authorize(Policy = WLPolicies.Account.Names.ChangePassword)]
     public class ChangePasswordModel : PageModel
     {
         #region InputModel

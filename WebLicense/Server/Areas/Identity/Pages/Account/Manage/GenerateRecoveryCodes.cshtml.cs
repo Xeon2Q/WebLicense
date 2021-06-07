@@ -16,7 +16,7 @@ using ResL = WebLicense.Server.Resources.Areas_Identity_Pages_Account_Manage_Gen
 
 namespace WebLicense.Server.Areas.Identity.Pages.Account.Manage
 {
-    [Authorize(Policy = WLPolicies.OwnAccount.Names.CanEnable2FA)]
+    [Authorize(Policy = WLPolicies.Account.Names.Enable2FA)]
     public class GenerateRecoveryCodesModel : PageModel
     {
         #region C-tor | Fields

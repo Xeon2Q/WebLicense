@@ -105,7 +105,7 @@ namespace WebLicense.Server.Areas.Identity.Pages.Account
 
         private async Task<bool> ResetPasswordAllowed(ISender mediator, User user, ILogger logger)
         {
-            var result = await mediator.Send(new HasClaim(new UserInfo(user), WLClaims.OwnAccount.CanResetPassword.ClaimType, bool.TrueString));
+            var result = await mediator.Send(new HasClaim(new UserInfo(user), WLClaims.Account.ResetPassword.ClaimType, bool.TrueString));
             if (!result.Succeeded)
             {
                 foreach (var error in result.Errors)

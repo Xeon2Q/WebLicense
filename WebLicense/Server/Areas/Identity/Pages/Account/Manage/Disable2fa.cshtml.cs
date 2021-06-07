@@ -15,7 +15,7 @@ using ResL = WebLicense.Server.Resources.Areas_Identity_Pages_Account_Manage_Dis
 
 namespace WebLicense.Server.Areas.Identity.Pages.Account.Manage
 {
-    [Authorize(Policy = WLPolicies.OwnAccount.Names.CanDisable2FA)]
+    [Authorize(Policy = WLPolicies.Account.Names.Disable2FA)]
     public class Disable2faModel : PageModel
     {
         #region C-tor | Fields

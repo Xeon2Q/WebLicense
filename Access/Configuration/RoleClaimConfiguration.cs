@@ -29,16 +29,16 @@ namespace WebLicense.Access.Configuration
 
             var claims = new RoleClaim[]
             {
-                new(){Id = id--, RoleId = Roles.AdminId, ClaimType = WLClaims.OwnAccount.CanChangePassword.ClaimType, ClaimValue = WLClaims.OwnAccount.CanChangePassword.Claim.Value},
-                new(){Id = id--, RoleId = Roles.AdminId, ClaimType = WLClaims.OwnAccount.CanDisable2FA.ClaimType, ClaimValue = WLClaims.OwnAccount.CanDisable2FA.Claim.Value},
-                new(){Id = id--, RoleId = Roles.AdminId, ClaimType = WLClaims.OwnAccount.CanEnable2FA.ClaimType, ClaimValue = WLClaims.OwnAccount.CanEnable2FA.Claim.Value},
-                new(){Id = id--, RoleId = Roles.AdminId, ClaimType = WLClaims.OwnAccount.CanLoginExternal.ClaimType, ClaimValue = WLClaims.OwnAccount.CanLoginExternal.Claim.Value},
-                new(){Id = id--, RoleId = Roles.AdminId, ClaimType = WLClaims.OwnAccount.CanResetPassword.ClaimType, ClaimValue = WLClaims.OwnAccount.CanResetPassword.Claim.Value},
+                new(){Id = id--, RoleId = Roles.AdminId, ClaimType = WLClaims.Account.ChangePassword.ClaimType, ClaimValue = WLClaims.Account.ChangePassword.Claim.Value},
+                new(){Id = id--, RoleId = Roles.AdminId, ClaimType = WLClaims.Account.Disable2FA.ClaimType, ClaimValue = WLClaims.Account.Disable2FA.Claim.Value},
+                new(){Id = id--, RoleId = Roles.AdminId, ClaimType = WLClaims.Account.Enable2FA.ClaimType, ClaimValue = WLClaims.Account.Enable2FA.Claim.Value},
+                new(){Id = id--, RoleId = Roles.AdminId, ClaimType = WLClaims.Account.LoginExternal.ClaimType, ClaimValue = WLClaims.Account.LoginExternal.Claim.Value},
+                new(){Id = id--, RoleId = Roles.AdminId, ClaimType = WLClaims.Account.ResetPassword.ClaimType, ClaimValue = WLClaims.Account.ResetPassword.Claim.Value},
 
-                new(){Id = id--, RoleId = Roles.AdminId, ClaimType = WLClaims.Administration.Account.CanChangePassword.ClaimType, ClaimValue = WLClaims.Administration.Account.CanChangePassword.Claim.Value},
-                new(){Id = id--, RoleId = Roles.AdminId, ClaimType = WLClaims.Administration.Account.CanDisable2FA.ClaimType, ClaimValue = WLClaims.Administration.Account.CanDisable2FA.Claim.Value},
-                new(){Id = id--, RoleId = Roles.AdminId, ClaimType = WLClaims.Administration.Account.CanEnable2FA.ClaimType, ClaimValue = WLClaims.Administration.Account.CanEnable2FA.Claim.Value},
-                new(){Id = id, RoleId = Roles.AdminId, ClaimType = WLClaims.Administration.Account.CanResetPassword.ClaimType, ClaimValue = WLClaims.Administration.Account.CanResetPassword.Claim.Value}
+                new(){Id = id--, RoleId = Roles.AdminId, ClaimType = WLClaims.Administration.Account.ChangePassword.ClaimType, ClaimValue = WLClaims.Administration.Account.ChangePassword.Claim.Value},
+                new(){Id = id--, RoleId = Roles.AdminId, ClaimType = WLClaims.Administration.Account.Disable2FA.ClaimType, ClaimValue = WLClaims.Administration.Account.Disable2FA.Claim.Value},
+                new(){Id = id--, RoleId = Roles.AdminId, ClaimType = WLClaims.Administration.Account.Enable2FA.ClaimType, ClaimValue = WLClaims.Administration.Account.Enable2FA.Claim.Value},
+                new(){Id = id, RoleId = Roles.AdminId, ClaimType = WLClaims.Administration.Account.ResetPassword.ClaimType, ClaimValue = WLClaims.Administration.Account.ResetPassword.Claim.Value}
             };
             builder.HasData(claims);
         }
@@ -49,11 +49,11 @@ namespace WebLicense.Access.Configuration
 
             var claims = new RoleClaim[]
             {
-                new(){Id = id--, RoleId = Roles.CustomerAdminId, ClaimType = WLClaims.OwnAccount.CanChangePassword.ClaimType, ClaimValue = WLClaims.OwnAccount.CanChangePassword.Claim.Value},
-                new(){Id = id--, RoleId = Roles.CustomerAdminId, ClaimType = WLClaims.OwnAccount.CanDisable2FA.ClaimType, ClaimValue = WLClaims.OwnAccount.CanDisable2FA.Claim.Value},
-                new(){Id = id--, RoleId = Roles.CustomerAdminId, ClaimType = WLClaims.OwnAccount.CanEnable2FA.ClaimType, ClaimValue = WLClaims.OwnAccount.CanEnable2FA.Claim.Value},
-                new(){Id = id--, RoleId = Roles.CustomerAdminId, ClaimType = WLClaims.OwnAccount.CanLoginExternal.ClaimType, ClaimValue = WLClaims.OwnAccount.CanLoginExternal.Claim.Value},
-                new(){Id = id, RoleId = Roles.CustomerAdminId, ClaimType = WLClaims.OwnAccount.CanResetPassword.ClaimType, ClaimValue = WLClaims.OwnAccount.CanResetPassword.Claim.Value}
+                new(){Id = id--, RoleId = Roles.CustomerAdminId, ClaimType = WLClaims.Account.ChangePassword.ClaimType, ClaimValue = WLClaims.Account.ChangePassword.Claim.Value},
+                new(){Id = id--, RoleId = Roles.CustomerAdminId, ClaimType = WLClaims.Account.Disable2FA.ClaimType, ClaimValue = WLClaims.Account.Disable2FA.Claim.Value},
+                new(){Id = id--, RoleId = Roles.CustomerAdminId, ClaimType = WLClaims.Account.Enable2FA.ClaimType, ClaimValue = WLClaims.Account.Enable2FA.Claim.Value},
+                new(){Id = id--, RoleId = Roles.CustomerAdminId, ClaimType = WLClaims.Account.LoginExternal.ClaimType, ClaimValue = WLClaims.Account.LoginExternal.Claim.Value},
+                new(){Id = id, RoleId = Roles.CustomerAdminId, ClaimType = WLClaims.Account.ResetPassword.ClaimType, ClaimValue = WLClaims.Account.ResetPassword.Claim.Value}
             };
             builder.HasData(claims);
         }
@@ -64,11 +64,11 @@ namespace WebLicense.Access.Configuration
 
             var claims = new RoleClaim[]
             {
-                new(){Id = id--, RoleId = Roles.CustomerManagerId, ClaimType = WLClaims.OwnAccount.CanChangePassword.ClaimType, ClaimValue = WLClaims.OwnAccount.CanChangePassword.Claim.Value},
-                new(){Id = id--, RoleId = Roles.CustomerManagerId, ClaimType = WLClaims.OwnAccount.CanDisable2FA.ClaimType, ClaimValue = WLClaims.OwnAccount.CanDisable2FA.Claim.Value},
-                new(){Id = id--, RoleId = Roles.CustomerManagerId, ClaimType = WLClaims.OwnAccount.CanEnable2FA.ClaimType, ClaimValue = WLClaims.OwnAccount.CanEnable2FA.Claim.Value},
-                new(){Id = id--, RoleId = Roles.CustomerManagerId, ClaimType = WLClaims.OwnAccount.CanLoginExternal.ClaimType, ClaimValue = WLClaims.OwnAccount.CanLoginExternal.Claim.Value},
-                new(){Id = id, RoleId = Roles.CustomerManagerId, ClaimType = WLClaims.OwnAccount.CanResetPassword.ClaimType, ClaimValue = WLClaims.OwnAccount.CanResetPassword.Claim.Value}
+                new(){Id = id--, RoleId = Roles.CustomerManagerId, ClaimType = WLClaims.Account.ChangePassword.ClaimType, ClaimValue = WLClaims.Account.ChangePassword.Claim.Value},
+                new(){Id = id--, RoleId = Roles.CustomerManagerId, ClaimType = WLClaims.Account.Disable2FA.ClaimType, ClaimValue = WLClaims.Account.Disable2FA.Claim.Value},
+                new(){Id = id--, RoleId = Roles.CustomerManagerId, ClaimType = WLClaims.Account.Enable2FA.ClaimType, ClaimValue = WLClaims.Account.Enable2FA.Claim.Value},
+                new(){Id = id--, RoleId = Roles.CustomerManagerId, ClaimType = WLClaims.Account.LoginExternal.ClaimType, ClaimValue = WLClaims.Account.LoginExternal.Claim.Value},
+                new(){Id = id, RoleId = Roles.CustomerManagerId, ClaimType = WLClaims.Account.ResetPassword.ClaimType, ClaimValue = WLClaims.Account.ResetPassword.Claim.Value}
             };
             builder.HasData(claims);
         }
@@ -79,11 +79,11 @@ namespace WebLicense.Access.Configuration
 
             var claims = new RoleClaim[]
             {
-                new(){Id = id--, RoleId = Roles.CustomerUserId, ClaimType = WLClaims.OwnAccount.CanChangePassword.ClaimType, ClaimValue = WLClaims.OwnAccount.CanChangePassword.Claim.Value},
-                new(){Id = id--, RoleId = Roles.CustomerUserId, ClaimType = WLClaims.OwnAccount.CanDisable2FA.ClaimType, ClaimValue = WLClaims.OwnAccount.CanDisable2FA.Claim.Value},
-                new(){Id = id--, RoleId = Roles.CustomerUserId, ClaimType = WLClaims.OwnAccount.CanEnable2FA.ClaimType, ClaimValue = WLClaims.OwnAccount.CanEnable2FA.Claim.Value},
-                new(){Id = id--, RoleId = Roles.CustomerUserId, ClaimType = WLClaims.OwnAccount.CanLoginExternal.ClaimType, ClaimValue = WLClaims.OwnAccount.CanLoginExternal.Claim.Value},
-                new(){Id = id, RoleId = Roles.CustomerUserId, ClaimType = WLClaims.OwnAccount.CanResetPassword.ClaimType, ClaimValue = WLClaims.OwnAccount.CanResetPassword.Claim.Value}
+                new(){Id = id--, RoleId = Roles.CustomerUserId, ClaimType = WLClaims.Account.ChangePassword.ClaimType, ClaimValue = WLClaims.Account.ChangePassword.Claim.Value},
+                new(){Id = id--, RoleId = Roles.CustomerUserId, ClaimType = WLClaims.Account.Disable2FA.ClaimType, ClaimValue = WLClaims.Account.Disable2FA.Claim.Value},
+                new(){Id = id--, RoleId = Roles.CustomerUserId, ClaimType = WLClaims.Account.Enable2FA.ClaimType, ClaimValue = WLClaims.Account.Enable2FA.Claim.Value},
+                new(){Id = id--, RoleId = Roles.CustomerUserId, ClaimType = WLClaims.Account.LoginExternal.ClaimType, ClaimValue = WLClaims.Account.LoginExternal.Claim.Value},
+                new(){Id = id, RoleId = Roles.CustomerUserId, ClaimType = WLClaims.Account.ResetPassword.ClaimType, ClaimValue = WLClaims.Account.ResetPassword.Claim.Value}
             };
             builder.HasData(claims);
         }

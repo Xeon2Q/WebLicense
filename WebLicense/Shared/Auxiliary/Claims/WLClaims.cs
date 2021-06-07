@@ -9,30 +9,37 @@ namespace WebLicense.Shared.Auxiliary.Claims
     {
         private const string TRUE_STRING = "true";
 
-        public static class OwnAccount
+        public static class Account
         {
-            public static WLClaim CanLoginExternal => new(WLPolicies.OwnAccount.Names.CanLoginExternal, true, TRUE_STRING);
+            public static WLClaim LoginExternal => new(WLPolicies.Account.Names.LoginExternal, true, TRUE_STRING);
+            public static WLClaim ResetPassword => new (WLPolicies.Account.Names.ResetPassword, true, TRUE_STRING);
+            public static WLClaim ChangePassword => new (WLPolicies.Account.Names.ChangePassword, true, TRUE_STRING);
+            public static WLClaim Disable2FA => new (WLPolicies.Account.Names.Disable2FA, true, TRUE_STRING);
+            public static WLClaim Enable2FA => new (WLPolicies.Account.Names.Enable2FA, true, TRUE_STRING);
+        }
 
-            public static WLClaim CanResetPassword => new (WLPolicies.OwnAccount.Names.CanResetPassword, true, TRUE_STRING);
-
-            public static WLClaim CanChangePassword => new (WLPolicies.OwnAccount.Names.CanChangePassword, true, TRUE_STRING);
-
-            public static WLClaim CanDisable2FA => new (WLPolicies.OwnAccount.Names.CanDisable2FA, true, TRUE_STRING);
-
-            public static WLClaim CanEnable2FA => new (WLPolicies.OwnAccount.Names.CanEnable2FA, true, TRUE_STRING);
+        public static class Customer
+        {
+            public static WLClaim View => new(WLPolicies.Customer.Names.View, true, TRUE_STRING);
+            public static WLClaim Edit => new(WLPolicies.Customer.Names.Edit, true, TRUE_STRING);
+            public static WLClaim ViewSettings => new(WLPolicies.Customer.Names.ViewSettings, true, TRUE_STRING);
+            public static WLClaim EditSettings => new(WLPolicies.Customer.Names.EditSettings, true, TRUE_STRING);
+            public static WLClaim ViewAdministrators => new(WLPolicies.Customer.Names.ViewAdministrators, true, TRUE_STRING);
+            public static WLClaim EditAdministrators => new(WLPolicies.Customer.Names.EditAdministrators, true, TRUE_STRING);
+            public static WLClaim ViewManagers => new(WLPolicies.Customer.Names.ViewManagers, true, TRUE_STRING);
+            public static WLClaim EditManagers => new(WLPolicies.Customer.Names.EditManagers, true, TRUE_STRING);
+            public static WLClaim ViewUsers => new(WLPolicies.Customer.Names.ViewUsers, true, TRUE_STRING);
+            public static WLClaim EditUsers => new(WLPolicies.Customer.Names.EditUsers, true, TRUE_STRING);
         }
 
         public static class Administration
         {
             public static class Account
             {
-                public static WLClaim CanResetPassword => new (WLPolicies.Administration.Account.Names.CanResetPassword, true, TRUE_STRING);
-
-                public static WLClaim CanChangePassword => new (WLPolicies.Administration.Account.Names.CanChangePassword, true, TRUE_STRING);
-
-                public static WLClaim CanDisable2FA => new (WLPolicies.Administration.Account.Names.CanDisable2FA, true, TRUE_STRING);
-
-                public static WLClaim CanEnable2FA => new (WLPolicies.Administration.Account.Names.CanEnable2FA, true, TRUE_STRING);
+                public static WLClaim ResetPassword => new (WLPolicies.Administration.Account.Names.ResetPassword, true, TRUE_STRING);
+                public static WLClaim ChangePassword => new (WLPolicies.Administration.Account.Names.ChangePassword, true, TRUE_STRING);
+                public static WLClaim Disable2FA => new (WLPolicies.Administration.Account.Names.Disable2FA, true, TRUE_STRING);
+                public static WLClaim Enable2FA => new (WLPolicies.Administration.Account.Names.Enable2FA, true, TRUE_STRING);
             }
         }
     }

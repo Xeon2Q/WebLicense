@@ -1,22 +1,21 @@
-﻿using System;
+﻿using IdentityServer4.EntityFramework.Options;
+using MediatR;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Moq;
+using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Moq;
 using System.Threading;
-using IdentityServer4.EntityFramework.Options;
-using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.Extensions.Options;
 using WebLicense.Access;
 using WebLicense.Core.Models.Customers;
 using WebLicense.Core.Models.Identity;
 using WebLicense.Logic.Auxiliary;
 using WebLicense.Logic.UseCases.Customers;
-using WebLicense.Logic.UseCases.Users;
 using Xunit.Abstractions;
 
 namespace UnitTests.Auxiliary
@@ -125,14 +124,6 @@ namespace UnitTests.Auxiliary
             db ??= GetMemoryContext();
 
             var mock = new Mock<IMediator>();
-
-            // users
-            mock.Setup(q => q.Send(It.IsAny<GetUser>(), It.IsAny<CancellationToken>()))
-                .Returns((GetUser request, CancellationToken cancellationToken) => new GetUserHandler(db).Handle(request, cancellationToken));
-            mock.Setup(q => q.Send(It.IsAny<GetUsers>(), It.IsAny<CancellationToken>()))
-                .Returns((GetUsers request, CancellationToken cancellationToken) => new GetUsersHandler(db).Handle(request, cancellationToken));
-            mock.Setup(q => q.Send(It.IsAny<AddUser>(), It.IsAny<CancellationToken>()))
-                .Returns((AddUser request, CancellationToken cancellationToken) => new AddUserHandler(db, userManager:).Handle(request, cancellationToken));
 
             // customers
             mock.Setup(q => q.Send(It.IsAny<GetCustomer>(), It.IsAny<CancellationToken>()))

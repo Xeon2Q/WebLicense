@@ -18,7 +18,7 @@ using ResL = WebLicense.Server.Resources.Areas_Identity_Pages_Account_Manage_Ext
 
 namespace WebLicense.Server.Areas.Identity.Pages.Account.Manage
 {
-    [Authorize(Policy = WLPolicies.OwnAccount.Names.CanLoginExternal)]
+    [Authorize(Policy = WLPolicies.Account.Names.LoginExternal)]
     public class ExternalLoginsModel : PageModel
     {
         #region C-tor | Fields

@@ -5,7 +5,7 @@ using WebLicense.Shared.Auxiliary.Policies;
 
 namespace WebLicense.Server.Areas.Identity.Pages.Account.Manage
 {
-    [Authorize(Policy = WLPolicies.OwnAccount.Names.CanEnable2FA)]
+    [Authorize(Policy = WLPolicies.Account.Names.Enable2FA)]
     public class ShowRecoveryCodesModel : PageModel
     {
         #region Properties
