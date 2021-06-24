@@ -9,8 +9,7 @@ namespace WebLicense.Core.Models.Customers
     [Index(nameof(CustomerId), IsUnique = true)]
     public sealed class CustomerSettings
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         [Required]
@@ -43,8 +42,7 @@ namespace WebLicense.Core.Models.Customers
         [DefaultValue(false)]
         public bool CanDeleteMachines { get; set; } = false;
 
-        [MaxLength(200)]
-        [Comment("Email address used for notifications.")]
+        [MaxLength(200), Comment("Email address used for notifications.")]
         public string NotificationsEmail { get; set; }
 
         [Comment("Must be TRUE if Customer wants to receive notifications about his licenses.")]

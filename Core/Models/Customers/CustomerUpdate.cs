@@ -10,12 +10,12 @@ namespace WebLicense.Core.Models.Customers
     [Table("CustomerUpdates")]
     public sealed class CustomerUpdate
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         [Required]
         public int CustomerId { get; set; }
+        public Customer Customer { get; set; }
 
         [Required]
         public long UserId { get; set; }
@@ -23,6 +23,9 @@ namespace WebLicense.Core.Models.Customers
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTimeOffset Created { get; set; }
+
+        [Required, MaxLength(2000)]
+        public string Description { get; set; }
 
         public ICollection<ValueUpdateInfo> Changes { get; set; }
     }

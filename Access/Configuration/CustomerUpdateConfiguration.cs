@@ -11,6 +11,8 @@ namespace WebLicense.Access.Configuration
     {
         public void Configure(EntityTypeBuilder<CustomerUpdate> builder)
         {
+            builder.HasOne(q => q.User).WithMany().HasForeignKey(q => q.UserId).IsRequired();
+
             builder.Property(q => q.Changes)
                    .HasConversion(
                        q => JsonSerializer.Serialize(q, null),

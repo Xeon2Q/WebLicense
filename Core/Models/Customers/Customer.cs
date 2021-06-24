@@ -11,20 +11,16 @@ namespace WebLicense.Core.Models.Customers
     [Index(nameof(ReferenceId), IsUnique = true)]
     public sealed class Customer
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        [Required, MaxLength(200)]
-        [Comment("The Name of the Customer")]
+        [Required, MaxLength(200), Comment("The Name of the Customer")]
         public string Name { get; set; }
 
-        [Required, MaxLength(60)]
-        [Comment("Secure ID of the Customer.")]
+        [Required, MaxLength(60), Comment("Secure ID of the Customer.")]
         public string Code { get; set; }
 
-        [Required, MaxLength(40)]
-        [Comment("Reference ID is using to register new users for the Customer.")]
+        [Required, MaxLength(40), Comment("Reference ID is using to register new users for the Customer.")]
         public string ReferenceId { get; set; }
 
         // navigation
@@ -38,5 +34,7 @@ namespace WebLicense.Core.Models.Customers
 
         public ICollection<User> Users { get; set; }
         public ICollection<CustomerUser> CustomerUsers{ get; set; }
+
+        public ICollection<CustomerUpdate> Updates { get; set; }
     }
 }
