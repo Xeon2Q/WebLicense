@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 using WebLicense.Core.Models.Auxiliary;
 using WebLicense.Core.Models.Identity;
 
 namespace WebLicense.Core.Models.Customers
 {
     [Table("CustomerUpdates")]
+    [Index(nameof(CustomerId))]
+    [Index(nameof(UserId))]
+    [Index(nameof(Created))]
     public sealed class CustomerUpdate
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]

@@ -1,7 +1,10 @@
-﻿using WebLicense.Core.Models.Identity;
+﻿using Microsoft.EntityFrameworkCore;
+using WebLicense.Core.Models.Identity;
 
 namespace WebLicense.Core.Models.Customers
 {
+    [Index(nameof(CustomerId))]
+    [Index(nameof(UserId))]
     public sealed class CustomerUser
     {
         public int CustomerId { get; set; }

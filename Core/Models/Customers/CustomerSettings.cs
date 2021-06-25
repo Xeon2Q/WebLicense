@@ -7,6 +7,7 @@ namespace WebLicense.Core.Models.Customers
 {
     [Table("CustomerSettings")]
     [Index(nameof(CustomerId), IsUnique = true)]
+    [Index(nameof(ReceiveNotifications))]
     public sealed class CustomerSettings
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -14,6 +15,7 @@ namespace WebLicense.Core.Models.Customers
 
         [Required]
         public int CustomerId { get; set; }
+        public Customer Customer { get; set; }
 
         [Range(0, int.MaxValue)]
         public int MaxActiveLicensesCount { get; set; } = 1;

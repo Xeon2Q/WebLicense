@@ -9,7 +9,7 @@ using WebLicense.Access;
 namespace WebLicense.Access.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20210601101637_V1.0")]
+    [Migration("20210625111727_V1.0")]
     partial class V10
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -167,6 +167,8 @@ namespace WebLicense.Access.Migrations
 
                     b.HasKey("CustomerId", "UserId");
 
+                    b.HasIndex("CustomerId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("CustomerAdministrator");
@@ -182,6 +184,8 @@ namespace WebLicense.Access.Migrations
 
                     b.HasKey("CustomerId", "UserId");
 
+                    b.HasIndex("CustomerId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("CustomerManager");
@@ -196,19 +200,19 @@ namespace WebLicense.Access.Migrations
                     b.Property<bool>("CanActivateLicenses")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("CanActivateMachine")
+                    b.Property<bool>("CanActivateMachines")
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("CanDeactivateLicenses")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("CanDeactivateMachine")
+                    b.Property<bool>("CanDeactivateMachines")
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("CanDeleteLicenses")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("CanDeleteMachine")
+                    b.Property<bool>("CanDeleteMachines")
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("CreateActiveLicenses")
@@ -237,6 +241,8 @@ namespace WebLicense.Access.Migrations
                     b.HasIndex("CustomerId")
                         .IsUnique();
 
+                    b.HasIndex("ReceiveNotifications");
+
                     b.ToTable("CustomerSettings");
                 });
 
@@ -257,10 +263,19 @@ namespace WebLicense.Access.Migrations
                     b.Property<int>("CustomerId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
                     b.Property<long>("UserId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Created");
+
+                    b.HasIndex("CustomerId");
 
                     b.HasIndex("UserId");
 
@@ -276,6 +291,8 @@ namespace WebLicense.Access.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("CustomerId", "UserId");
+
+                    b.HasIndex("CustomerId");
 
                     b.HasIndex("UserId");
 
@@ -312,28 +329,28 @@ namespace WebLicense.Access.Migrations
                         new
                         {
                             Id = 9223372036854775807L,
-                            ConcurrencyStamp = "6be6174c-9a89-4d1c-9aaf-b24cdcaf92e4",
+                            ConcurrencyStamp = "72ad42cc-f490-419d-a30f-e082881edfa4",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 9223372036854775806L,
-                            ConcurrencyStamp = "319db5cc-38c6-4304-9ff8-63ad51699d15",
+                            ConcurrencyStamp = "ad600d30-c53b-43e4-94f1-6c10dadb5a56",
                             Name = "Customer Admin",
                             NormalizedName = "CUSTOMER ADMIN"
                         },
                         new
                         {
                             Id = 9223372036854775805L,
-                            ConcurrencyStamp = "86e338fb-f074-4555-9acb-cf40360fdeb0",
+                            ConcurrencyStamp = "c090cc4c-4b47-4294-838e-4790a2a7cb98",
                             Name = "Customer Manager",
                             NormalizedName = "CUSTOMER MANAGER"
                         },
                         new
                         {
                             Id = 9223372036854775804L,
-                            ConcurrencyStamp = "e3a7aea6-a5c9-4560-ae5a-a729fa4f489e",
+                            ConcurrencyStamp = "11abc07c-b2c8-4b27-8313-3659830b976d",
                             Name = "Customer User",
                             NormalizedName = "CUSTOMER USER"
                         });
@@ -606,7 +623,7 @@ namespace WebLicense.Access.Migrations
                         {
                             Id = 9223372036854775807L,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "7fbf7e97-9136-4c5d-9f5a-d488fa917dbd",
+                            ConcurrencyStamp = "1d4c7b7c-097d-4c9b-b41c-f848451d4881",
                             Email = "admin-one@weblicense.com",
                             EmailConfirmed = true,
                             EulaAccepted = true,
@@ -614,9 +631,9 @@ namespace WebLicense.Access.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN-ONE@WEBLICENSE.COM",
                             NormalizedUserName = "ADMINISTRATOR",
-                            PasswordHash = "AQAAAAEAACcQAAAAEA/bb+7O+Ogg/VnKC3XZP5OHcScud9fXRrA0TwTKgCUHe0eXUDm+H1cIjQ1kzo1tbg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEKAw3BH8c/s6bVp875JBirfp7MqLm9e3HGCM0UAiQHQ+Llz4g2eibnd1CkdVcBkYng==",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "6CE4347555574513BE023D111A438DA3B39442DBB4F342D2AD1CFC83B4668D178DEF689F06804448938B87C31787B3D0",
+                            SecurityStamp = "828D1EE61C5E4257996C4A14EFE539DD54F2FF5C917B45439E5BB8920F145810141DEE8FEE0D438FA769D6E9F2AC84D7",
                             TwoFactorEnabled = false,
                             UserName = "Administrator"
                         });
@@ -750,20 +767,30 @@ namespace WebLicense.Access.Migrations
 
             modelBuilder.Entity("WebLicense.Core.Models.Customers.CustomerSettings", b =>
                 {
-                    b.HasOne("WebLicense.Core.Models.Customers.Customer", null)
+                    b.HasOne("WebLicense.Core.Models.Customers.Customer", "Customer")
                         .WithOne("Settings")
                         .HasForeignKey("WebLicense.Core.Models.Customers.CustomerSettings", "CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("WebLicense.Core.Models.Customers.CustomerUpdate", b =>
                 {
+                    b.HasOne("WebLicense.Core.Models.Customers.Customer", "Customer")
+                        .WithMany("Updates")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("WebLicense.Core.Models.Identity.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Customer");
 
                     b.Navigation("User");
                 });
@@ -847,6 +874,8 @@ namespace WebLicense.Access.Migrations
                     b.Navigation("CustomerUsers");
 
                     b.Navigation("Settings");
+
+                    b.Navigation("Updates");
                 });
 
             modelBuilder.Entity("WebLicense.Core.Models.Identity.User", b =>

@@ -8,7 +8,7 @@ namespace WebLicense.Access.Configuration
     {
         public void Configure(EntityTypeBuilder<Customer> builder)
         {
-            builder.HasOne(q => q.Settings).WithOne().HasForeignKey<CustomerSettings>(q => q.CustomerId).IsRequired();
+            builder.HasOne(q => q.Settings).WithOne(q => q.Customer).HasForeignKey<CustomerSettings>(q => q.CustomerId).IsRequired();
             builder.HasMany(q => q.Updates).WithOne(q => q.Customer).HasForeignKey(q => q.CustomerId).IsRequired();
 
             builder.HasMany(q => q.Administrators)
