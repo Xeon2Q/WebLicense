@@ -132,6 +132,10 @@ namespace WebLicense.Logic.Auxiliary
     {
         Equals = 0,
         NotEquals = 1,
+        LessThan = 2,
+        LessThanOrEquals = 3,
+        GreaterThan = 4,
+        GreaterThanOrEquals = 5,
         Contains = 6,
         StartsWith = 7,
         EndsWith = 8
