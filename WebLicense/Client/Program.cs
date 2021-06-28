@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using WebLicense.Client.Auxiliary;
 using WebLicense.Client.Auxiliary.Configuration;
 
 namespace WebLicense.Client
@@ -20,6 +21,7 @@ namespace WebLicense.Client
 
             // Supply HttpClient instances that include access tokens when making requests to the server project
             builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("WebLicense.ServerAPI"));
+            builder.Services.AddTransient<JsLog>();
 
             builder.Services.AddApiAuthorization(options =>
                    {

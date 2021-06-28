@@ -1,0 +1,10 @@
+﻿@using WebLicense.Shared.Customers;
+
+<RadzenDataGrid TItem="CustomerInfo" Data="Data" Count="TotalCount" AllowVirtualization="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" LogicalFilterOperator="LogicalFilterOperator.Or" AllowSorting="true">
+    <Columns>
+        <RadzenDataGridColumn TItem="CustomerInfo" Property="@nameof(CustomerInfo.Id)" Filterable="false" Title="ID" Frozen="true" Width="50px" TextAlign="TextAlign.Center" />
+        <RadzenDataGridColumn TItem="CustomerInfo" Property="@nameof(CustomerInfo.Name)" Title="Name" />
+        <RadzenDataGridColumn TItem="CustomerInfo" Property="@nameof(CustomerInfo.Code)" Title="Code" Width="150px" Filterable="false" Sortable="false" />
+        <RadzenDataGridColumn TItem="CustomerInfo" Property="@nameof(CustomerInfo.ReferenceId)" Title="Reference ID" Filterable="false" Sortable="false" />
+    </Columns>
+</RadzenDataGrid>

@@ -21,6 +21,7 @@ namespace WebLicense.Logic.Auxiliary.Extensions
                 res.Append(valid[(int) (num % (uint) valid.Length)]);
             }
 
-            return res.ToString();        }
+            return res.ToString();
+        }
     }
 }

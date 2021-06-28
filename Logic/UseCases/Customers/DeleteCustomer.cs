@@ -53,7 +53,7 @@ namespace WebLicense.Logic.UseCases.Customers
             {
                 if (e.Message.Contains("expected to affect 1 row") && e.Message.Contains("actually affected 0 row"))
                 {
-                    return new CaseResult(new CaseException("*Customer not found or deleted", "Customer not found or deleted"));
+                    return new CaseResult(new CaseException(Exceptions.Customer_NotFoundOrDeleted, "Customer not found or deleted"));
                 }
                 return new CaseResult(e);
             }

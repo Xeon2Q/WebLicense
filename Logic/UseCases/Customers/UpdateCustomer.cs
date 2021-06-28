@@ -54,7 +54,7 @@ namespace WebLicense.Logic.UseCases.Customers
                                     .Include(q => q.CustomerAdministrators)
                                     .Include(q => q.CustomerManagers)
                                     .Include(q => q.CustomerUsers).FirstOrDefaultAsync(cancellationToken);
-                if (model == null) throw new CaseException("*Customer not found or deleted", "Customer not found or deleted");
+                if (model == null) throw new CaseException(Exceptions.Customer_NotFoundOrDeleted, "Customer not found or deleted");
 
                 UpdateModel(model, info);
 

@@ -1,69 +1,160 @@
-﻿html, body {
-    background: #010203;
-    color: #ffffff;
+﻿:root {
+    --black: #010203;
+    --white: #FFFFFF;
+    --gray10: #101010;
+    --gray21: #212121;
+    --gray33: #333333;
+    --gray38: #383838;
+    --gray42: #424242;
+    --gray52: #525252;
+    --gray63: #636363;
+    --gray84: #848484;
+    --grayA5: #A5A5A5;
+    --grayB0: #B0B0B0;
+    --grayC0: #C0C0C0;
+    --grayD0: #D0D0D0;
+    --grayE0: #E0E0E0;
+    --grayF0: #F0F0F0;
+    --white: #FFFFFF;
+    --link: #82B1FF;
+    --link-hover: #B5E4FF;
+    --alert: #F0F0F0;
+    --primary: #5C6BC0;
+    --primary-hover: #4352A7;
+    --secondary: #0277BD;
+    --secondary-hover: #005EA4;
+    --success: #388E3C;
+    --success-hover: #1F7523;
+    --danger: #BF360C;
+    --danger-hover: #A61D00;
+    --warning: #F9A825;
+    --warning-hover: #E08F0C;
+    --info: #00B8D4;
+    --info-hover: #009FBB;
+    --light: #BDBDBD;
+    --light-hover: #A4A4A4;
+    --dark: #424242;
+    --dark-hover: #292929;
+}
+
+html, body {
+    background: var(--black);
+    color: var(--white);
 }
 
 .page > .main {
-    background: #212121;
+    background: var(--gray21);
 }
 
 .top-row {
-    background-color: #424242;
-    border-bottom: 1px solid #010203;
+    background-color: var(--gray42);
+    border-bottom: 1px solid var(--black);
 }
 
 a, .btn-link {
-    color: #82B1FF !important;
+    color: var(--link) !important;
 }
 
 /* #region Bootstrap overrides */
-
-/* #region Alerts */
-.alert {
-    color: #F0F0F0;
-    border-color: #010203;
-}
-.alert-primary {
-    background-color: #5C6BC0;
-}
-
-.alert-secondary {
-    background-color: #0277BD;
-}
-
-.alert-success {
-    background-color: #388E3C;
-}
-
-.alert-danger {
-    background-color: #BF360C;
-}
-
-.alert-warning {
-    background-color: #F9A825;
-    color: #010203;
-}
-
-.alert-info {
-    background-color: #00B8D4;
-    color: #010203;
-}
-
-.alert-light {
-    background-color: #BDBDBD;
-    color: #010203;
-}
-
-.alert-dark {
-    background-color: #424242;
-}
-
-/* #endregion*/
-
-/* #region Containers */
 /* #endregion */
 
-/* #endregion */
-
-/* #region  */
+/*# region Radzen overrides */
+/* - paginator */
+.rz-datatable {
+    border-color: var(--gray63) !important;
+}
+.rz-datatable .rz-paginator {
+    background-color: var(--black) !important;
+}
+.rz-datatable .rz-paginator .rz-paginator-icon {
+    margin-left: 2px !important;
+}
+.rz-datatable .rz-button.rz-state-disabled, .rz-datatable .rz-state-disabled.rz-paginator-element {
+    opacity: 0.3 !important;
+    cursor: default !important;
+}
+.rz-datatable .rz-paginator-page.rz-state-active {
+    background-color: transparent !important;
+    border-color: var(--grayA5) !important;
+}
+.rz-datatable .rz-paginator-page {
+    background-color: transparent !important;
+    text-decoration: none;
+}
+.rz-button:not(.rz-state-disabled):hover:not(:active), .rz-paginator-element:not(.rz-state-disabled):hover:not(:active) {
+    background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0.15)), to(rgba(255, 255, 255, 0.15))) !important;
+    background-image: -o-linear-gradient(rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.15)) !important;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.15)) !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}
+.rz-datatable .rz-paginator-first, .rz-datatable .rz-paginator-prev {
+    background-color: transparent !important;
+}
+.rz-datatable .rz-paginator-last, .rz-datatable .rz-paginator-next {
+    background-color: transparent !important;
+}
+/* - header */
+.rz-datatable-thead th:not(:last-child), .rz-grid-table thead th:not(:last-child) {
+    border-right-color: var(--black) !important;
+}
+.rz-datatable-thead th, .rz-grid-table thead th {
+    background-color: var(--gray10) !important;
+}
+.rz-datatable-thead th .rz-column-title, .rz-grid-table thead th .rz-column-title {
+    color: var(--grayE0) !important;
+}
+.rz-datatable-thead .rzi, .rz-datatable-thead .rz-datatable-loading-content .rzi-circle-o-notch, .rz-datatable-loading-content .rz-datatable-thead .rzi-circle-o-notch, .rz-datatable-thead .rz-datatable-header .rzi-plus, .rz-datatable-header .rz-datatable-thead .rzi-plus, .rz-datatable-thead .rz-sortable-column .rzi-grid-sort, .rz-sortable-column .rz-datatable-thead .rzi-grid-sort, .rz-datatable-thead .rz-menuitem .rz-menuitem-icon, .rz-menuitem .rz-datatable-thead .rz-menuitem-icon, .rz-datatable-thead .rz-fileupload-row .rz-button .rzi-close, .rz-datatable-thead .rz-fileupload-row .rz-paginator-element .rzi-close, .rz-fileupload-row .rz-button .rz-datatable-thead .rzi-close, .rz-fileupload-row .rz-paginator-element .rz-datatable-thead .rzi-close, .rz-datatable-thead .rz-fileupload-row .rz-button .rzi-times, .rz-datatable-thead .rz-fileupload-row .rz-paginator-element .rzi-times, .rz-fileupload-row .rz-button .rz-datatable-thead .rzi-times, .rz-fileupload-row .rz-paginator-element .rz-datatable-thead .rzi-times, .rz-datatable-thead .rz-fileupload-row .rz-button .rz-icon-trash, .rz-datatable-thead .rz-fileupload-row .rz-paginator-element .rz-icon-trash, .rz-fileupload-row .rz-button .rz-datatable-thead .rz-icon-trash, .rz-fileupload-row .rz-paginator-element .rz-datatable-thead .rz-icon-trash, .rz-datatable-thead .rz-datatable .rzi-chevron-circle-right, .rz-datatable .rz-datatable-thead .rzi-chevron-circle-right, .rz-datatable-thead .rz-datatable .rzi-chevron-circle-down, .rz-datatable .rz-datatable-thead .rzi-chevron-circle-down, .rz-grid-table thead .rzi, .rz-grid-table thead .rz-datatable-loading-content .rzi-circle-o-notch, .rz-datatable-loading-content .rz-grid-table thead .rzi-circle-o-notch, .rz-grid-table thead .rz-datatable-header .rzi-plus, .rz-datatable-header .rz-grid-table thead .rzi-plus, .rz-grid-table thead .rz-sortable-column .rzi-grid-sort, .rz-sortable-column .rz-grid-table thead .rzi-grid-sort, .rz-grid-table thead .rz-menuitem .rz-menuitem-icon, .rz-menuitem .rz-grid-table thead .rz-menuitem-icon, .rz-grid-table thead .rz-fileupload-row .rz-button .rzi-close, .rz-grid-table thead .rz-fileupload-row .rz-paginator-element .rzi-close, .rz-fileupload-row .rz-button .rz-grid-table thead .rzi-close, .rz-fileupload-row .rz-paginator-element .rz-grid-table thead .rzi-close, .rz-grid-table thead .rz-fileupload-row .rz-button .rzi-times, .rz-grid-table thead .rz-fileupload-row .rz-paginator-element .rzi-times, .rz-fileupload-row .rz-button .rz-grid-table thead .rzi-times, .rz-fileupload-row .rz-paginator-element .rz-grid-table thead .rzi-times, .rz-grid-table thead .rz-fileupload-row .rz-button .rz-icon-trash, .rz-grid-table thead .rz-fileupload-row .rz-paginator-element .rz-icon-trash, .rz-fileupload-row .rz-button .rz-grid-table thead .rz-icon-trash, .rz-fileupload-row .rz-paginator-element .rz-grid-table thead .rz-icon-trash, .rz-grid-table thead .rz-datatable .rzi-chevron-circle-right, .rz-datatable .rz-grid-table thead .rzi-chevron-circle-right, .rz-grid-table thead .rz-datatable .rzi-chevron-circle-down, .rz-datatable .rz-grid-table thead .rzi-chevron-circle-down {
+    color: var(--grayE0) !important;
+}
+.rz-cell-filter {
+    background-color: var(--gray21) !important;
+    border-top-color: var(--black) !important;
+}
+.rz-cell-filter .rz-cell-filter-label > input {
+    color: var(--link) !important;
+}
+.rz-cell-filter .rz-cell-filter-label > input:focus {
+    color: var(--warning) !important;
+}
+.rz-overlaypanel {
+    border-color: var(--gray63) !important;
+    background-color: var(--gray42) !important;
+}
+/* - data */
+.rz-datatable-even > td {
+    background-color: var(--gray33) !important;
+}
+.rz-datatable-even:hover > td {
+    background-color: var(--gray42) !important;
+}
+.rz-datatable-odd > td {
+    background-color: var(--gray38) !important;
+}
+.rz-datatable-odd:hover > td {
+    background-color: var(--gray42) !important;
+}
+.rz-datatable-data td:not(:last-child), .rz-grid-table td:not(:last-child) {
+    border-right-color: var(--black) !important;
+}
+.rz-datatable-data td, .rz-grid-table td {
+    border-bottom-color: var(--black) !important;
+}
+.rz-datatable-data td .rz-cell-data, .rz-grid-table td .rz-cell-data {
+    color: var(--grayD0) !important;
+}
+/* other controls */
+.rz-colorpicker, .rz-lookup-search input, .rz-spinner, .rz-calendar .rz-inputtext, .rz-multiselect, .rz-dropdown, .mask, .rz-textarea, .rz-textbox {
+    background-color: var(--grayA5) !important;
+    border-color: var(--gray84) !important;
+    color: var(--black) !important;
+}
+.rz-html-editor-dropdown-items, .rz-splitbutton-menu, .rz-autocomplete-panel, .rz-multiselect-panel, .rz-dropdown-panel {
+    background-color: var(--grayA5) !important;
+    border-color: var(--gray84) !important;
+    color: var(--black) !important;
+}
+.rz-dropdown-item.rz-state-highlight, .rz-state-highlight.rz-menuitem, .rz-state-highlight.rz-autocomplete-list-item, .rz-state-highlight.rz-multiselect-item, .rz-dropdown-items li.rz-state-highlight, .rz-autocomplete-items li.rz-state-highlight, .rz-multiselect-items li.rz-state-highlight {
+    color: var(--grayF0) !important;
+}
 /* #endregion */

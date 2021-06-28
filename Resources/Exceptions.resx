@@ -129,6 +129,9 @@
   <data name="Customer_Name_Empty" xml:space="preserve">
     <value>Customer "Name" is empty</value>
   </data>
+  <data name="Customer_NotFoundOrDeleted" xml:space="preserve">
+    <value>Customer not found or deleted</value>
+  </data>
   <data name="Customer_NotificationsEmail_Empty" xml:space="preserve">
     <value>Customer "NotificationsEmail" is empty</value>
   </data>

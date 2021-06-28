@@ -97,6 +97,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Customer not found or deleted.
+        /// </summary>
+        public static string Customer_NotFoundOrDeleted {
+            get {
+                return ResourceManager.GetString("Customer_NotFoundOrDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Customer &quot;NotificationsEmail&quot; is empty.
         /// </summary>
         public static string Customer_NotificationsEmail_Empty {
