@@ -40,9 +40,6 @@ namespace WebLicense.Logic.UseCases.Users
 
     internal sealed class GetUsersHandler : IRequestHandler<GetUsers, CaseResult<IList<UserInfo>>>
     {
-        private const string SORT_ID = "ID";
-        private const string SORT_NAME = "USERNAME";
-
         private readonly DatabaseContext db;
 
         public GetUsersHandler(DatabaseContext db)
@@ -57,9 +54,7 @@ namespace WebLicense.Logic.UseCases.Users
                 request.Validate();
 
                 var query = db.Set<User>().AsNoTrackingWithIdentityResolution();
-                query = ApplyFilter(query, request.Criteria);
-                query = ApplySort(query, request.Criteria);
-                query = ApplySkipTake(query, request.Criteria);
+                request.Criteria?.ApplyAll(ref query);
 
                 var data1 = await query.ToListAsync(cancellationToken);
                 var data2 = data1.Select(q => new UserInfo(q)).ToList();
@@ -72,33 +67,5 @@ namespace WebLicense.Logic.UseCases.Users
                 return new CaseResult<IList<UserInfo>>(e);
             }
         }
-
-        #region Methods
-
-        private IQueryable<User> ApplyFilter(IQueryable<User> query, Criteria<User> criteria)
-        {
-            return criteria.Filter != null ? query.Where(criteria.Filter) : query;
-        }
-
-        private IQueryable<User> ApplySort(IQueryable<User> query, Criteria<User> criteria)
-        {
-            return (criteria.SortAsc, criteria.Sort?.ToUpper()) switch
-            {
-                (true, SORT_ID) => query.OrderBy(q => q.Id),
-                (false, SORT_ID) => query.OrderByDescending(q => q.Id),
-
-                (true, SORT_NAME) => query.OrderBy(q => q.UserName),
-                (false, SORT_NAME) => query.OrderByDescending(q => q.UserName),
-
-                _ => query.OrderBy(q => q.UserName)
-            };
-        }
-
-        private IQueryable<User> ApplySkipTake(IQueryable<User> query, Criteria<User> criteria)
-        {
-            return query.Skip(criteria.Skip).Take(criteria.Take);
-        }
-
-        #endregion
     }
 }

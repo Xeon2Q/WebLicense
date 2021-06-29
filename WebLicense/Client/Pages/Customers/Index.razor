@@ -7,9 +7,9 @@
 <RadzenDataGrid TItem="CustomerInfo" Data="@Data" Count="@TotalCount" LoadData="LoadDataAsync" IsLoading="IsLoading" 
                 AllowPaging="true" PagerPosition="PagerPosition.TopAndBottom" PageNumbersCount="10" PageSizeOptions="new []{10, 25, 50, 100}" 
                 AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" LogicalFilterOperator="LogicalFilterOperator.Or" FilterMode="FilterMode.Advanced"
-                AllowSorting="true">
+                AllowSorting="true" AllowMultiColumnSorting="true">
     <Columns>
-        <RadzenDataGridColumn TItem="CustomerInfo" Property="@nameof(CustomerInfo.Id)" Filterable="false" Title="ID" Width="50px" TextAlign="TextAlign.Center" />
+        <RadzenDataGridColumn TItem="CustomerInfo" Property="@nameof(CustomerInfo.Id)" Filterable="false" Title="ID" Width="50px" TextAlign="TextAlign.Center" SortOrder="SortOrder.Ascending" />
         <RadzenDataGridColumn TItem="CustomerInfo" Property="@nameof(CustomerInfo.Name)" Title="Name" />
         <RadzenDataGridColumn TItem="CustomerInfo" Property="@nameof(CustomerInfo.Code)" Title="Code" Width="150px" />
         <RadzenDataGridColumn TItem="CustomerInfo" Property="@nameof(CustomerInfo.ReferenceId)" Title="Reference ID" />

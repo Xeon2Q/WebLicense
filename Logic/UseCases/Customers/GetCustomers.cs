@@ -40,9 +40,6 @@ namespace WebLicense.Logic.UseCases.Customers
 
     internal sealed class GetCustomersHandler : IRequestHandler<GetCustomers, CaseResult<IList<CustomerInfo>>>
     {
-        private const string SORT_ID = "ID";
-        private const string SORT_NAME = "NAME";
-
         private readonly DatabaseContext db;
 
         public GetCustomersHandler(DatabaseContext db)
@@ -57,9 +54,7 @@ namespace WebLicense.Logic.UseCases.Customers
                 request.Validate();
 
                 var query = db.Set<Customer>().AsNoTrackingWithIdentityResolution();
-                query = ApplyFilter(query, request.Criteria);
-                query = ApplySort(query, request.Criteria);
-                query = ApplySkipTake(query, request.Criteria);
+                request.Criteria?.ApplyAll(ref query);
 
                 var data1 = await query.ToListAsync(cancellationToken);
                 var data2 = data1.Select(q => new CustomerInfo(q)).ToList();
@@ -72,33 +67,5 @@ namespace WebLicense.Logic.UseCases.Customers
                 return new CaseResult<IList<CustomerInfo>>(e);
             }
         }
-
-        #region Methods
-
-        private IQueryable<Customer> ApplyFilter(IQueryable<Customer> query, Criteria<Customer> criteria)
-        {
-            return criteria.Filter != null ? query.Where(criteria.Filter) : query;
-        }
-
-        private IQueryable<Customer> ApplySort(IQueryable<Customer> query, Criteria<Customer> criteria)
-        {
-            return (criteria.SortAsc, criteria.Sort?.ToUpper()) switch
-            {
-                (true, SORT_ID) => query.OrderBy(q => q.Id),
-                (false, SORT_ID) => query.OrderByDescending(q => q.Id),
-
-                (true, SORT_NAME) => query.OrderBy(q => q.Name),
-                (false, SORT_NAME) => query.OrderByDescending(q => q.Name),
-
-                _ => query.OrderBy(q => q.Name)
-            };
-        }
-
-        private IQueryable<Customer> ApplySkipTake(IQueryable<Customer> query, Criteria<Customer> criteria)
-        {
-            return query.Skip(criteria.Skip).Take(criteria.Take);
-        }
-
-        #endregion
     }
 }

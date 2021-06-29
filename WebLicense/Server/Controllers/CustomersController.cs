@@ -4,7 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
+using WebLicense.Core.Models.Customers;
 using WebLicense.Logic.Auxiliary;
+using WebLicense.Logic.UseCases.Customers;
 using WebLicense.Shared;
 using WebLicense.Shared.Customers;
 
@@ -32,7 +35,7 @@ namespace WebLicense.Server.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public ListData<CustomerInfo> Get(int skip = 0, int take = 100, string filters = null, string sorts = null)
+        public async Task<ListData<CustomerInfo>> Get(int skip = 0, int take = 100, string filters = null, string sorts = null)
         {
             try
             {
@@ -41,6 +44,8 @@ namespace WebLicense.Server.Controllers
                 if (skip > 1000) skip = 1000;
                 var criteriaFilter = CriteriaFilter.TryParse(filters);
                 var criteriaSort = CriteriaSort.TryParse(sorts);
+
+                var ccc = await sender.Send(new GetCustomers(new Criteria<Customer>(skip, take, criteriaSort, criteriaFilter)));
 
                 var data = Enumerable.Range(skip, take).Select(q => new CustomerInfo{Id = q, Name = $"Name {q}", Code = $"Code {q}", ReferenceId = $"{Guid.NewGuid():N}".ToUpper()}).ToList();
 
