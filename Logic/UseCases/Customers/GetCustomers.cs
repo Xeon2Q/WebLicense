@@ -1,21 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Resources;
+using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Resources;
 using WebLicense.Access;
 using WebLicense.Core.Models.Customers;
 using WebLicense.Logic.Auxiliary;
 using WebLicense.Logic.UseCases.Auxiliary;
+using WebLicense.Shared;
 using WebLicense.Shared.Customers;
 
 namespace WebLicense.Logic.UseCases.Customers
 {
-    public sealed class GetCustomers : IRequest<CaseResult<IList<CustomerInfo>>>, IValidate
+    public sealed class GetCustomers : IRequest<CaseResult<ListData<CustomerInfo>>>, IValidate
     {
         internal Criteria<Customer> Criteria { get; }
 
@@ -38,7 +38,7 @@ namespace WebLicense.Logic.UseCases.Customers
         }
     }
 
-    internal sealed class GetCustomersHandler : IRequestHandler<GetCustomers, CaseResult<IList<CustomerInfo>>>
+    internal sealed class GetCustomersHandler : IRequestHandler<GetCustomers, CaseResult<ListData<CustomerInfo>>>
     {
         private readonly DatabaseContext db;
 
@@ -47,7 +47,7 @@ namespace WebLicense.Logic.UseCases.Customers
             this.db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
-        public async Task<CaseResult<IList<CustomerInfo>>> Handle(GetCustomers request, CancellationToken cancellationToken)
+        public async Task<CaseResult<ListData<CustomerInfo>>> Handle(GetCustomers request, CancellationToken cancellationToken)
         {
             try
             {
@@ -59,12 +59,14 @@ namespace WebLicense.Logic.UseCases.Customers
                 var data1 = await query.ToListAsync(cancellationToken);
                 var data2 = data1.Select(q => new CustomerInfo(q)).ToList();
 
-                return new CaseResult<IList<CustomerInfo>>(data2);
+                var total = await db.Set<Customer>().CountAsync(cancellationToken);
+
+                return new CaseResult<ListData<CustomerInfo>>(new ListData<CustomerInfo>(total, data2));
 
             }
             catch (Exception e)
             {
-                return new CaseResult<IList<CustomerInfo>>(e);
+                return new CaseResult<ListData<CustomerInfo>>(e);
             }
         }
     }

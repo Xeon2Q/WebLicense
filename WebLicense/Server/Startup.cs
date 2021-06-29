@@ -15,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using WebLicense.Access;
 using WebLicense.Core.Auxiliary;
@@ -71,12 +72,17 @@ namespace WebLicense.Server
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            services.AddSwaggerGen();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
+                app.UseSwagger();
+                app.UseSwaggerUI(options => options.SwaggerEndpoint("/swagger/v1/swagger.json", "WebLicense API"));
+
                 app.UseDeveloperExceptionPage();
                 app.UseMigrationsEndPoint();
                 app.UseWebAssemblyDebugging();
@@ -202,12 +208,14 @@ namespace WebLicense.Server
             openId.UserClaims.Add(JwtClaimTypes.Id);
             openId.UserClaims.Add(JwtClaimTypes.Name);
             openId.UserClaims.Add(JwtClaimTypes.Role);
+            openId.UserClaims.Add(ClaimTypes.Email);
             AddWLClaims(openId.UserClaims);
 
             var api = options.ApiResources.Single();
             api.UserClaims.Add(JwtClaimTypes.Id);
             api.UserClaims.Add(JwtClaimTypes.Name);
             api.UserClaims.Add(JwtClaimTypes.Role);
+            api.UserClaims.Add(ClaimTypes.Email);
             AddWLClaims(api.UserClaims);
         }
 

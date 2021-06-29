@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using WebLicense.Core.Models.Customers;
 using WebLicense.Logic.Auxiliary;
@@ -45,11 +44,10 @@ namespace WebLicense.Server.Controllers
                 var criteriaFilter = CriteriaFilter.TryParse(filters);
                 var criteriaSort = CriteriaSort.TryParse(sorts);
 
-                var ccc = await sender.Send(new GetCustomers(new Criteria<Customer>(skip, take, criteriaSort, criteriaFilter)));
+                var data = await sender.Send(new GetCustomers(new Criteria<Customer>(skip, take, criteriaSort, criteriaFilter)));
+                data.ThrowOnFail();
 
-                var data = Enumerable.Range(skip, take).Select(q => new CustomerInfo{Id = q, Name = $"Name {q}", Code = $"Code {q}", ReferenceId = $"{Guid.NewGuid():N}".ToUpper()}).ToList();
-
-                return ListData<CustomerInfo>.FromData(1000, data);
+                return data.Data;
             }
             catch (Exception e)
             {
@@ -57,13 +55,58 @@ namespace WebLicense.Server.Controllers
                 throw;
             }
         }
-        
 
-        #endregion
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<CustomerInfo> Add(CustomerInfo customer)
+        {
+            try
+            {
+                var data = await sender.Send(new AddCustomer(customer));
+                data.ThrowOnFail();
 
-        #region Methods
+                return data.Data;
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+                throw;
+            }
+        }
 
-        
+        [AllowAnonymous]
+        [HttpPatch]
+        public async Task<CustomerInfo> Update(CustomerInfo customer)
+        {
+            try
+            {
+                var data = await sender.Send(new UpdateCustomer(customer));
+                data.ThrowOnFail();
+
+                return data.Data;
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+                throw;
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpDelete]
+        public async Task Delete(int id)
+        {
+            try
+            {
+                var data = await sender.Send(new DeleteCustomer(id));
+                data.ThrowOnFail();
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+                throw;
+            }
+        }
 
         #endregion
     }

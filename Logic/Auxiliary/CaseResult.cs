@@ -57,6 +57,18 @@ namespace WebLicense.Logic.Auxiliary
         }
 
         #endregion
+
+        #region Methods
+
+        public void ThrowOnFail()
+        {
+            if (Succeeded || Errors == null || Errors.Count == 0) return;
+
+            var error = Errors.FirstOrDefault(q => q != null);
+            if (error != null) throw error;
+        }
+
+        #endregion
     }
 
     public sealed class CaseResult<T> : CaseResult

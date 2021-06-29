@@ -48,6 +48,7 @@ namespace WebLicense.Server.Auxiliary.IdentityServices
 
             claims.Add(new(JwtClaimTypes.Id, user.Id.ToString()));
             claims.Add(new(JwtClaimTypes.Name, user.UserName));
+            claims.Add(new(ClaimTypes.Email, user.Email));
 
             // roles
             var roleNames = await UserManager.GetRolesAsync(user) ?? new List<string>(0);

@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Resources;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
@@ -11,11 +10,12 @@ using WebLicense.Access;
 using WebLicense.Core.Models.Identity;
 using WebLicense.Logic.Auxiliary;
 using WebLicense.Logic.UseCases.Auxiliary;
+using WebLicense.Shared;
 using WebLicense.Shared.Identity;
 
 namespace WebLicense.Logic.UseCases.Users
 {
-    public sealed class GetUsers : IRequest<CaseResult<IList<UserInfo>>>, IValidate
+    public sealed class GetUsers : IRequest<CaseResult<ListData<UserInfo>>>, IValidate
     {
         internal Criteria<User> Criteria { get; }
 
@@ -38,7 +38,7 @@ namespace WebLicense.Logic.UseCases.Users
         }
     }
 
-    internal sealed class GetUsersHandler : IRequestHandler<GetUsers, CaseResult<IList<UserInfo>>>
+    internal sealed class GetUsersHandler : IRequestHandler<GetUsers, CaseResult<ListData<UserInfo>>>
     {
         private readonly DatabaseContext db;
 
@@ -47,7 +47,7 @@ namespace WebLicense.Logic.UseCases.Users
             this.db = db ?? throw new ArgumentNullException(nameof(db));
         }
 
-        public async Task<CaseResult<IList<UserInfo>>> Handle(GetUsers request, CancellationToken cancellationToken)
+        public async Task<CaseResult<ListData<UserInfo>>> Handle(GetUsers request, CancellationToken cancellationToken)
         {
             try
             {
@@ -59,12 +59,14 @@ namespace WebLicense.Logic.UseCases.Users
                 var data1 = await query.ToListAsync(cancellationToken);
                 var data2 = data1.Select(q => new UserInfo(q)).ToList();
 
-                return new CaseResult<IList<UserInfo>>(data2);
+                var total = await db.Set<User>().CountAsync(cancellationToken);
+
+                return new CaseResult<ListData<UserInfo>>(new ListData<UserInfo>(total, data2));
 
             }
             catch (Exception e)
             {
-                return new CaseResult<IList<UserInfo>>(e);
+                return new CaseResult<ListData<UserInfo>>(e);
             }
         }
     }

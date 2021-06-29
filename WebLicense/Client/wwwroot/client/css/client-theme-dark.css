@@ -1,6 +1,6 @@
-﻿:root {
-    --black: #010203;
-    --white: #FFFFFF;
+﻿@import url('bootstrap-dark.css');
+
+:root {
     --gray10: #101010;
     --gray21: #212121;
     --gray33: #333333;
@@ -15,26 +15,6 @@
     --grayD0: #D0D0D0;
     --grayE0: #E0E0E0;
     --grayF0: #F0F0F0;
-    --white: #FFFFFF;
-    --link: #82B1FF;
-    --link-hover: #B5E4FF;
-    --alert: #F0F0F0;
-    --primary: #5C6BC0;
-    --primary-hover: #4352A7;
-    --secondary: #0277BD;
-    --secondary-hover: #005EA4;
-    --success: #388E3C;
-    --success-hover: #1F7523;
-    --danger: #BF360C;
-    --danger-hover: #A61D00;
-    --warning: #F9A825;
-    --warning-hover: #E08F0C;
-    --info: #00B8D4;
-    --info-hover: #009FBB;
-    --light: #BDBDBD;
-    --light-hover: #A4A4A4;
-    --dark: #424242;
-    --dark-hover: #292929;
 }
 
 html, body {
@@ -49,10 +29,6 @@ html, body {
 .top-row {
     background-color: var(--gray42);
     border-bottom: 1px solid var(--black);
-}
-
-a, .btn-link {
-    color: var(--link) !important;
 }
 
 /* #region Bootstrap overrides */

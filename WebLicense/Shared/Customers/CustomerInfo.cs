@@ -6,15 +6,15 @@ namespace WebLicense.Shared.Customers
 {
     public sealed record CustomerInfo
     {
-        public int? Id { get; init; }
+        public int? Id { get; set; }
 
-        public string Name { get; init; }
+        public string Name { get; set; }
 
-        public string Code { get; init; }
+        public string Code { get; set; }
 
-        public string ReferenceId { get; init; }
+        public string ReferenceId { get; set; }
 
-        public CustomerSettingsInfo Settings { get; init; }
+        public CustomerSettingsInfo Settings { get; set; }
 
         public ICollection<CustomerUserInfo> Administrators { get; set; }
 

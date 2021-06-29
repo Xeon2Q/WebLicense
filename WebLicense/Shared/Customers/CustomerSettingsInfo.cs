@@ -4,27 +4,27 @@ namespace WebLicense.Shared.Customers
 {
     public sealed class CustomerSettingsInfo
     {
-        public int? MaxActiveLicensesCount { get; init; }
+        public int? MaxActiveLicensesCount { get; set; }
 
-        public int? MaxTotalLicensesCount { get; init; }
+        public int? MaxTotalLicensesCount { get; set; }
 
-        public bool? CreateActiveLicenses { get; init; }
+        public bool? CreateActiveLicenses { get; set; }
 
-        public bool? CanActivateLicenses { get; init; }
+        public bool? CanActivateLicenses { get; set; }
 
-        public bool? CanDeactivateLicenses { get; init; }
+        public bool? CanDeactivateLicenses { get; set; }
 
-        public bool? CanDeleteLicenses { get; init; }
+        public bool? CanDeleteLicenses { get; set; }
 
-        public bool? CanActivateMachines { get; init; }
+        public bool? CanActivateMachines { get; set; }
 
-        public bool? CanDeactivateMachines { get; init; }
+        public bool? CanDeactivateMachines { get; set; }
 
-        public bool? CanDeleteMachines { get; init; }
+        public bool? CanDeleteMachines { get; set; }
 
-        public string NotificationsEmail { get; init; }
+        public string NotificationsEmail { get; set; }
 
-        public bool? ReceiveNotifications { get; init; }
+        public bool? ReceiveNotifications { get; set; }
 
         #region C-tor
 

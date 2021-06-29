@@ -3,16 +3,21 @@
 
 <h1>Customers: @TotalCount</h1>
 
+<div class="d-flex my-3">
+    <NavLink class="btn btn-success btn-sm" href="/customers/add">
+        <i class="bi bi-plus"></i> Add Customer...
+    </NavLink>
+</div>
 
-<RadzenDataGrid TItem="CustomerInfo" Data="@Data" Count="@TotalCount" LoadData="LoadDataAsync" IsLoading="IsLoading" 
-                AllowPaging="true" PagerPosition="PagerPosition.TopAndBottom" PageNumbersCount="10" PageSizeOptions="new []{10, 25, 50, 100}" 
+<RadzenDataGrid TItem="CustomerInfo" Data="@Data" Count="@TotalCount" LoadData="LoadDataAsync" IsLoading="IsLoading"
+                AllowPaging="true" PagerPosition="PagerPosition.TopAndBottom" PageNumbersCount="10" PageSizeOptions="new[] {10, 25, 50, 100}"
                 AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" LogicalFilterOperator="LogicalFilterOperator.Or" FilterMode="FilterMode.Advanced"
                 AllowSorting="true" AllowMultiColumnSorting="true">
     <Columns>
-        <RadzenDataGridColumn TItem="CustomerInfo" Property="@nameof(CustomerInfo.Id)" Filterable="false" Title="ID" Width="50px" TextAlign="TextAlign.Center" SortOrder="SortOrder.Ascending" />
-        <RadzenDataGridColumn TItem="CustomerInfo" Property="@nameof(CustomerInfo.Name)" Title="Name" />
-        <RadzenDataGridColumn TItem="CustomerInfo" Property="@nameof(CustomerInfo.Code)" Title="Code" Width="150px" />
-        <RadzenDataGridColumn TItem="CustomerInfo" Property="@nameof(CustomerInfo.ReferenceId)" Title="Reference ID" />
+        <RadzenDataGridColumn TItem="CustomerInfo" Property="@nameof(CustomerInfo.Id)" Filterable="false" Title="ID" Width="50px" TextAlign="TextAlign.Center" SortOrder="SortOrder.Ascending"/>
+        <RadzenDataGridColumn TItem="CustomerInfo" Property="@nameof(CustomerInfo.Name)" Title="Name"/>
+        <RadzenDataGridColumn TItem="CustomerInfo" Property="@nameof(CustomerInfo.Code)" Title="Code"/>
+        <RadzenDataGridColumn TItem="CustomerInfo" Property="@nameof(CustomerInfo.ReferenceId)" Title="Reference ID"/>
     </Columns>
 </RadzenDataGrid>
 
