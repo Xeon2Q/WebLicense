@@ -1,86 +1,107 @@
-﻿<ul class="nav nav-pills mb-5" id="pills-tab" role="tablist">
-    <li class="nav-item me-2" role="presentation">
-        <button class="nav-link active" id="pills-main-tab" data-bs-toggle="pill" data-bs-target="#pills-main" type="button" role="tab" aria-controls="pills-main" aria-selected="true">Main</button>
-    </li>
-    <li class="nav-item me-2" role="presentation">
-        <button class="nav-link" id="pills-settings-tab" data-bs-toggle="pill" data-bs-target="#pills-settings" type="button" role="tab" aria-controls="pills-settings" aria-selected="false">Settings</button>
-    </li>
-    <li class="nav-item me-2" role="presentation">
-        <button class="nav-link" id="pills-administrators-tab" data-bs-toggle="pill" data-bs-target="#pills-administrators" type="button" role="tab" aria-controls="pills-administrators" aria-selected="false">Administrators</button>
-    </li>
-    <li class="nav-item me-2" role="presentation">
-        <button class="nav-link" id="pills-managers-tab" data-bs-toggle="pill" data-bs-target="#pills-managers" type="button" role="tab" aria-controls="pills-managers" aria-selected="false">Managers</button>
-    </li>
-    <li class="nav-item me-2" role="presentation">
-        <button class="nav-link" id="pills-users-tab" data-bs-toggle="pill" data-bs-target="#pills-users" type="button" role="tab" aria-controls="pills-users" aria-selected="false">Users</button>
-    </li>
-</ul>
-<div class="tab-content" id="pills-tabContent">
-    <div class="tab-pane fade col-8 col-xxl-5 min-w-600px show active" id="pills-main" role="tabpanel" aria-labelledby="pills-main-tab">
-        <div class="form-floating mb-3">
-            <input class="form-control" placeholder="placeholder" @bind="@Data.Name" />
-            <label class="form-label">Name</label>
-        </div>
-        <div class="form-floating mb-3">
-            <input class="form-control" placeholder="placeholder" @bind="@Data.Code" />
-            <label class="form-label">Code</label>
-        </div>
-        <div class="form-floating mb-3">
-            <input class="form-control" placeholder="placeholder" @bind="@Data.ReferenceId" />
-            <label class="form-label">Reference ID</label>
-        </div>
-    </div>
+﻿@using System.Collections.Concurrent
+@inject IStringLocalizer<Properties> LocP
+@inject IStringLocalizer<UI> LocUI
 
-    <div class="tab-pane fade col-8 col-xxl-5 min-w-600px" id="pills-settings" role="tabpanel" aria-labelledby="pills-settings-tab">
-        <div class="form-floating mb-3">
-            <input class="form-control" placeholder="placeholder" @bind="@Data.Settings.MaxActiveLicensesCount" />
-            <label class="form-label">MaxActiveLicensesCount</label>
+<EditForm Model="@Data">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+
+    <ul class="nav nav-pills mb-5" id="pills-tab" role="tablist">
+        <li class="nav-item me-2" role="presentation">
+            <button class="nav-link active" id="pills-main-tab" data-bs-toggle="pill" data-bs-target="#pills-main" type="button" role="tab" aria-controls="pills-main" aria-selected="true">Main</button>
+        </li>
+        <li class="nav-item me-2" role="presentation">
+            <button class="nav-link" id="pills-settings-tab" data-bs-toggle="pill" data-bs-target="#pills-settings" type="button" role="tab" aria-controls="pills-settings" aria-selected="false">Settings</button>
+        </li>
+        <li class="nav-item me-2" role="presentation">
+            <button class="nav-link" id="pills-administrators-tab" data-bs-toggle="pill" data-bs-target="#pills-administrators" type="button" role="tab" aria-controls="pills-administrators" aria-selected="false">Administrators</button>
+        </li>
+        <li class="nav-item me-2" role="presentation">
+            <button class="nav-link" id="pills-managers-tab" data-bs-toggle="pill" data-bs-target="#pills-managers" type="button" role="tab" aria-controls="pills-managers" aria-selected="false">Managers</button>
+        </li>
+        <li class="nav-item me-2" role="presentation">
+            <button class="nav-link" id="pills-users-tab" data-bs-toggle="pill" data-bs-target="#pills-users" type="button" role="tab" aria-controls="pills-users" aria-selected="false">Users</button>
+        </li>
+    </ul>
+    <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade col-8 col-xxl-5 min-w-600px show active" id="pills-main" role="tabpanel" aria-labelledby="pills-main-tab">
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="Data.Name" class="form-control" placeholder="placeholder"></InputText>
+                <label class="form-label">@LocP["Customer_Name"]</label>
+            </div>
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="Data.Code" class="form-control" placeholder="placeholder"></InputText>
+                <label class="form-label">@LocP["Customer_Code"]</label>
+            </div>
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="Data.ReferenceId" class="form-control" placeholder="placeholder"></InputText>
+                <label class="form-label">@LocP["Customer_ReferenceId"]</label>
+            </div>
         </div>
-        <div class="form-floating mb-3">
-            <input class="form-control" placeholder="placeholder" @bind="@Data.Settings.MaxTotalLicensesCount" />
-            <label class="form-label">MaxTotalLicensesCount</label>
+
+        <div class="tab-pane fade col-8 col-xxl-5 min-w-600px" id="pills-settings" role="tabpanel" aria-labelledby="pills-settings-tab">
+            <h4 class="text-info">@LocUI["Customer-Settings-Notifications"]</h4>
+            <div class="row g-0">
+                <div class="mb-3">
+                    <label class="form-label">@LocP["Customer_Settings_NotificationsEmail"]</label>
+                    <InputText @bind-Value="Data.Settings.NotificationsEmail" class="form-control" placeholder="placeholder"></InputText>
+                </div>
+                <div class="mb-3">
+                    <div class="form-check form-switch form-switch-lg">
+                        <input class="form-check-input" type="checkbox" @bind="@Data.Settings.ReceiveNotifications" id="settings-receivenotifications" />
+                        <label class="form-check-label ms-3" for="settings-receivenotifications">@LocP["Customer_Settings_ReceiveNotifications"]</label>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="my-2" />
+
+            <h4 class="text-info mt-3">@LocUI["Customer-Settings-Licenses"]</h4>
+            <div class="row mb-4">
+                <div class="col-6 pe-2">
+                    <label class="form-label">@LocP["Customer_Settings_MaxActiveLicensesCount"]</label>
+                    <InputNumber @bind-Value="Data.Settings.MaxActiveLicensesCount" class="form-control"></InputNumber>
+                </div>
+                <div class="col-6 ps-2">
+                    <label class="form-label">@LocP["Customer_Settings_MaxTotalLicensesCount"]</label>
+                    <InputNumber @bind-Value="Data.Settings.MaxTotalLicensesCount" class="form-control"></InputNumber>
+                </div>
+            </div>
+            <div class="row g-0">
+                <div class="form-check form-switch form-switch-lg mb-3">
+                    <input class="form-check-input" placeholder="placeholder" type="checkbox" @bind="@Data.Settings.CreateActiveLicenses" id="settings-createalicense" />
+                    <label class="form-check-label ms-3" for="settings-createalicense">@LocP["Customer_Settings_CreateActiveLicenses"]</label>
+                </div>
+                <div class="form-check form-switch form-switch-lg mb-3">
+                    <input class="form-check-input" placeholder="placeholder" type="checkbox" @bind="@Data.Settings.CanActivateLicenses" id="settings-candactivatelicense" />
+                    <label class="form-check-label ms-3" for="settings-candactivatelicense">@LocP["Customer_Settings_CanActivateLicenses"]</label>
+                </div>
+                <div class="form-check form-switch form-switch-lg mb-3">
+                    <input class="form-check-input" placeholder="placeholder" type="checkbox" @bind="@Data.Settings.CanDeactivateLicenses" id="settings-candeactivatelicense" />
+                    <label class="form-check-label ms-3" for="settings-candeactivatelicense">@LocP["Customer_Settings_CanDeactivateLicenses"]</label>
+                </div>
+                <div class="form-check form-switch form-switch-lg mb-3">
+                    <input class="form-check-input" placeholder="placeholder" type="checkbox" @bind="@Data.Settings.CanDeleteLicenses" id="settings-candeletelicense" />
+                    <label class="form-check-label ms-3" for="settings-candeletelicense">@LocP["Customer_Settings_CanDeleteLicenses"]</label>
+                </div>
+                <div class="form-check form-switch form-switch-lg mb-3">
+                    <input class="form-check-input" placeholder="placeholder" type="checkbox" @bind="@Data.Settings.CanActivateMachines" id="settings-canactivatemachines" />
+                    <label class="form-check-label ms-3" for="settings-canactivatemachines">@LocP["Customer_Settings_CanActivateMachines"]</label>
+                </div>
+                <div class="form-check form-switch form-switch-lg mb-3">
+                    <input class="form-check-input" placeholder="placeholder" type="checkbox" @bind="@Data.Settings.CanDeactivateMachines" id="settings-candeactivatemachines" />
+                    <label class="form-check-label ms-3" for="settings-candeactivatemachines">@LocP["Customer_Settings_CanDeactivateMachines"]</label>
+                </div>
+                <div class="form-check form-switch form-switch-lg">
+                    <input class="form-check-input" placeholder="placeholder" type="checkbox" @bind="@Data.Settings.CanDeleteMachines" id="settings-candeletemachines" />
+                    <label class="form-check-label ms-3" for="settings-candeletemachines">@LocP["Customer_Settings_CanDeleteMachines"]</label>
+                </div>
+            </div>
         </div>
-        <div class="form-floating mb-3">
-            <input class="form-control" placeholder="placeholder" @bind="@Data.Settings.CreateActiveLicenses" />
-            <label class="form-label">CreateActiveLicenses</label>
-        </div>
-        <div class="form-floating mb-3">
-            <input class="form-control" placeholder="placeholder" @bind="@Data.Settings.CanActivateLicenses" />
-            <label class="form-label">CanActivateLicenses</label>
-        </div>
-        <div class="form-floating mb-3">
-            <input class="form-control" placeholder="placeholder" @bind="@Data.Settings.CanDeactivateLicenses" />
-            <label class="form-label">CanDeactivateLicenses</label>
-        </div>
-        <div class="form-floating mb-3">
-            <input class="form-control" placeholder="placeholder" @bind="@Data.Settings.CanDeleteLicenses" />
-            <label class="form-label">CanDeleteLicenses</label>
-        </div>
-        <div class="form-floating mb-3">
-            <input class="form-control" placeholder="placeholder" @bind="@Data.Settings.CanActivateMachines" />
-            <label class="form-label">CanActivateMachines</label>
-        </div>
-        <div class="form-floating mb-3">
-            <input class="form-control" placeholder="placeholder" @bind="@Data.Settings.CanDeactivateMachines" />
-            <label class="form-label">CanDeactivateMachines</label>
-        </div>
-        <div class="form-floating mb-3">
-            <input class="form-control" placeholder="placeholder" @bind="@Data.Settings.CanDeleteMachines" />
-            <label class="form-label">CanDeleteMachines</label>
-        </div>
-        <div class="form-floating mb-3">
-            <input class="form-control" placeholder="placeholder" @bind="@Data.Settings.NotificationsEmail" />
-            <label class="form-label">NotificationsEmail</label>
-        </div>
-        <div class="form-floating mb-3">
-            <input class="form-control" placeholder="placeholder" @bind="@Data.Settings.ReceiveNotifications" />
-            <label class="form-label">ReceiveNotifications</label>
-        </div>
+
+        <div class="tab-pane fade" id="pills-administrators" role="tabpanel" aria-labelledby="pills-administrators-tab">3</div>
+
+        <div class="tab-pane fade" id="pills-managers" role="tabpanel" aria-labelledby="pills-managers-tab">4</div>
+
+        <div class="tab-pane fade" id="pills-users" role="tabpanel" aria-labelledby="pills-users-tab">5</div>
     </div>
-    
-    <div class="tab-pane fade" id="pills-administrators" role="tabpanel" aria-labelledby="pills-administrators-tab">3</div>
-    
-    <div class="tab-pane fade" id="pills-managers" role="tabpanel" aria-labelledby="pills-managers-tab">4</div>
-    
-    <div class="tab-pane fade" id="pills-users" role="tabpanel" aria-labelledby="pills-users-tab">5</div>
-</div>
+</EditForm>

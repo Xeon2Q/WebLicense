@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using WebLicense.Shared.Customers;
 
 namespace WebLicense.Client.Components.Customers
@@ -20,7 +21,7 @@ namespace WebLicense.Client.Components.Customers
 
         private async Task SyncChanges()
         {
-            await DataChanged.InvokeAsync(Data);
+            if (DataChanged.HasDelegate) await DataChanged.InvokeAsync(Data);
         }
 
         #endregion

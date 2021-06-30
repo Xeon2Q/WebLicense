@@ -32,6 +32,16 @@ a, .btn-link {
     min-width: 600px;
 }
 
+/* bootstrap */
+.form-switch-lg .form-check-input {
+    width: 3.25rem;
+    height: 1.5rem;
+}
+.form-switch-lg .form-check-label {
+    margin-top: 0.25rem;
+}
+/* bootstrap */
+
 #blazor-error-ui {
     background: lightyellow;
     bottom: 0;

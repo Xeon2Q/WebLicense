@@ -41,14 +41,27 @@ namespace WebLicense.Client.Pages.Customers
             var entity = new CustomerInfo
             {
                 Id = 0,
-                Settings = new CustomerSettingsInfo(),
+                Settings = new CustomerSettingsInfo
+                {
+                    MaxActiveLicensesCount = 1,
+                    MaxTotalLicensesCount = 1,
+                    ReceiveNotifications = true,
+                    NotificationsEmail = user.GetEmail(),
+                    CreateActiveLicenses = false,
+                    CanActivateLicenses = false,
+                    CanDeactivateLicenses = true,
+                    CanDeleteLicenses = false,
+                    CanActivateMachines = true,
+                    CanDeactivateMachines = true,
+                    CanDeleteMachines = true
+                },
                 Administrators = new List<CustomerUserInfo>(),
                 Managers = new List<CustomerUserInfo>(),
-                Users = new List<CustomerUserInfo>()
+                Users = new List<CustomerUserInfo>
+                {
+                    new() {Id = user.GetId(), Name = user.GetName()}
+                }
             };
-
-            entity.Settings.NotificationsEmail = user.GetEmail();
-            entity.Users.Add(new() {Id = user.GetId(), Name = user.GetName()});
 
             return entity;
         }

@@ -31,10 +31,21 @@ html, body {
     border-bottom: 1px solid var(--black);
 }
 
+.valid {
+    outline: none !important;
+}
+
+.invalid {
+    background-color: var(--warning) !important;
+    border-color: var(--border-error) !important;
+    color: var(--danger) !important;
+    outline: none !important;
+}
+
 /* #region Bootstrap overrides */
 /* #endregion */
 
-/*# region Radzen overrides */
+/* #region Radzen overrides */
 /* - paginator */
 .rz-datatable {
     border-color: var(--gray63) !important;

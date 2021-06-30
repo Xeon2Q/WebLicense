@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using WebLicense.Core.Models.Customers;
 
@@ -8,6 +9,7 @@ namespace WebLicense.Shared.Customers
     {
         public int? Id { get; set; }
 
+        [Required]
         public string Name { get; set; }
 
         public string Code { get; set; }

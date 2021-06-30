@@ -467,4 +467,7 @@ kbd {
     background-color: var(--background-header);
     color: var(--white);
 }
+.border-bottom {
+    border-color: #666666 !important;
+}
 /*#endregion*/

@@ -23,6 +23,8 @@ namespace WebLicense.Client
             builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("WebLicense.ServerAPI"));
             builder.Services.AddTransient<JsLog>();
 
+            builder.Services.AddLocalization();
+
             builder.Services.AddApiAuthorization(options =>
                    {
                        options.UserOptions.RoleClaim = "role";
