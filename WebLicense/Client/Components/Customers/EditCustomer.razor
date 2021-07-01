@@ -1,5 +1,4 @@
-﻿@using System.Collections.Concurrent
-@inject IStringLocalizer<Properties> LocP
+﻿@inject IStringLocalizer<Properties> LocP
 @inject IStringLocalizer<UI> LocUI
 
 <EditForm Model="@Data">
@@ -24,77 +23,33 @@
     </ul>
     <div class="tab-content" id="pills-tabContent">
         <div class="tab-pane fade col-8 col-xxl-5 min-w-600px show active" id="pills-main" role="tabpanel" aria-labelledby="pills-main-tab">
-            <div class="form-floating mb-3">
-                <InputText @bind-Value="Data.Name" class="form-control" placeholder="placeholder"></InputText>
-                <label class="form-label">@LocP["Customer_Name"]</label>
-            </div>
-            <div class="form-floating mb-3">
-                <InputText @bind-Value="Data.Code" class="form-control" placeholder="placeholder"></InputText>
-                <label class="form-label">@LocP["Customer_Code"]</label>
-            </div>
-            <div class="form-floating mb-3">
-                <InputText @bind-Value="Data.ReferenceId" class="form-control" placeholder="placeholder"></InputText>
-                <label class="form-label">@LocP["Customer_ReferenceId"]</label>
-            </div>
+            <XInputFloatingText CssClass2="mb-3" @bind-Value="Data.Name" Label="@LocP["Customer_Name"]"></XInputFloatingText>
+            <XInputFloatingText CssClass2="mb-3" @bind-Value="Data.Code" Label="@LocP["Customer_Code"]"></XInputFloatingText>
+            <XInputFloatingText CssClass2="mb-3" @bind-Value="Data.ReferenceId" Label="@LocP["Customer_ReferenceId"]"></XInputFloatingText>
         </div>
 
         <div class="tab-pane fade col-8 col-xxl-5 min-w-600px" id="pills-settings" role="tabpanel" aria-labelledby="pills-settings-tab">
             <h4 class="text-info">@LocUI["Customer-Settings-Notifications"]</h4>
             <div class="row g-0">
-                <div class="mb-3">
-                    <label class="form-label">@LocP["Customer_Settings_NotificationsEmail"]</label>
-                    <InputText @bind-Value="Data.Settings.NotificationsEmail" class="form-control" placeholder="placeholder"></InputText>
-                </div>
-                <div class="mb-3">
-                    <div class="form-check form-switch form-switch-lg">
-                        <input class="form-check-input" type="checkbox" @bind="@Data.Settings.ReceiveNotifications" id="settings-receivenotifications" />
-                        <label class="form-check-label ms-3" for="settings-receivenotifications">@LocP["Customer_Settings_ReceiveNotifications"]</label>
-                    </div>
-                </div>
+                <XInputText CssClass2="mb-3" @bind-Value="Data.Settings.NotificationsEmail" Label="@LocP["Customer_Settings_NotificationsEmail"]"></XInputText>
+                <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.ReceiveNotifications" Label="@LocP["Customer_Settings_ReceiveNotifications"]" IsLarge="true"></XInputCheckBox>
             </div>
 
             <hr class="my-2" />
 
             <h4 class="text-info mt-3">@LocUI["Customer-Settings-Licenses"]</h4>
             <div class="row mb-4">
-                <div class="col-6 pe-2">
-                    <label class="form-label">@LocP["Customer_Settings_MaxActiveLicensesCount"]</label>
-                    <InputNumber @bind-Value="Data.Settings.MaxActiveLicensesCount" class="form-control"></InputNumber>
-                </div>
-                <div class="col-6 ps-2">
-                    <label class="form-label">@LocP["Customer_Settings_MaxTotalLicensesCount"]</label>
-                    <InputNumber @bind-Value="Data.Settings.MaxTotalLicensesCount" class="form-control"></InputNumber>
-                </div>
+                <XInputNumber CssClass2="col-6 pe-2" @bind-Value="Data.Settings.MaxActiveLicensesCount" Label="@LocP["Customer_Settings_MaxActiveLicensesCount"]"></XInputNumber>
+                <XInputNumber CssClass2="col-6 ps-2" @bind-Value="Data.Settings.MaxTotalLicensesCount" Label="@LocP["Customer_Settings_MaxTotalLicensesCount"]"></XInputNumber>
             </div>
             <div class="row g-0">
-                <div class="form-check form-switch form-switch-lg mb-3">
-                    <input class="form-check-input" placeholder="placeholder" type="checkbox" @bind="@Data.Settings.CreateActiveLicenses" id="settings-createalicense" />
-                    <label class="form-check-label ms-3" for="settings-createalicense">@LocP["Customer_Settings_CreateActiveLicenses"]</label>
-                </div>
-                <div class="form-check form-switch form-switch-lg mb-3">
-                    <input class="form-check-input" placeholder="placeholder" type="checkbox" @bind="@Data.Settings.CanActivateLicenses" id="settings-candactivatelicense" />
-                    <label class="form-check-label ms-3" for="settings-candactivatelicense">@LocP["Customer_Settings_CanActivateLicenses"]</label>
-                </div>
-                <div class="form-check form-switch form-switch-lg mb-3">
-                    <input class="form-check-input" placeholder="placeholder" type="checkbox" @bind="@Data.Settings.CanDeactivateLicenses" id="settings-candeactivatelicense" />
-                    <label class="form-check-label ms-3" for="settings-candeactivatelicense">@LocP["Customer_Settings_CanDeactivateLicenses"]</label>
-                </div>
-                <div class="form-check form-switch form-switch-lg mb-3">
-                    <input class="form-check-input" placeholder="placeholder" type="checkbox" @bind="@Data.Settings.CanDeleteLicenses" id="settings-candeletelicense" />
-                    <label class="form-check-label ms-3" for="settings-candeletelicense">@LocP["Customer_Settings_CanDeleteLicenses"]</label>
-                </div>
-                <div class="form-check form-switch form-switch-lg mb-3">
-                    <input class="form-check-input" placeholder="placeholder" type="checkbox" @bind="@Data.Settings.CanActivateMachines" id="settings-canactivatemachines" />
-                    <label class="form-check-label ms-3" for="settings-canactivatemachines">@LocP["Customer_Settings_CanActivateMachines"]</label>
-                </div>
-                <div class="form-check form-switch form-switch-lg mb-3">
-                    <input class="form-check-input" placeholder="placeholder" type="checkbox" @bind="@Data.Settings.CanDeactivateMachines" id="settings-candeactivatemachines" />
-                    <label class="form-check-label ms-3" for="settings-candeactivatemachines">@LocP["Customer_Settings_CanDeactivateMachines"]</label>
-                </div>
-                <div class="form-check form-switch form-switch-lg">
-                    <input class="form-check-input" placeholder="placeholder" type="checkbox" @bind="@Data.Settings.CanDeleteMachines" id="settings-candeletemachines" />
-                    <label class="form-check-label ms-3" for="settings-candeletemachines">@LocP["Customer_Settings_CanDeleteMachines"]</label>
-                </div>
+                <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CreateActiveLicenses" Label="@LocP["Customer_Settings_CreateActiveLicenses"]" IsLarge="true"></XInputCheckBox>
+                <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanActivateLicenses" Label="@LocP["Customer_Settings_CanActivateLicenses"]" IsLarge="true"></XInputCheckBox>
+                <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanDeactivateLicenses" Label="@LocP["Customer_Settings_CanDeactivateLicenses"]" IsLarge="true"></XInputCheckBox>
+                <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanDeleteLicenses" Label="@LocP["Customer_Settings_CanDeleteLicenses"]" IsLarge="true"></XInputCheckBox>
+                <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanActivateMachines" Label="@LocP["Customer_Settings_CanActivateMachines"]" IsLarge="true"></XInputCheckBox>
+                <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanDeactivateMachines" Label="@LocP["Customer_Settings_CanDeactivateMachines"]" IsLarge="true"></XInputCheckBox>
+                <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanDeleteMachines" Label="@LocP["Customer_Settings_CanDeleteMachines"]" IsLarge="true"></XInputCheckBox>
             </div>
         </div>
 

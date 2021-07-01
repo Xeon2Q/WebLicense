@@ -1,0 +1,16 @@
+﻿@inherits InputText
+
+<div class="@CssClass2">
+    <label class="form-label">@Label</label>
+    <input @bind="CurrentValueAsString" @bind:event="oninput" @attributes="AdditionalAttributes" class="form-control @CssClass" />
+</div>
+
+
+@code
+{
+    [Parameter]
+    public string Label { get; set; }
+
+    [Parameter]
+    public string CssClass2 { get; set; }
+}

@@ -1,0 +1,7 @@
+﻿@typeparam T
+@inherits XInputNumberBase<T>
+
+<div class="@CssClass2">
+    <label class="form-label">@Label</label>
+    <input @bind="CurrentValueAsString" @bind:event="oninput" @attributes="AdditionalAttributes" type="number" class="form-control @CssClass" />
+</div>

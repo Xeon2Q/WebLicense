@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using WebLicense.Core.Models.Customers;
+using WebLicense.Shared.Resources;
 
 namespace WebLicense.Shared.Customers
 {
@@ -10,10 +11,13 @@ namespace WebLicense.Shared.Customers
         public int? Id { get; set; }
 
         [Required]
+        [Display(ResourceType = typeof(Model), Name = "Customer_Name")]
         public string Name { get; set; }
 
+        [Display(ResourceType = typeof(Model), Name = "Customer_Code")]
         public string Code { get; set; }
 
+        [Display(ResourceType = typeof(Model), Name = "Customer_ReferenceId")]
         public string ReferenceId { get; set; }
 
         public CustomerSettingsInfo Settings { get; set; }
