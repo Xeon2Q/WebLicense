@@ -49,7 +49,7 @@ namespace WebLicense.Logic.UseCases.Customers
                                        .Include(q => q.Settings)
                                        .FirstOrDefaultAsync(cancellationToken);
 
-                if (customer == null) throw new CaseException(Exceptions.Customer_NotFoundOrDeleted, "Customer not found or deleted");
+                if (customer == null) throw new CaseException(Exceptions.Customer_NotFoundOrDeleted, $"Customer({request.Id}) not found or deleted");
 
                 return new CaseResult<CustomerInfo>(new CustomerInfo(customer, null));
             }

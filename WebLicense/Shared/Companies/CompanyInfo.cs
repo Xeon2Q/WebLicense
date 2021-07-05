@@ -16,6 +16,8 @@ namespace WebLicense.Shared.Companies
         [Required, MaxLength(40)]
         public string ReferenceId { get; set; }
 
+        public byte[] Logo { get; set; }
+
         // navigation
         public ICollection<CompanyUserInfo> Users { get; set; }
 

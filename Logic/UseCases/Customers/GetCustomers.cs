@@ -62,7 +62,6 @@ namespace WebLicense.Logic.UseCases.Customers
                 var total = await db.Set<Customer>().CountAsync(cancellationToken);
 
                 return new CaseResult<ListData<CustomerInfo>>(new ListData<CustomerInfo>(total, data2));
-
             }
             catch (Exception e)
             {

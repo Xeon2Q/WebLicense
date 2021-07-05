@@ -21,6 +21,8 @@ namespace WebLicense.Core.Models.Companies
         [Required, MaxLength(40), Comment("Reference ID is using to register new users for the Company.")]
         public string ReferenceId { get; set; }
 
+        public byte[] Logo { get; set; }
+
         // navigation
         public ICollection<User> Users { get; set; }
         public ICollection<CompanyUser> CompanyUsers { get; set; }

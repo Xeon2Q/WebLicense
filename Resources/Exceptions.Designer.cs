@@ -61,6 +61,42 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Company &quot;Name&quot; is empty.
+        /// </summary>
+        public static string Company_Name_Empty {
+            get {
+                return ResourceManager.GetString("Company_Name_Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Company not found or deleted.
+        /// </summary>
+        public static string Company_NotFoundOrDeleted {
+            get {
+                return ResourceManager.GetString("Company_NotFoundOrDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Company &quot;Users&quot; is empty.
+        /// </summary>
+        public static string Company_Users_Empty {
+            get {
+                return ResourceManager.GetString("Company_Users_Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Company &quot;Users&quot; is invalid.
+        /// </summary>
+        public static string Company_Users_Invalid {
+            get {
+                return ResourceManager.GetString("Company_Users_Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &quot;Criteria&quot; is null.
         /// </summary>
         public static string Criteria_Null {
