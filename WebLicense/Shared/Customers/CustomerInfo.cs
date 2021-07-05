@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using WebLicense.Core.Models.Companies;
 using WebLicense.Core.Models.Customers;
 using WebLicense.Shared.Resources;
 
@@ -10,8 +11,7 @@ namespace WebLicense.Shared.Customers
     {
         public int? Id { get; set; }
 
-        [Required]
-        [Display(ResourceType = typeof(Model), Name = "Customer_Name")]
+        [Required, Display(ResourceType = typeof(Model), Name = "Customer_Name")]
         public string Name { get; set; }
 
         [Display(ResourceType = typeof(Model), Name = "Customer_Code")]
@@ -21,8 +21,6 @@ namespace WebLicense.Shared.Customers
         public string ReferenceId { get; set; }
 
         public CustomerSettingsInfo Settings { get; set; }
-
-        public ICollection<CustomerUserInfo> Administrators { get; set; }
 
         public ICollection<CustomerUserInfo> Managers { get; set; }
 
@@ -34,7 +32,7 @@ namespace WebLicense.Shared.Customers
         {
         }
 
-        public CustomerInfo(Customer customer)
+        public CustomerInfo(Customer customer, Company company)
         {
             if (customer == null) return;
 
@@ -43,9 +41,7 @@ namespace WebLicense.Shared.Customers
             Code = customer.Code;
             ReferenceId = customer.ReferenceId;
 
-            if (customer.Settings != null) Settings = new CustomerSettingsInfo(customer.Settings);
-
-            if (customer.Administrators != null && customer.Administrators.Any()) Administrators = customer.Administrators.Select(q => new CustomerUserInfo(q)).ToList();
+            if (customer.Settings != null && customer.Settings.Any()) Settings = new CustomerSettingsInfo(customer.Settings.FirstOrDefault(q => q.CompanyId == company?.Id));
             if (customer.Managers != null && customer.Managers.Any()) Managers = customer.Managers.Select(q => new CustomerUserInfo(q)).ToList();
             if (customer.Users != null && customer.Users.Any()) Users = customer.Users.Select(q => new CustomerUserInfo(q)).ToList();
         }

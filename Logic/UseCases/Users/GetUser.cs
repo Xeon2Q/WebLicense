@@ -44,7 +44,7 @@ namespace WebLicense.Logic.UseCases.Users
                 request.Validate();
 
                 var user = await db.Set<User>().Where(q => q.Id == request.Id)
-                                   .Include(q => q.AdministeredCustomers)
+                                   .Include(q => q.Companies)
                                    .Include(q => q.ManagedCustomers)
                                    .Include(q => q.MemberOfCustomers).FirstOrDefaultAsync(cancellationToken);
 

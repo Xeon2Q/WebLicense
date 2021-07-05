@@ -1,6 +1,6 @@
 ﻿@inherits XInputFloatingTextBase
 
 <div class="form-floating @CssClass2">
-    <input @bind="CurrentValueAsString" @bind:event="oninput" @attributes="AdditionalAttributes" class="form-control @CssClass" placeholder="placeholder" />
-    <label class="form-label">@Label</label>
+    <input @bind="CurrentValueAsString" @bind:event="oninput" @attributes="AdditionalAttributes" class="form-control @CssClass" placeholder="placeholder" id="@UUID" />
+    <XLabel Field="@FieldIdentifier" class="form-label" for="@UUID"></XLabel>
 </div>

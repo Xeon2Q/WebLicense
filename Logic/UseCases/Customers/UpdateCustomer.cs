@@ -51,7 +51,7 @@ namespace WebLicense.Logic.UseCases.Customers
                 var info = request.Customer;
                 var model = await db.Set<Customer>().AsTracking().Where(q => q.Id == info.Id.Value)
                                     .Include(q => q.Settings)
-                                    .Include(q => q.CustomerAdministrators)
+                                    .Include(q => q.Companies)
                                     .Include(q => q.CustomerManagers)
                                     .Include(q => q.CustomerUsers).FirstOrDefaultAsync(cancellationToken);
                 if (model == null) throw new CaseException(Exceptions.Customer_NotFoundOrDeleted, "Customer not found or deleted");
@@ -76,27 +76,20 @@ namespace WebLicense.Logic.UseCases.Customers
             if (info.Code != null && info.Code != model.Code) model.Code = info.Code;
             if (info.ReferenceId != null && info.ReferenceId != model.ReferenceId) model.ReferenceId = info.ReferenceId;
 
-            if (info.Settings != null)
+            var settings = model.Settings?.FirstOrDefault(q => q.CompanyId == info.Settings?.CompanyId);
+            if (settings != null)
             {
-                if (info.Settings.MaxActiveLicensesCount.HasValue && info.Settings.MaxActiveLicensesCount != model.Settings.MaxActiveLicensesCount) model.Settings.MaxActiveLicensesCount = info.Settings.MaxActiveLicensesCount.Value;
-                if (info.Settings.MaxTotalLicensesCount.HasValue && info.Settings.MaxTotalLicensesCount != model.Settings.MaxTotalLicensesCount) model.Settings.MaxTotalLicensesCount = info.Settings.MaxTotalLicensesCount.Value;
-                if (info.Settings.CreateActiveLicenses.HasValue && info.Settings.CreateActiveLicenses != model.Settings.CreateActiveLicenses) model.Settings.CreateActiveLicenses = info.Settings.CreateActiveLicenses.Value;
-                if (info.Settings.CanActivateLicenses.HasValue && info.Settings.CanActivateLicenses != model.Settings.CanActivateLicenses) model.Settings.CanActivateLicenses = info.Settings.CanActivateLicenses.Value;
-                if (info.Settings.CanDeactivateLicenses.HasValue && info.Settings.CanDeactivateLicenses != model.Settings.CanDeactivateLicenses) model.Settings.CanDeactivateLicenses = info.Settings.CanDeactivateLicenses.Value;
-                if (info.Settings.CanDeleteLicenses.HasValue && info.Settings.CanDeleteLicenses != model.Settings.CanDeleteLicenses) model.Settings.CanDeleteLicenses = info.Settings.CanDeleteLicenses.Value;
-                if (info.Settings.CanActivateMachines.HasValue && info.Settings.CanActivateMachines != model.Settings.CanActivateMachines) model.Settings.CanActivateMachines = info.Settings.CanActivateMachines.Value;
-                if (info.Settings.CanDeactivateMachines.HasValue && info.Settings.CanDeactivateMachines != model.Settings.CanDeactivateMachines) model.Settings.CanDeactivateMachines = info.Settings.CanDeactivateMachines.Value;
-                if (info.Settings.CanDeleteMachines.HasValue && info.Settings.CanDeleteMachines != model.Settings.CanDeleteMachines) model.Settings.CanDeleteMachines = info.Settings.CanDeleteMachines.Value;
-                if (info.Settings.NotificationsEmail != null && info.Settings.NotificationsEmail != model.Settings.NotificationsEmail) model.Settings.NotificationsEmail = !string.IsNullOrWhiteSpace(info.Settings.NotificationsEmail) ? info.Settings.NotificationsEmail.Trim() : null;
-                if (info.Settings.ReceiveNotifications.HasValue && info.Settings.ReceiveNotifications != model.Settings.ReceiveNotifications) model.Settings.ReceiveNotifications = info.Settings.ReceiveNotifications.Value;
-            }
-
-            if (info.Administrators != null)
-            {
-                model.CustomerAdministrators ??= new List<CustomerAdministrator>();
-                model.CustomerAdministrators = model.CustomerAdministrators.Where(q => info.Administrators.Any(w => w.Id == q.UserId)).ToList();
-
-                GetNewUsers(info.Administrators, model.CustomerAdministrators.Select(q => q.UserId)).ForEach(q => model.CustomerAdministrators.Add(new CustomerAdministrator {CustomerId = model.Id, UserId = q}));
+                if (info.Settings.MaxActiveLicensesCount.HasValue && info.Settings.MaxActiveLicensesCount != settings.MaxActiveLicensesCount) settings.MaxActiveLicensesCount = info.Settings.MaxActiveLicensesCount.Value;
+                if (info.Settings.MaxTotalLicensesCount.HasValue && info.Settings.MaxTotalLicensesCount != settings.MaxTotalLicensesCount) settings.MaxTotalLicensesCount = info.Settings.MaxTotalLicensesCount.Value;
+                if (info.Settings.CreateActiveLicenses.HasValue && info.Settings.CreateActiveLicenses != settings.CreateActiveLicenses) settings.CreateActiveLicenses = info.Settings.CreateActiveLicenses.Value;
+                if (info.Settings.CanActivateLicenses.HasValue && info.Settings.CanActivateLicenses != settings.CanActivateLicenses) settings.CanActivateLicenses = info.Settings.CanActivateLicenses.Value;
+                if (info.Settings.CanDeactivateLicenses.HasValue && info.Settings.CanDeactivateLicenses != settings.CanDeactivateLicenses) settings.CanDeactivateLicenses = info.Settings.CanDeactivateLicenses.Value;
+                if (info.Settings.CanDeleteLicenses.HasValue && info.Settings.CanDeleteLicenses != settings.CanDeleteLicenses) settings.CanDeleteLicenses = info.Settings.CanDeleteLicenses.Value;
+                if (info.Settings.CanActivateMachines.HasValue && info.Settings.CanActivateMachines != settings.CanActivateMachines) settings.CanActivateMachines = info.Settings.CanActivateMachines.Value;
+                if (info.Settings.CanDeactivateMachines.HasValue && info.Settings.CanDeactivateMachines != settings.CanDeactivateMachines) settings.CanDeactivateMachines = info.Settings.CanDeactivateMachines.Value;
+                if (info.Settings.CanDeleteMachines.HasValue && info.Settings.CanDeleteMachines != settings.CanDeleteMachines) settings.CanDeleteMachines = info.Settings.CanDeleteMachines.Value;
+                if (info.Settings.NotificationsEmail != null && info.Settings.NotificationsEmail != settings.NotificationsEmail) settings.NotificationsEmail = !string.IsNullOrWhiteSpace(info.Settings.NotificationsEmail) ? info.Settings.NotificationsEmail.Trim() : null;
+                if (info.Settings.ReceiveNotifications.HasValue && info.Settings.ReceiveNotifications != settings.ReceiveNotifications) settings.ReceiveNotifications = info.Settings.ReceiveNotifications.Value;
             }
 
             if (info.Managers != null)

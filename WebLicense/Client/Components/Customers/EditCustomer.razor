@@ -23,33 +23,33 @@
     </ul>
     <div class="tab-content" id="pills-tabContent">
         <div class="tab-pane fade col-8 col-xxl-5 min-w-600px show active" id="pills-main" role="tabpanel" aria-labelledby="pills-main-tab">
-            <XInputFloatingText CssClass2="mb-3" @bind-Value="Data.Name" Label="@LocP["Customer_Name"]"></XInputFloatingText>
-            <XInputFloatingText CssClass2="mb-3" @bind-Value="Data.Code" Label="@LocP["Customer_Code"]"></XInputFloatingText>
-            <XInputFloatingText CssClass2="mb-3" @bind-Value="Data.ReferenceId" Label="@LocP["Customer_ReferenceId"]"></XInputFloatingText>
+            <XInputFloatingText CssClass2="mb-3" @bind-Value="Data.Name"></XInputFloatingText>
+            <XInputFloatingText CssClass2="mb-3" @bind-Value="Data.Code"></XInputFloatingText>
+            <XInputFloatingText CssClass2="mb-3" @bind-Value="Data.ReferenceId"></XInputFloatingText>
         </div>
 
         <div class="tab-pane fade col-8 col-xxl-5 min-w-600px" id="pills-settings" role="tabpanel" aria-labelledby="pills-settings-tab">
             <h4 class="text-info">@LocUI["Customer-Settings-Notifications"]</h4>
             <div class="row g-0">
-                <XInputText CssClass2="mb-3" @bind-Value="Data.Settings.NotificationsEmail" Label="@LocP["Customer_Settings_NotificationsEmail"]"></XInputText>
-                <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.ReceiveNotifications" Label="@LocP["Customer_Settings_ReceiveNotifications"]" IsLarge="true"></XInputCheckBox>
+                <XInputText CssClass2="mb-3" @bind-Value="Data.Settings.NotificationsEmail"></XInputText>
+                <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.ReceiveNotifications" IsLarge="true"></XInputCheckBox>
             </div>
 
             <hr class="my-2" />
 
             <h4 class="text-info mt-3">@LocUI["Customer-Settings-Licenses"]</h4>
             <div class="row mb-4">
-                <XInputNumber CssClass2="col-6 pe-2" @bind-Value="Data.Settings.MaxActiveLicensesCount" Label="@LocP["Customer_Settings_MaxActiveLicensesCount"]"></XInputNumber>
-                <XInputNumber CssClass2="col-6 ps-2" @bind-Value="Data.Settings.MaxTotalLicensesCount" Label="@LocP["Customer_Settings_MaxTotalLicensesCount"]"></XInputNumber>
+                <XInputNumber CssClass2="col-6 pe-2" @bind-Value="Data.Settings.MaxActiveLicensesCount"></XInputNumber>
+                <XInputNumber CssClass2="col-6 ps-2" @bind-Value="Data.Settings.MaxTotalLicensesCount"></XInputNumber>
             </div>
             <div class="row g-0">
-                <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CreateActiveLicenses" Label="@LocP["Customer_Settings_CreateActiveLicenses"]" IsLarge="true"></XInputCheckBox>
-                <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanActivateLicenses" Label="@LocP["Customer_Settings_CanActivateLicenses"]" IsLarge="true"></XInputCheckBox>
-                <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanDeactivateLicenses" Label="@LocP["Customer_Settings_CanDeactivateLicenses"]" IsLarge="true"></XInputCheckBox>
-                <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanDeleteLicenses" Label="@LocP["Customer_Settings_CanDeleteLicenses"]" IsLarge="true"></XInputCheckBox>
-                <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanActivateMachines" Label="@LocP["Customer_Settings_CanActivateMachines"]" IsLarge="true"></XInputCheckBox>
-                <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanDeactivateMachines" Label="@LocP["Customer_Settings_CanDeactivateMachines"]" IsLarge="true"></XInputCheckBox>
-                <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanDeleteMachines" Label="@LocP["Customer_Settings_CanDeleteMachines"]" IsLarge="true"></XInputCheckBox>
+                <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CreateActiveLicenses" IsLarge="true"></XInputCheckBox>
+                <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanActivateLicenses" IsLarge="true"></XInputCheckBox>
+                <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanDeactivateLicenses" IsLarge="true"></XInputCheckBox>
+                <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanDeleteLicenses" IsLarge="true"></XInputCheckBox>
+                <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanActivateMachines" IsLarge="true"></XInputCheckBox>
+                <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanDeactivateMachines" IsLarge="true"></XInputCheckBox>
+                <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanDeleteMachines" IsLarge="true"></XInputCheckBox>
             </div>
         </div>
 

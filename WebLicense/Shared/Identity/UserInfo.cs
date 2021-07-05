@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using WebLicense.Core.Models.Identity;
+using WebLicense.Shared.Companies;
 
 namespace WebLicense.Shared.Identity
 {
@@ -29,7 +30,7 @@ namespace WebLicense.Shared.Identity
 
         public bool? GdprAccepted { get; set; }
 
-        public IList<UserCustomerInfo> AdministeredCustomers { get; set; }
+        public IList<CompanyInfo> Companies { get; set; }
 
         public IList<UserCustomerInfo> ManagedCustomers { get; set; }
 
@@ -56,7 +57,7 @@ namespace WebLicense.Shared.Identity
             TwoFactorEnabled = user.TwoFactorEnabled;
             EulaAccepted = user.EulaAccepted;
             GdprAccepted = user.GdprAccepted;
-            AdministeredCustomers = user.AdministeredCustomers?.Select(q => new UserCustomerInfo(q)).ToList();
+            Companies = user.Companies?.Select(q => new CompanyInfo(q)).ToList();
             ManagedCustomers = user.ManagedCustomers?.Select(q => new UserCustomerInfo(q)).ToList();
             MemberOfCustomers = user.MemberOfCustomers?.Select(q => new UserCustomerInfo(q)).ToList();
         }

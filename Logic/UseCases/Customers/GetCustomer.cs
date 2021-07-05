@@ -43,7 +43,7 @@ namespace WebLicense.Logic.UseCases.Customers
                 request.Validate();
 
                 var customer = await db.Customers.AsNoTrackingWithIdentityResolution().Where(q => q.Id == request.Id)
-                                       .Include(q => q.Administrators)
+                                       .Include(q => q.Companies)
                                        .Include(q => q.Managers)
                                        .Include(q => q.Users)
                                        .Include(q => q.Settings)
@@ -51,7 +51,7 @@ namespace WebLicense.Logic.UseCases.Customers
 
                 if (customer == null) throw new CaseException(Exceptions.Customer_NotFoundOrDeleted, "Customer not found or deleted");
 
-                return new CaseResult<CustomerInfo>(new CustomerInfo(customer));
+                return new CaseResult<CustomerInfo>(new CustomerInfo(customer, null));
             }
             catch (Exception e)
             {

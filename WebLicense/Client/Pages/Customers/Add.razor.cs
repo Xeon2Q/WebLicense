@@ -55,7 +55,6 @@ namespace WebLicense.Client.Pages.Customers
                     CanDeactivateMachines = true,
                     CanDeleteMachines = true
                 },
-                Administrators = new List<CustomerUserInfo>(),
                 Managers = new List<CustomerUserInfo>(),
                 Users = new List<CustomerUserInfo>
                 {

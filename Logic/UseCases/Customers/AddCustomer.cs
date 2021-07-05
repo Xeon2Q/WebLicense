@@ -25,6 +25,7 @@ namespace WebLicense.Logic.UseCases.Customers
 
         public void Validate()
         {
+            if (!(Customer.Settings?.CompanyId > 0)) throw new CaseException(Exceptions.Customer_CompanyId_LessOne, "Customer 'Settings.CompanyId' < 1");
             if (string.IsNullOrWhiteSpace(Customer.Settings?.NotificationsEmail)) throw new CaseException(Exceptions.Customer_NotificationsEmail_Empty, "Customer 'NotificationsEmail' is empty");
             if (string.IsNullOrWhiteSpace(Customer.Name)) throw new CaseException(Exceptions.Customer_Name_Empty, "Customer 'Name' is empty");
             if (Customer.Users == null || Customer.Users.Count == 0) throw new CaseException(Exceptions.Customer_Users_Empty, "Customer 'Users' is empty");
@@ -51,7 +52,6 @@ namespace WebLicense.Logic.UseCases.Customers
 
                 var users = request.Customer.Users.Where(q => q?.Id > 0).Select(q => q.Id.Value).Distinct().Select(q => new CustomerUser {UserId = q}).ToList();
                 var managers = request.Customer.Managers?.Where(q => q?.Id > 0).Select(q => q.Id.Value).Distinct().Select(q => new CustomerManager {UserId = q}).ToList() ?? new List<CustomerManager>();
-                var administrators = request.Customer.Administrators?.Where(q => q?.Id > 0).Select(q => q.Id.Value).Distinct().Select(q => new CustomerAdministrator {UserId = q}).ToList() ?? new List<CustomerAdministrator>(0);
 
                 if (managers.Count == 0) managers = new List<CustomerManager> {new() {UserId = users.First().UserId}};
 
@@ -60,10 +60,13 @@ namespace WebLicense.Logic.UseCases.Customers
                     Name = request.Customer.Name,
                     Code = string.Empty.GetRandom(50),
                     ReferenceId = Guid.NewGuid().ToString("N"),
-                    Settings = new CustomerSettings {NotificationsEmail = request.Customer.Settings.NotificationsEmail},
+                    Settings = new List<CustomerSettings> {new()
+                    {
+                        CompanyId = request.Customer.Settings.CompanyId ?? -1,
+                        NotificationsEmail = request.Customer.Settings.NotificationsEmail
+                    }},
                     CustomerUsers = users,
-                    CustomerManagers = managers,
-                    CustomerAdministrators = administrators
+                    CustomerManagers = managers
                 };
 
                 var result = await db.Customers.AddAsync(customer, cancellationToken);

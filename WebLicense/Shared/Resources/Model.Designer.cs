@@ -86,5 +86,104 @@ namespace WebLicense.Shared.Resources {
                 return ResourceManager.GetString("Customer-ReferenceId", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ##Can activate Licenses.
+        /// </summary>
+        public static string Customer_Settings_CanActivateLicenses {
+            get {
+                return ResourceManager.GetString("Customer-Settings-CanActivateLicenses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ##Can activate Machines.
+        /// </summary>
+        public static string Customer_Settings_CanActivateMachines {
+            get {
+                return ResourceManager.GetString("Customer-Settings-CanActivateMachines", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ##Can deactivate Licenses.
+        /// </summary>
+        public static string Customer_Settings_CanDeactivateLicenses {
+            get {
+                return ResourceManager.GetString("Customer-Settings-CanDeactivateLicenses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ##Can deactivate Machines.
+        /// </summary>
+        public static string Customer_Settings_CanDeactivateMachines {
+            get {
+                return ResourceManager.GetString("Customer-Settings-CanDeactivateMachines", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ##Can delete Licenses.
+        /// </summary>
+        public static string Customer_Settings_CanDeleteLicenses {
+            get {
+                return ResourceManager.GetString("Customer_Settings_CanDeleteLicenses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ##Can delete Machines.
+        /// </summary>
+        public static string Customer_Settings_CanDeleteMachines {
+            get {
+                return ResourceManager.GetString("Customer-Settings-CanDeleteMachines", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ##Create new Licenses activated by default.
+        /// </summary>
+        public static string Customer_Settings_CreateActiveLicenses {
+            get {
+                return ResourceManager.GetString("Customer-Settings-CreateActiveLicenses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ##Maximum active Licenses.
+        /// </summary>
+        public static string Customer_Settings_MaxActiveLicensesCount {
+            get {
+                return ResourceManager.GetString("Customer-Settings-MaxActiveLicensesCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ##Maximum total Licenses.
+        /// </summary>
+        public static string Customer_Settings_MaxTotalLicensesCount {
+            get {
+                return ResourceManager.GetString("Customer-Settings-MaxTotalLicensesCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ##Email for notifications.
+        /// </summary>
+        public static string Customer_Settings_NotificationsEmail {
+            get {
+                return ResourceManager.GetString("Customer-Settings-NotificationsEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ##Want to receive notifications.
+        /// </summary>
+        public static string Customer_Settings_ReceiveNotifications {
+            get {
+                return ResourceManager.GetString("Customer-Settings-ReceiveNotifications", resourceCulture);
+            }
+        }
     }
 }

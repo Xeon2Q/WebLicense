@@ -57,7 +57,7 @@ namespace WebLicense.Logic.UseCases.Customers
                 request.Criteria?.ApplyAll(ref query);
 
                 var data1 = await query.ToListAsync(cancellationToken);
-                var data2 = data1.Select(q => new CustomerInfo(q)).ToList();
+                var data2 = data1.Select(q => new CustomerInfo(q, null)).ToList();
 
                 var total = await db.Set<Customer>().CountAsync(cancellationToken);
 

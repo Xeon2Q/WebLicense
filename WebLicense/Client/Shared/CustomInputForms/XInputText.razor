@@ -1,16 +1,6 @@
-﻿@inherits InputText
+﻿@inherits XInputTextBase
 
 <div class="@CssClass2">
-    <label class="form-label">@Label</label>
-    <input @bind="CurrentValueAsString" @bind:event="oninput" @attributes="AdditionalAttributes" class="form-control @CssClass" />
+    <XLabel Field="@FieldIdentifier" class="form-label" for="@UUID"></XLabel>
+    <input @bind="CurrentValueAsString" @bind:event="oninput" @attributes="AdditionalAttributes" class="form-control @CssClass" id="@UUID"/>
 </div>
-
-
-@code
-{
-    [Parameter]
-    public string Label { get; set; }
-
-    [Parameter]
-    public string CssClass2 { get; set; }
-}

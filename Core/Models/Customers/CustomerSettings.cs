@@ -2,18 +2,17 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using WebLicense.Core.Models.Companies;
 
 namespace WebLicense.Core.Models.Customers
 {
     [Table("CustomerSettings")]
-    [Index(nameof(CustomerId), IsUnique = true)]
     [Index(nameof(ReceiveNotifications))]
     public sealed class CustomerSettings
     {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int CompanyId { get; set; }
+        public Company Company { get; set; }
 
-        [Required]
         public int CustomerId { get; set; }
         public Customer Customer { get; set; }
 

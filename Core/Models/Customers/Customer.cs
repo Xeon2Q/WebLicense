@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using WebLicense.Core.Models.Companies;
 using WebLicense.Core.Models.Identity;
 
 namespace WebLicense.Core.Models.Customers
@@ -24,16 +25,14 @@ namespace WebLicense.Core.Models.Customers
         public string ReferenceId { get; set; }
 
         // navigation
-        public CustomerSettings Settings { get; set; }
-
-        public ICollection<User> Administrators { get; set; }
-        public ICollection<CustomerAdministrator> CustomerAdministrators { get; set; }
+        public ICollection<Company> Companies { get; set; }
+        public ICollection<CustomerSettings> Settings { get; set; }
 
         public ICollection<User> Managers { get; set; }
         public ICollection<CustomerManager> CustomerManagers { get; set; }
 
         public ICollection<User> Users { get; set; }
-        public ICollection<CustomerUser> CustomerUsers{ get; set; }
+        public ICollection<CustomerUser> CustomerUsers { get; set; }
 
         public ICollection<CustomerUpdate> Updates { get; set; }
     }

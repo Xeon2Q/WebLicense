@@ -1,15 +1,15 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using System;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 
 namespace WebLicense.Client.Shared.CustomInputForms
 {
-    public class XInputNumberBase<T> : InputBase<T>
+    public class XInputNumberBase<T> : InputBase<T>, IXInputBase
     {
-        [Parameter]
-        public string CssClass2 { get; set; }
+        public string UUID { get; } = $"XID-{Guid.NewGuid():N}";
 
         [Parameter]
-        public string Label { get; set; }
+        public string CssClass2 { get; set; }
 
         protected override bool TryParseValueFromString(string value, out T result, out string validationErrorMessage)
         {

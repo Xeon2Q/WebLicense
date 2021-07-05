@@ -70,6 +70,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Customer &quot;Company&quot; is invalid.
+        /// </summary>
+        public static string Customer_CompanyId_LessOne {
+            get {
+                return ResourceManager.GetString("Customer_CompanyId_LessOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Customer &quot;Id&quot; &lt; 1.
         /// </summary>
         public static string Customer_Id_LessOne {

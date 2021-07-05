@@ -3,7 +3,7 @@
 
 <div class="@CssClass2">
     <div class="form-check form-switch @(IsLarge ? " form-switch-lg" : null)">
-        <input class="form-check-input @CssClass" type="checkbox" @bind="CurrentValue" @attributes="AdditionalAttributes" id="@UID" />
-        <label class="form-check-label @(IsLarge ? " ms-3" : @"ms-2")" for="@UID">@Label</label>
+        <input class="form-check-input @CssClass" type="checkbox" @bind="CurrentValue" @attributes="AdditionalAttributes" id="@UUID" />
+        <XLabel Field="@FieldIdentifier" class="@LabelCssClass" for="@UUID"></XLabel>
     </div>
 </div>

@@ -126,4 +126,37 @@
   <data name="Customer-ReferenceId" xml:space="preserve">
     <value>##ReferenceId</value>
   </data>
+  <data name="Customer-Settings-CanActivateLicenses" xml:space="preserve">
+    <value>##Can activate Licenses</value>
+  </data>
+  <data name="Customer-Settings-CanActivateMachines" xml:space="preserve">
+    <value>##Can activate Machines</value>
+  </data>
+  <data name="Customer-Settings-CanDeactivateLicenses" xml:space="preserve">
+    <value>##Can deactivate Licenses</value>
+  </data>
+  <data name="Customer-Settings-CanDeactivateMachines" xml:space="preserve">
+    <value>##Can deactivate Machines</value>
+  </data>
+  <data name="Customer-Settings-CanDeleteMachines" xml:space="preserve">
+    <value>##Can delete Machines</value>
+  </data>
+  <data name="Customer-Settings-CreateActiveLicenses" xml:space="preserve">
+    <value>##Create new Licenses activated by default</value>
+  </data>
+  <data name="Customer-Settings-MaxActiveLicensesCount" xml:space="preserve">
+    <value>##Maximum active Licenses</value>
+  </data>
+  <data name="Customer-Settings-MaxTotalLicensesCount" xml:space="preserve">
+    <value>##Maximum total Licenses</value>
+  </data>
+  <data name="Customer-Settings-NotificationsEmail" xml:space="preserve">
+    <value>##Email for notifications</value>
+  </data>
+  <data name="Customer-Settings-ReceiveNotifications" xml:space="preserve">
+    <value>##Want to receive notifications</value>
+  </data>
+  <data name="Customer_Settings_CanDeleteLicenses" xml:space="preserve">
+    <value>##Can delete Licenses</value>
+  </data>
 </root>
