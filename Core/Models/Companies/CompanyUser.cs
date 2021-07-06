@@ -12,5 +12,7 @@ namespace WebLicense.Core.Models.Companies
 
         public long UserId { get; set; }
         public User User { get; set; }
+
+        public bool IsManager { get; set; }
     }
 }

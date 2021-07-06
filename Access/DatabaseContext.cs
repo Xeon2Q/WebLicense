@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
 using WebLicense.Core.Models.Companies;
-using WebLicense.Core.Models.Customers;
 using WebLicense.Core.Models.Identity;
 using UserClaim = WebLicense.Core.Models.Identity.UserClaim;
 
@@ -39,9 +38,8 @@ namespace WebLicense.Access
         private OperationalStoreOptions OperationalOptions { get; }
 
         public DbSet<Company> Companies { get; set; }
-        public DbSet<Customer> Customers { get; set; }
-        public DbSet<CustomerSettings> CustomerSettings { get; set; }
-        public DbSet<CustomerUpdate> CustomerUpdates { get; set; }
+        public DbSet<CompanySettings> CompanySettings { get; set; }
+        public DbSet<CompanyUpdate> CompanyUpdates { get; set; }
 
         //public DbSet<Log> Logs { get; set; }
 

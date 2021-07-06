@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using WebLicense.Core.Models.Companies;
-using WebLicense.Core.Models.Customers;
 
 namespace WebLicense.Access.Configuration
 {
@@ -9,7 +8,16 @@ namespace WebLicense.Access.Configuration
     {
         public void Configure(EntityTypeBuilder<Company> builder)
         {
-            builder.HasMany(q => q.CompanyCustomers).WithOne(q => q.Company).HasForeignKey(q => q.CompanyId).IsRequired();
+            builder.HasMany(q => q.Settings).WithOne(q => q.ServiceProviderCompany).HasForeignKey(q => q.ServiceProviderCompanyId).IsRequired();
+            builder.HasMany(q => q.Settings).WithOne(q => q.ServiceConsumerCompany).HasForeignKey(q => q.ServiceConsumerCompanyId).IsRequired();
+            builder.HasMany(q => q.Updates).WithOne(q => q.Company).HasForeignKey(q => q.CompanyId).IsRequired();
+
+            builder.HasMany(q => q.Providers)
+                   .WithMany(q => q.Clients)
+                   .UsingEntity<CompanySettings>(
+                       q => q.HasOne(w => w.ServiceProviderCompany).WithMany(w => w.Settings).HasForeignKey(w => w.ServiceProviderCompanyId).IsRequired(),
+                       q => q.HasOne(w => w.ServiceConsumerCompany).WithMany(w => w.Settings).HasForeignKey(w => w.ServiceConsumerCompanyId).IsRequired(),
+                       q => q.HasKey(w => new {w.ServiceProviderCompanyId, w.ServiceConsumerCompanyId}));
 
             builder.HasMany(q => q.Users)
                    .WithMany(q => q.Companies)
@@ -17,13 +25,6 @@ namespace WebLicense.Access.Configuration
                        q => q.HasOne(w => w.User).WithMany(w => w.CompanyUsers).HasForeignKey(w => w.UserId).IsRequired(),
                        q => q.HasOne(w => w.Company).WithMany(w => w.CompanyUsers).HasForeignKey(w => w.CompanyId).IsRequired(),
                        q => q.HasKey(w => new {w.CompanyId, w.UserId}));
-
-            builder.HasMany(q => q.Customers)
-                   .WithMany(q => q.Companies)
-                   .UsingEntity<CustomerSettings>(
-                       q => q.HasOne(w => w.Customer).WithMany(w => w.Settings).HasForeignKey(w => w.CustomerId).IsRequired(),
-                       q => q.HasOne(w => w.Company).WithMany(w => w.CompanyCustomers).HasForeignKey(w => w.CompanyId).IsRequired(),
-                       q => q.HasKey(w => new {w.CompanyId, w.CustomerId}));
         }
     }
 }

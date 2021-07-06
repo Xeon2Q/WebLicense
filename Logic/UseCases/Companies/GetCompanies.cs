@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using WebLicense.Access;
 using WebLicense.Core.Models.Companies;
 using WebLicense.Logic.Auxiliary;
+using WebLicense.Logic.Auxiliary.Extensions;
 using WebLicense.Logic.UseCases.Auxiliary;
 using WebLicense.Shared;
 using WebLicense.Shared.Companies;
@@ -53,15 +54,11 @@ namespace WebLicense.Logic.UseCases.Companies
             {
                 request.Validate();
 
-                var query = db.Set<Company>().AsNoTrackingWithIdentityResolution();
-                request.Criteria?.ApplyAll(ref query);
+                var total = await request.Criteria.GetTotal(db.Set<Company>().AsNoTrackingWithIdentityResolution(), cancellationToken);
+                var totalFiltered = await request.Criteria.GetTotalFiltered(db.Set<Company>().AsNoTrackingWithIdentityResolution(), total, cancellationToken);
+                var data = (await request.Criteria.GetData(db.Set<Company>().AsNoTrackingWithIdentityResolution(), cancellationToken)).Select(q => new CompanyInfo(q)).ToList();
 
-                var data1 = await query.ToListAsync(cancellationToken);
-                var data2 = data1.Select(q => new CompanyInfo(q)).ToList();
-
-                var total = await db.Set<Company>().CountAsync(cancellationToken);
-
-                return new CaseResult<ListData<CompanyInfo>>(new ListData<CompanyInfo>(total, data2));
+                return new CaseResult<ListData<CompanyInfo>>(new ListData<CompanyInfo>(total, totalFiltered, data));
             }
             catch (Exception e)
             {

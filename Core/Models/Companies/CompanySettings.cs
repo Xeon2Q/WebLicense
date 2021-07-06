@@ -2,19 +2,18 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
-using WebLicense.Core.Models.Companies;
 
-namespace WebLicense.Core.Models.Customers
+namespace WebLicense.Core.Models.Companies
 {
-    [Table("CustomerSettings")]
+    [Table("CompanySettings")]
     [Index(nameof(ReceiveNotifications))]
-    public sealed class CustomerSettings
+    public sealed class CompanySettings
     {
-        public int CompanyId { get; set; }
-        public Company Company { get; set; }
+        public int ServiceProviderCompanyId { get; set; }
+        public Company ServiceProviderCompany { get; set; }
 
-        public int CustomerId { get; set; }
-        public Customer Customer { get; set; }
+        public int ServiceConsumerCompanyId { get; set; }
+        public Company ServiceConsumerCompany { get; set; }
 
         [Range(0, int.MaxValue)]
         public int MaxActiveLicensesCount { get; set; } = 1;

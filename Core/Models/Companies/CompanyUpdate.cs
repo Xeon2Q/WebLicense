@@ -6,20 +6,20 @@ using Microsoft.EntityFrameworkCore;
 using WebLicense.Core.Models.Auxiliary;
 using WebLicense.Core.Models.Identity;
 
-namespace WebLicense.Core.Models.Customers
+namespace WebLicense.Core.Models.Companies
 {
-    [Table("CustomerUpdates")]
-    [Index(nameof(CustomerId))]
+    [Table("CompanyUpdates")]
+    [Index(nameof(CompanyId))]
     [Index(nameof(UserId))]
     [Index(nameof(Created))]
-    public sealed class CustomerUpdate
+    public sealed class CompanyUpdate
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         [Required]
-        public int CustomerId { get; set; }
-        public Customer Customer { get; set; }
+        public int CompanyId { get; set; }
+        public Company Company { get; set; }
 
         [Required]
         public long UserId { get; set; }

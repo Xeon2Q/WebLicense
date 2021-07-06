@@ -5,19 +5,24 @@ namespace WebLicense.Shared
 {
     public sealed class ListData<T>
     {
-        #region C-tor | Fields
+        #region C-tor | Properties
 
-        public int TotalCount { get; set; }
+        public int Total { get; }
 
-        public T[] Data { get; set; }
+        public int TotalFiltered { get; }
 
-        public ListData(int totalCount, IEnumerable<T> data)
+        public IReadOnlyCollection<T> Data { get; }
+
+        public ListData() : this(0, 0, null)
         {
-            TotalCount = totalCount > 0 ? totalCount : 0;
-            Data = data?.ToArray() ?? new T[0];
         }
 
-        public ListData() : this(0, null) {}
+        public ListData(int total, int totalFiltered, IEnumerable<T> data)
+        {
+            Total = total > 0 ? total : 0;
+            TotalFiltered = totalFiltered > 0 ? totalFiltered : 0;
+            Data = data?.ToArray() ?? new T[0];
+        }
 
         #endregion
     }

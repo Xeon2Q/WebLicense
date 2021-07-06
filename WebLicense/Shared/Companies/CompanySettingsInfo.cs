@@ -1,16 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using WebLicense.Core.Models.Customers;
+using WebLicense.Core.Models.Companies;
 using WebLicense.Shared.Resources;
 
-namespace WebLicense.Shared.Customers
+namespace WebLicense.Shared.Companies
 {
-    public sealed class CustomerSettingsInfo
+    public sealed class CompanySettingsInfo
     {
         [Required]
-        public int? CompanyId { get; set; }
+        public int? ServiceProviderCompanyId { get; set; }
 
         [Required]
-        public int? CustomerId { get; set; }
+        public int? ServiceConsumerCompanyId { get; set; }
 
         [Range(0, int.MaxValue)]
         [Display(ResourceType = typeof(Model), Name = "Customer_Settings_MaxActiveLicensesCount")]
@@ -50,16 +50,16 @@ namespace WebLicense.Shared.Customers
 
         #region C-tor
 
-        public CustomerSettingsInfo()
+        public CompanySettingsInfo()
         {
         }
 
-        public CustomerSettingsInfo(CustomerSettings settings)
+        public CompanySettingsInfo(CompanySettings settings)
         {
             if (settings == null) return;
 
-            CompanyId = settings.CompanyId;
-            CustomerId = settings.CustomerId;
+            ServiceProviderCompanyId = settings.ServiceProviderCompanyId;
+            ServiceConsumerCompanyId = settings.ServiceConsumerCompanyId;
 
             MaxActiveLicensesCount = settings.MaxActiveLicensesCount;
             MaxTotalLicensesCount = settings.MaxTotalLicensesCount;

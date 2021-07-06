@@ -2,26 +2,26 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using WebLicense.Core.Models.Companies;
-using WebLicense.Shared.Customers;
+using WebLicense.Shared.Resources;
 
 namespace WebLicense.Shared.Companies
 {
-    public sealed class CompanyInfo
+    public sealed record CompanyInfo
     {
         public int? Id { get; set; }
 
-        [Required, MaxLength(200)]
+        [Required, Display(ResourceType = typeof(Model), Name = "Customer_Name")]
         public string Name { get; set; }
 
-        [Required, MaxLength(40)]
+        [Display(ResourceType = typeof(Model), Name = "Customer_Code")]
+        public string Code { get; set; }
+
+        [Display(ResourceType = typeof(Model), Name = "Customer_ReferenceId")]
         public string ReferenceId { get; set; }
 
-        public byte[] Logo { get; set; }
+        public CompanySettingsInfo Settings { get; set; }
 
-        // navigation
         public ICollection<CompanyUserInfo> Users { get; set; }
-
-        public ICollection<CustomerInfo> Customers { get; set; }
 
         #region C-tor
 
@@ -35,10 +35,11 @@ namespace WebLicense.Shared.Companies
 
             Id = company.Id;
             Name = company.Name;
+            Code = company.Code;
             ReferenceId = company.ReferenceId;
 
+            if (company.Settings != null && company.Settings.Any()) Settings = new CompanySettingsInfo(company.Settings.FirstOrDefault(q => q.ServiceConsumerCompanyId == company.Id));
             if (company.Users != null && company.Users.Any()) Users = company.Users.Select(q => new CompanyUserInfo(q)).ToList();
-            if (company.Customers != null && company.Customers.Any()) Customers = company.Customers.Select(q => new CustomerInfo(q, company)).ToList();
         }
 
         #endregion

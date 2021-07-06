@@ -32,9 +32,9 @@ namespace WebLicense.Shared.Identity
 
         public IList<CompanyInfo> Companies { get; set; }
 
-        public IList<UserCustomerInfo> ManagedCustomers { get; set; }
+        public IList<UserCompanyInfo> ManagedCustomers { get; set; }
 
-        public IList<UserCustomerInfo> MemberOfCustomers { get; set; }
+        public IList<UserCompanyInfo> MemberOfCustomers { get; set; }
 
         #region C-tor
 
