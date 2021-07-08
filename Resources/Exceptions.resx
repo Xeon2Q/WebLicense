@@ -117,47 +117,29 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Company_Id_LessOne" xml:space="preserve">
+    <value>Company "Id" &lt; 1</value>
+  </data>
+  <data name="Company_Id_Null" xml:space="preserve">
+    <value>Company "Id" is null</value>
+  </data>
   <data name="Company_Name_Empty" xml:space="preserve">
     <value>Company "Name" is empty</value>
   </data>
   <data name="Company_NotFoundOrDeleted" xml:space="preserve">
     <value>Company not found or deleted</value>
   </data>
+  <data name="Company_Null" xml:space="preserve">
+    <value>"Company" is null</value>
+  </data>
   <data name="Company_Users_Empty" xml:space="preserve">
     <value>Company "Users" is empty</value>
   </data>
   <data name="Company_Users_Invalid" xml:space="preserve">
-    <value>Company "Users" is invalid</value>
+    <value>Company "User" is invalid</value>
   </data>
   <data name="Criteria_Null" xml:space="preserve">
     <value>"Criteria" is null</value>
-  </data>
-  <data name="Customer_CompanyId_LessOne" xml:space="preserve">
-    <value>Customer "Company" is invalid</value>
-  </data>
-  <data name="Customer_Id_LessOne" xml:space="preserve">
-    <value>Customer "Id" &lt; 1</value>
-  </data>
-  <data name="Customer_Id_Null" xml:space="preserve">
-    <value>Customer "Id" is null</value>
-  </data>
-  <data name="Customer_Name_Empty" xml:space="preserve">
-    <value>Customer "Name" is empty</value>
-  </data>
-  <data name="Customer_NotFoundOrDeleted" xml:space="preserve">
-    <value>Customer not found or deleted</value>
-  </data>
-  <data name="Customer_NotificationsEmail_Empty" xml:space="preserve">
-    <value>Customer "NotificationsEmail" is empty</value>
-  </data>
-  <data name="Customer_Null" xml:space="preserve">
-    <value>"Customer" is null</value>
-  </data>
-  <data name="Customer_Users_Empty" xml:space="preserve">
-    <value>Customer "Users" is empty</value>
-  </data>
-  <data name="Customer_Users_Invalid" xml:space="preserve">
-    <value>Customer "User" is invalid</value>
   </data>
   <data name="Id_LessOne" xml:space="preserve">
     <value>"Id" &lt; 1</value>

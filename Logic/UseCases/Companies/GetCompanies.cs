@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Resources;
 using System;
 using System.Linq;
@@ -54,9 +53,9 @@ namespace WebLicense.Logic.UseCases.Companies
             {
                 request.Validate();
 
-                var total = await request.Criteria.GetTotal(db.Set<Company>().AsNoTrackingWithIdentityResolution(), cancellationToken);
-                var totalFiltered = await request.Criteria.GetTotalFiltered(db.Set<Company>().AsNoTrackingWithIdentityResolution(), total, cancellationToken);
-                var data = (await request.Criteria.GetData(db.Set<Company>().AsNoTrackingWithIdentityResolution(), cancellationToken)).Select(q => new CompanyInfo(q)).ToList();
+                var total = await request.Criteria.GetTotal(db, cancellationToken);
+                var totalFiltered = await request.Criteria.GetTotalFiltered(db, total, cancellationToken);
+                var data = (await request.Criteria.GetData(db, cancellationToken)).Select(q => new CompanyInfo(q)).ToList();
 
                 return new CaseResult<ListData<CompanyInfo>>(new ListData<CompanyInfo>(total, totalFiltered, data));
             }

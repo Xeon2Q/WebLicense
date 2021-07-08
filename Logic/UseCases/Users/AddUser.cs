@@ -1,15 +1,17 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Resources;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using WebLicense.Access;
 using WebLicense.Core.Enums;
-using WebLicense.Core.Models.Customers;
+using WebLicense.Core.Models.Companies;
 using WebLicense.Core.Models.Identity;
 using WebLicense.Logic.Auxiliary;
+using WebLicense.Logic.Auxiliary.Extensions;
 using WebLicense.Logic.UseCases.Auxiliary;
 using WebLicense.Shared.Identity;
 
@@ -19,13 +21,13 @@ namespace WebLicense.Logic.UseCases.Users
     {
         internal UserInfo User { get; }
         internal readonly string Password;
-        internal readonly string CustomerReferenceId;
+        internal readonly string CompanyReferenceId;
 
-        public AddUser(UserInfo user, string password, string customerReferenceId)
+        public AddUser(UserInfo user, string password, string companyReferenceId)
         {
             User = user;
             Password = password;
-            CustomerReferenceId = !string.IsNullOrWhiteSpace(customerReferenceId) ? customerReferenceId.Trim() : null;
+            CompanyReferenceId = !string.IsNullOrWhiteSpace(companyReferenceId) ? companyReferenceId.Trim() : null;
 
             if (User != null)
             {
@@ -63,30 +65,33 @@ namespace WebLicense.Logic.UseCases.Users
             {
                 request.Validate();
 
-                var user = new User
-                {
-                    Email = request.User.Email,
-                    UserName = request.User.UserName,
-                    PhoneNumber = request.User.PhoneNumber,
-                    EulaAccepted = request.User.EulaAccepted ?? false,
-                    GdprAccepted = request.User.GdprAccepted ?? false
-                };
+                // create transaction
+                await using var transaction = await db.Database.BeginTransactionAsync(cancellationToken);
 
+                // create user
+                var user = GetEmptyUser(request.User);
                 var result1 = await userManager.CreateAsync(user, request.Password).ConfigureAwait(false);
                 if (!result1.Succeeded) return new CaseResult<User>(user, result1);
 
+                // create role
                 var result2 = await userManager.AddToRoleAsync(user, Roles.CustomerUser).ConfigureAwait(false);
                 if (!result2.Succeeded) return new CaseResult<User>(user, result2);
 
-                if (!string.IsNullOrWhiteSpace(request.CustomerReferenceId))
+                // create or attach company
+                if (string.IsNullOrWhiteSpace(request.CompanyReferenceId))
                 {
-                    var customer = await db.Set<Customer>().FirstOrDefaultAsync(q => q.ReferenceId == request.CustomerReferenceId, cancellationToken);
-                    if (customer != null)
-                    {
-                        customer.CustomerUsers.Add(new CustomerUser{UserId = user.Id});
-                        await db.SaveChangesAsync(cancellationToken);
-                    }
+                    var company = GetEmptyCompany(user);
+                    user.CompanyUsers.Add(new() {Company = company, User = user, IsManager = true});
                 }
+                else
+                {
+                    var company = await db.Set<Company>().FirstOrDefaultAsync(q => q.ReferenceId == request.CompanyReferenceId, cancellationToken);
+                    user.CompanyUsers.Add(new() {Company = company, User = user, IsManager = false});
+                }
+
+                // save & commit changes
+                await db.SaveChangesAsync(cancellationToken);
+                await transaction.CommitAsync(cancellationToken);
 
                 user = await db.Set<User>().FirstOrDefaultAsync(q => q.Id == user.Id, cancellationToken);
 
@@ -97,5 +102,36 @@ namespace WebLicense.Logic.UseCases.Users
                 return new(e);
             }
         }
+
+        #region Methods
+
+        private static User GetEmptyUser(UserInfo user)
+        {
+            if (user == null) return null;
+
+            return new User
+            {
+                Email = user.Email,
+                UserName = user.UserName,
+                PhoneNumber = user.PhoneNumber,
+                EulaAccepted = user.EulaAccepted ?? false,
+                GdprAccepted = user.GdprAccepted ?? false,
+                CompanyUsers = new List<CompanyUser>()
+            };
+        }
+
+        private static Company GetEmptyCompany(User user)
+        {
+            return new()
+            {
+                Name = $"{user.UserName}-{Guid.NewGuid():N}",
+                Code = string.Empty.GetRandom(50),
+                ReferenceId = Guid.NewGuid().ToString("N"),
+                Logo = null,
+                Settings = null
+            };
+        }
+
+        #endregion
     }
 }

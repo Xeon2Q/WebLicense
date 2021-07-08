@@ -20,6 +20,8 @@ namespace WebLicense.Core.Models.Companies
         [Required, MaxLength(60), Comment("Secure ID of the Customer.")]
         public string Code { get; set; }
 
+        public byte[] Logo { get; set; }
+
         [Required, MaxLength(40), Comment("Reference ID is using to register new users for the Customer.")]
         public string ReferenceId { get; set; }
 

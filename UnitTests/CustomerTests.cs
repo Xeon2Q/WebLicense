@@ -240,7 +240,7 @@ namespace UnitTests
             await using var db = GetMemoryContext();
             var med = GetMediator(db);
 
-            var model = await med.Send(new DeleteCustomer(id));
+            var model = await med.Send(new DeleteCompany(id));
 
             model.Should().NotBeNull();
             model.Succeeded.Should().BeTrue();
@@ -256,7 +256,7 @@ namespace UnitTests
             await using var db = GetMemoryContext();
             var med = GetMediator(db);
 
-            var model = await med.Send(new DeleteCustomer(id));
+            var model = await med.Send(new DeleteCompany(id));
 
             model.Should().NotBeNull();
             model.Succeeded.Should().BeFalse();

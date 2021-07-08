@@ -1,12 +1,13 @@
 ﻿using MediatR;
-using Resources;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Resources;
 using WebLicense.Access;
 using WebLicense.Core.Models.Companies;
 using WebLicense.Logic.Auxiliary;
+using WebLicense.Logic.Auxiliary.Extensions;
 using WebLicense.Logic.UseCases.Auxiliary;
 using WebLicense.Shared.Companies;
 
@@ -50,9 +51,11 @@ namespace WebLicense.Logic.UseCases.Companies
                 var company = new Company
                 {
                     Name = request.Company.Name,
+                    Code = string.Empty.GetRandom(50),
                     ReferenceId = Guid.NewGuid().ToString("N"),
                     Logo = request.Company.Logo,
-                    CompanyUsers = users
+                    CompanyUsers = users,
+                    Settings = null
                 };
 
                 var result = await db.Companies.AddAsync(company, cancellationToken);

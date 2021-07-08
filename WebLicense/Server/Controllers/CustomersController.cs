@@ -98,7 +98,7 @@ namespace WebLicense.Server.Controllers
         {
             try
             {
-                var data = await sender.Send(new DeleteCustomer(id));
+                var data = await sender.Send(new DeleteCompany(id));
                 data.ThrowOnFail();
             }
             catch (Exception e)

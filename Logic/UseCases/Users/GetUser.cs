@@ -45,8 +45,7 @@ namespace WebLicense.Logic.UseCases.Users
 
                 var user = await db.Set<User>().Where(q => q.Id == request.Id)
                                    .Include(q => q.Companies)
-                                   .Include(q => q.ManagedCustomers)
-                                   .Include(q => q.MemberOfCustomers).FirstOrDefaultAsync(cancellationToken);
+                                   .FirstOrDefaultAsync(cancellationToken);
 
                 if (user == null) throw new CaseException("*User not found or deleted", $"User ('{request.Id}') not found or deleted");
 

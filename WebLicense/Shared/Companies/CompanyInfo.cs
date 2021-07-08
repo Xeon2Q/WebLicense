@@ -19,6 +19,8 @@ namespace WebLicense.Shared.Companies
         [Display(ResourceType = typeof(Model), Name = "Customer_ReferenceId")]
         public string ReferenceId { get; set; }
 
+        public byte[] Logo { get; set; }
+
         public CompanySettingsInfo Settings { get; set; }
 
         public ICollection<CompanyUserInfo> Users { get; set; }
@@ -37,6 +39,7 @@ namespace WebLicense.Shared.Companies
             Name = company.Name;
             Code = company.Code;
             ReferenceId = company.ReferenceId;
+            Logo = company.Logo;
 
             if (company.Settings != null && company.Settings.Any()) Settings = new CompanySettingsInfo(company.Settings.FirstOrDefault(q => q.ServiceConsumerCompanyId == company.Id));
             if (company.Users != null && company.Users.Any()) Users = company.Users.Select(q => new CompanyUserInfo(q)).ToList();

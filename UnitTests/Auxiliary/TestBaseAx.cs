@@ -128,14 +128,14 @@ namespace UnitTests.Auxiliary
             // customers
             mock.Setup(q => q.Send(It.IsAny<GetCustomer>(), It.IsAny<CancellationToken>()))
                 .Returns((GetCustomer request, CancellationToken cancellationToken) => new GetCustomerHandler(db).Handle(request, cancellationToken));
-            mock.Setup(q => q.Send(It.IsAny<GetCustomers>(), It.IsAny<CancellationToken>()))
-                .Returns((GetCustomers request, CancellationToken cancellationToken) => new GetCustomersHandler(db).Handle(request, cancellationToken));
+            mock.Setup(q => q.Send(It.IsAny<GetCompanies>(), It.IsAny<CancellationToken>()))
+                .Returns((GetCompanies request, CancellationToken cancellationToken) => new GetCustomersHandler(db).Handle(request, cancellationToken));
             mock.Setup(q => q.Send(It.IsAny<AddCustomer>(), It.IsAny<CancellationToken>()))
                 .Returns((AddCustomer request, CancellationToken cancellationToken) => new AddCustomerHandler(db, mock.Object).Handle(request, cancellationToken));
-            mock.Setup(q => q.Send(It.IsAny<UpdateCustomer>(), It.IsAny<CancellationToken>()))
-                .Returns((UpdateCustomer request, CancellationToken cancellationToken) => new UpdateCustomerHandler(db, mock.Object).Handle(request, cancellationToken));
-            mock.Setup(q => q.Send(It.IsAny<DeleteCustomer>(), It.IsAny<CancellationToken>()))
-                .Returns((DeleteCustomer request, CancellationToken cancellationToken) => new DeleteCustomerHandler(db).Handle(request, cancellationToken));
+            mock.Setup(q => q.Send(It.IsAny<UpdateCompany>(), It.IsAny<CancellationToken>()))
+                .Returns((UpdateCompany request, CancellationToken cancellationToken) => new UpdateCustomerHandler(db, mock.Object).Handle(request, cancellationToken));
+            mock.Setup(q => q.Send(It.IsAny<DeleteCompany>(), It.IsAny<CancellationToken>()))
+                .Returns((DeleteCompany request, CancellationToken cancellationToken) => new DeleteCustomerHandler(db).Handle(request, cancellationToken));
 
             return mock.Object;
         }

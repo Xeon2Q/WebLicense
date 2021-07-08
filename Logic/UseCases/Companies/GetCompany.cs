@@ -1,10 +1,10 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Resources;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Resources;
 using WebLicense.Access;
 using WebLicense.Logic.Auxiliary;
 using WebLicense.Logic.UseCases.Auxiliary;
@@ -43,8 +43,10 @@ namespace WebLicense.Logic.UseCases.Companies
                 request.Validate();
 
                 var company = await db.Companies.AsNoTrackingWithIdentityResolution().Where(q => q.Id == request.Id)
-                                       .Include(q => q.Customers)
                                        .Include(q => q.Users)
+                                       .Include(q => q.Settings)
+                                       .Include(q => q.Clients)
+                                       .Include(q => q.Providers)
                                        .FirstOrDefaultAsync(cancellationToken);
 
                 if (company == null) throw new CaseException(Exceptions.Company_NotFoundOrDeleted, $"Company({request.Id}) not found or deleted");

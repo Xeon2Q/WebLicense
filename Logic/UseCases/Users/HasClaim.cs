@@ -1,10 +1,10 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Resources;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Resources;
 using WebLicense.Access;
 using WebLicense.Logic.Auxiliary;
 using WebLicense.Logic.UseCases.Auxiliary;

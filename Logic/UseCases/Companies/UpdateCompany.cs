@@ -51,8 +51,8 @@ namespace WebLicense.Logic.UseCases.Companies
                 var info = request.Company;
                 var model = await db.Set<Company>().AsTracking().Where(q => q.Id == info.Id.Value)
                                     .Include(q => q.Settings)
-                                    .Include(q => q.Companies)
-                                    .Include(q => q.CompanyManagers)
+                                    .Include(q => q.Clients)
+                                    .Include(q => q.Providers)
                                     .Include(q => q.CompanyUsers).FirstOrDefaultAsync(cancellationToken);
                 if (model == null) throw new CaseException(Exceptions.Company_NotFoundOrDeleted, "Company not found or deleted");
 
@@ -75,8 +75,9 @@ namespace WebLicense.Logic.UseCases.Companies
             if (info.Name != null && info.Name != model.Name) model.Name = info.Name;
             if (info.Code != null && info.Code != model.Code) model.Code = info.Code;
             if (info.ReferenceId != null && info.ReferenceId != model.ReferenceId) model.ReferenceId = info.ReferenceId;
+            if (info.Logo != null && info.Logo != model.Logo) model.Logo = info.Logo;
 
-            var settings = model.Settings?.FirstOrDefault(q => q.CompanyId == info.Settings?.CompanyId);
+            var settings = model.Settings?.FirstOrDefault(q => q.ServiceProviderCompanyId == info.Settings?.ServiceProviderCompanyId);
             if (settings != null)
             {
                 if (info.Settings.MaxActiveLicensesCount.HasValue && info.Settings.MaxActiveLicensesCount != settings.MaxActiveLicensesCount) settings.MaxActiveLicensesCount = info.Settings.MaxActiveLicensesCount.Value;
@@ -92,18 +93,9 @@ namespace WebLicense.Logic.UseCases.Companies
                 if (info.Settings.ReceiveNotifications.HasValue && info.Settings.ReceiveNotifications != settings.ReceiveNotifications) settings.ReceiveNotifications = info.Settings.ReceiveNotifications.Value;
             }
 
-            if (info.Managers != null)
-            {
-                model.CompanyManagers ??= new List<CompanyManager>();
-                model.CompanyManagers = model.CompanyManagers.Where(q => info.Managers.Any(w => w.Id == q.UserId)).ToList();
-
-                GetNewUsers(info.Managers, model.CompanyManagers.Select(q => q.UserId)).ForEach(q => model.CompanyManagers.Add(new CompanyManager {CompanyId = model.Id, UserId = q}));
-            }
-
             if (info.Users != null)
             {
-                model.CompanyUsers ??= new List<CompanyUser>();
-                model.CompanyUsers = model.CompanyUsers.Where(q => info.Users.Any(w => w.Id == q.UserId)).ToList();
+                model.CompanyUsers = model.CompanyUsers?.Where(q => info.Users.Any(w => w.Id == q.UserId)).ToList() ?? new List<CompanyUser>();
                 
                 GetNewUsers(info.Users, model.CompanyUsers.Select(q => q.UserId)).ForEach(q => model.CompanyUsers.Add(new CompanyUser {CompanyId = model.Id, UserId = q}));
             }

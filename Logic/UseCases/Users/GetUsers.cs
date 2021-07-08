@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Resources;
 using System;
 using System.Linq;
@@ -9,6 +8,7 @@ using System.Threading.Tasks;
 using WebLicense.Access;
 using WebLicense.Core.Models.Identity;
 using WebLicense.Logic.Auxiliary;
+using WebLicense.Logic.Auxiliary.Extensions;
 using WebLicense.Logic.UseCases.Auxiliary;
 using WebLicense.Shared;
 using WebLicense.Shared.Identity;
@@ -53,15 +53,11 @@ namespace WebLicense.Logic.UseCases.Users
             {
                 request.Validate();
 
-                var query = db.Set<User>().AsNoTrackingWithIdentityResolution();
-                request.Criteria?.ApplyAll(ref query);
+                var total = await request.Criteria.GetTotal(db, cancellationToken);
+                var totalFiltered = await request.Criteria.GetTotalFiltered(db, total, cancellationToken);
+                var data = (await request.Criteria.GetData(db, cancellationToken)).Select(q => new UserInfo(q)).ToList();
 
-                var data1 = await query.ToListAsync(cancellationToken);
-                var data2 = data1.Select(q => new UserInfo(q)).ToList();
-
-                var total = await db.Set<User>().CountAsync(cancellationToken);
-
-                return new CaseResult<ListData<UserInfo>>(new ListData<UserInfo>(total, data2));
+                return new CaseResult<ListData<UserInfo>>(new ListData<UserInfo>(total, totalFiltered, data));
 
             }
             catch (Exception e)

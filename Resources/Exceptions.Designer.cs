@@ -61,6 +61,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Company &quot;Id&quot; &lt; 1.
+        /// </summary>
+        public static string Company_Id_LessOne {
+            get {
+                return ResourceManager.GetString("Company_Id_LessOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Company &quot;Id&quot; is null.
+        /// </summary>
+        public static string Company_Id_Null {
+            get {
+                return ResourceManager.GetString("Company_Id_Null", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Company &quot;Name&quot; is empty.
         /// </summary>
         public static string Company_Name_Empty {
@@ -79,6 +97,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &quot;Company&quot; is null.
+        /// </summary>
+        public static string Company_Null {
+            get {
+                return ResourceManager.GetString("Company_Null", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Company &quot;Users&quot; is empty.
         /// </summary>
         public static string Company_Users_Empty {
@@ -88,7 +115,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Company &quot;Users&quot; is invalid.
+        ///   Looks up a localized string similar to Company &quot;User&quot; is invalid.
         /// </summary>
         public static string Company_Users_Invalid {
             get {
@@ -102,87 +129,6 @@ namespace Resources {
         public static string Criteria_Null {
             get {
                 return ResourceManager.GetString("Criteria_Null", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Customer &quot;Company&quot; is invalid.
-        /// </summary>
-        public static string Customer_CompanyId_LessOne {
-            get {
-                return ResourceManager.GetString("Customer_CompanyId_LessOne", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Customer &quot;Id&quot; &lt; 1.
-        /// </summary>
-        public static string Customer_Id_LessOne {
-            get {
-                return ResourceManager.GetString("Customer_Id_LessOne", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Customer &quot;Id&quot; is null.
-        /// </summary>
-        public static string Customer_Id_Null {
-            get {
-                return ResourceManager.GetString("Customer_Id_Null", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Customer &quot;Name&quot; is empty.
-        /// </summary>
-        public static string Customer_Name_Empty {
-            get {
-                return ResourceManager.GetString("Customer_Name_Empty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Customer not found or deleted.
-        /// </summary>
-        public static string Customer_NotFoundOrDeleted {
-            get {
-                return ResourceManager.GetString("Customer_NotFoundOrDeleted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Customer &quot;NotificationsEmail&quot; is empty.
-        /// </summary>
-        public static string Customer_NotificationsEmail_Empty {
-            get {
-                return ResourceManager.GetString("Customer_NotificationsEmail_Empty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &quot;Customer&quot; is null.
-        /// </summary>
-        public static string Customer_Null {
-            get {
-                return ResourceManager.GetString("Customer_Null", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Customer &quot;Users&quot; is empty.
-        /// </summary>
-        public static string Customer_Users_Empty {
-            get {
-                return ResourceManager.GetString("Customer_Users_Empty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Customer &quot;User&quot; is invalid.
-        /// </summary>
-        public static string Customer_Users_Invalid {
-            get {
-                return ResourceManager.GetString("Customer_Users_Invalid", resourceCulture);
             }
         }
         

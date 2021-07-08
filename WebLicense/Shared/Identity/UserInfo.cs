@@ -32,10 +32,6 @@ namespace WebLicense.Shared.Identity
 
         public IList<CompanyInfo> Companies { get; set; }
 
-        public IList<UserCompanyInfo> ManagedCustomers { get; set; }
-
-        public IList<UserCompanyInfo> MemberOfCustomers { get; set; }
-
         #region C-tor
 
         public UserInfo()
@@ -58,8 +54,6 @@ namespace WebLicense.Shared.Identity
             EulaAccepted = user.EulaAccepted;
             GdprAccepted = user.GdprAccepted;
             Companies = user.Companies?.Select(q => new CompanyInfo(q)).ToList();
-            ManagedCustomers = user.ManagedCustomers?.Select(q => new UserCustomerInfo(q)).ToList();
-            MemberOfCustomers = user.MemberOfCustomers?.Select(q => new UserCustomerInfo(q)).ToList();
         }
 
         #endregion

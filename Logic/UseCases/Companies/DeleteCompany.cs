@@ -43,7 +43,6 @@ namespace WebLicense.Logic.UseCases.Companies
                 request.Validate();
 
                 db.Detach<Company>(q => q.Id == request.Id);
-
                 db.Companies.Remove(new Company {Id = request.Id});
                 await db.SaveChangesAsync(cancellationToken);
 
@@ -53,7 +52,7 @@ namespace WebLicense.Logic.UseCases.Companies
             {
                 if (e.Message.Contains("expected to affect 1 row") && e.Message.Contains("actually affected 0 row"))
                 {
-                    return new CaseResult(new CaseException(Exceptions.Company_NotFoundOrDeleted, $"Company({request.Id}) not found or deleted"));
+                    return new CaseResult(new CaseException(Exceptions.Company_NotFoundOrDeleted, "Company not found or deleted"));
                 }
                 return new CaseResult(e);
             }
