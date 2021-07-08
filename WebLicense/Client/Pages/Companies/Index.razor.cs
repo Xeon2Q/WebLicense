@@ -48,7 +48,7 @@ namespace WebLicense.Client.Pages.Companies
                 if (args.Filters?.Any() ?? false) parameters.Add($"filters={args.FiltersToUrlEncodedString()}");
                 if (args.Sorts?.Any() ?? false) parameters.Add($"sorts={args.SortsToUrlEncodedString()}");
 
-                var data = await Client.GetFromJsonAsync<ListData<CompanyInfo>>($"api/customers?{string.Join('&', parameters)}");
+                var data = await Client.GetFromJsonAsync<ListData<CompanyInfo>>($"api/companies?{string.Join('&', parameters)}");
 
                 TotalCount = data?.Total ?? 0;
                 Data = data?.Data;
