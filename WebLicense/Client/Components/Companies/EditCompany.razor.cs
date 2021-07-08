@@ -1,19 +1,18 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
-using WebLicense.Shared.Customers;
+using WebLicense.Shared.Companies;
 
-namespace WebLicense.Client.Components.Customers
+namespace WebLicense.Client.Components.Companies
 {
-    public partial class EditCustomer : ComponentBase
+    public partial class EditCompany : ComponentBase
     {
         #region Properties
 
         [Parameter]
-        public CustomerInfo Data { get; set; }
+        public CompanyInfo Data { get; set; }
 
         [Parameter]
-        public EventCallback<CustomerInfo> DataChanged { get; set; }
+        public EventCallback<CompanyInfo> DataChanged { get; set; }
 
         #endregion
 

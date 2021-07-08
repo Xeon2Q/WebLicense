@@ -1,0 +1,24 @@
+﻿@page "/companies"
+@using WebLicense.Shared.Companies;
+
+<h1>Companys: @TotalCount</h1>
+
+<div class="d-flex my-3">
+    <NavLink class="btn btn-success btn-sm" href="/customers/add">
+        <i class="bi bi-plus"></i> Add Company...
+    </NavLink>
+</div>
+
+<RadzenDataGrid TItem="CompanyInfo" Data="@Data" Count="@TotalCount" LoadData="LoadDataAsync" IsLoading="IsLoading"
+                AllowPaging="true" PagerPosition="PagerPosition.TopAndBottom" PageNumbersCount="10" PageSizeOptions="new[] {10, 25, 50, 100}"
+                AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" LogicalFilterOperator="LogicalFilterOperator.Or" FilterMode="FilterMode.Advanced"
+                AllowSorting="true" AllowMultiColumnSorting="true">
+    <Columns>
+        <RadzenDataGridColumn TItem="CompanyInfo" Property="@nameof(CompanyInfo.Id)" Filterable="false" Title="ID" Width="50px" TextAlign="TextAlign.Center" SortOrder="SortOrder.Ascending"/>
+        <RadzenDataGridColumn TItem="CompanyInfo" Property="@nameof(CompanyInfo.Name)" Title="Name"/>
+        <RadzenDataGridColumn TItem="CompanyInfo" Property="@nameof(CompanyInfo.Code)" Title="Code"/>
+        <RadzenDataGridColumn TItem="CompanyInfo" Property="@nameof(CompanyInfo.ReferenceId)" Title="Reference ID"/>
+    </Columns>
+</RadzenDataGrid>
+
+<br />

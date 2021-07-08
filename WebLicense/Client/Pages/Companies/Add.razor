@@ -1,0 +1,7 @@
+﻿@page "/companies/add"
+@using WebLicense.Client.Components.Companies;
+
+<h1>Add new Customer</h1>
+<hr class="my-3"/>
+
+<EditCompany @bind-Data="@Data" @bind-Data:event="DataChanged"></EditCompany>

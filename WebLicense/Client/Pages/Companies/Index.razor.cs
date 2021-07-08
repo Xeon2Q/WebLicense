@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 using WebLicense.Client.Auxiliary;
 using WebLicense.Client.Auxiliary.Extensions;
 using WebLicense.Shared;
-using WebLicense.Shared.Customers;
+using WebLicense.Shared.Companies;
 
-namespace WebLicense.Client.Pages.Customers
+namespace WebLicense.Client.Pages.Companies
 {
     public partial class Index
     {
@@ -26,7 +26,7 @@ namespace WebLicense.Client.Pages.Customers
 
         public int TotalCount { get; set; }
 
-        public IEnumerable<CustomerInfo> Data { get; set; }
+        public IEnumerable<CompanyInfo> Data { get; set; }
 
         public bool IsLoading { get; set; }
 
@@ -48,9 +48,9 @@ namespace WebLicense.Client.Pages.Customers
                 if (args.Filters?.Any() ?? false) parameters.Add($"filters={args.FiltersToUrlEncodedString()}");
                 if (args.Sorts?.Any() ?? false) parameters.Add($"sorts={args.SortsToUrlEncodedString()}");
 
-                var data = await Client.GetFromJsonAsync<ListData<CustomerInfo>>($"api/customers?{string.Join('&', parameters)}");
+                var data = await Client.GetFromJsonAsync<ListData<CompanyInfo>>($"api/customers?{string.Join('&', parameters)}");
 
-                TotalCount = data?.TotalCount ?? 0;
+                TotalCount = data?.Total ?? 0;
                 Data = data?.Data;
             }
             catch (AccessTokenNotAvailableException ex)

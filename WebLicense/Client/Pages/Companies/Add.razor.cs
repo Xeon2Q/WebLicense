@@ -5,9 +5,9 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.Authorization;
 using WebLicense.Client.Auxiliary.Extensions;
-using WebLicense.Shared.Customers;
+using WebLicense.Shared.Companies;
 
-namespace WebLicense.Client.Pages.Customers
+namespace WebLicense.Client.Pages.Companies
 {
     public partial class Add : ComponentBase
     {
@@ -19,7 +19,7 @@ namespace WebLicense.Client.Pages.Customers
         [Inject]
         private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
 
-        public CustomerInfo Data { get; set; } = new();
+        public CompanyInfo Data { get; set; } = new();
 
         #endregion
 
@@ -29,19 +29,19 @@ namespace WebLicense.Client.Pages.Customers
         {
             var state = await AuthenticationStateProvider.GetAuthenticationStateAsync();
 
-            Data = GetEmptyCustomerInfo(state.User);
+            Data = GetEmptyCompanyInfo(state.User);
         }
 
         #endregion
 
         #region Private methods
 
-        private static CustomerInfo GetEmptyCustomerInfo(ClaimsPrincipal user)
+        private static CompanyInfo GetEmptyCompanyInfo(ClaimsPrincipal user)
         {
-            var entity = new CustomerInfo
+            var entity = new CompanyInfo
             {
                 Id = 0,
-                Settings = new CustomerSettingsInfo
+                Settings = new CompanySettingsInfo
                 {
                     MaxActiveLicensesCount = 1,
                     MaxTotalLicensesCount = 1,
@@ -55,8 +55,7 @@ namespace WebLicense.Client.Pages.Customers
                     CanDeactivateMachines = true,
                     CanDeleteMachines = true
                 },
-                Managers = new List<CustomerUserInfo>(),
-                Users = new List<CustomerUserInfo>
+                Users = new List<CompanyUserInfo>
                 {
                     new() {Id = user.GetId(), Name = user.GetName()}
                 }

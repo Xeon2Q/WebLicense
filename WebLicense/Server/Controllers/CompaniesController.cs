@@ -4,25 +4,25 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
-using WebLicense.Core.Models.Customers;
+using WebLicense.Core.Models.Companies;
 using WebLicense.Logic.Auxiliary;
-using WebLicense.Logic.UseCases.Customers;
+using WebLicense.Logic.UseCases.Companies;
 using WebLicense.Shared;
-using WebLicense.Shared.Customers;
+using WebLicense.Shared.Companies;
 
 namespace WebLicense.Server.Controllers
 {
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class CustomersController : ControllerBase
+    public class CompaniesController : ControllerBase
     {
         private readonly ISender sender;
-        private readonly ILogger<CustomersController> logger;
+        private readonly ILogger<CompaniesController> logger;
 
         #region C-tor | Fields
 
-        public CustomersController(ISender sender, ILogger<CustomersController> logger)
+        public CompaniesController(ISender sender, ILogger<CompaniesController> logger)
         {
             this.sender = sender ?? throw new ArgumentNullException(nameof(sender));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -34,7 +34,7 @@ namespace WebLicense.Server.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<ListData<CustomerInfo>> Get(int skip = 0, int take = 100, string filters = null, string sorts = null)
+        public async Task<ListData<CompanyInfo>> Get(int skip = 0, int take = 100, string filters = null, string sorts = null)
         {
             try
             {
@@ -44,7 +44,7 @@ namespace WebLicense.Server.Controllers
                 var criteriaFilter = CriteriaFilter.TryParse(filters);
                 var criteriaSort = CriteriaSort.TryParse(sorts);
 
-                var data = await sender.Send(new GetCustomers(new Criteria<Customer>(skip, take, criteriaSort, criteriaFilter)));
+                var data = await sender.Send(new GetCompanies(new Criteria<Company>(skip, take, criteriaSort, criteriaFilter)));
                 data.ThrowOnFail();
 
                 return data.Data;
@@ -58,11 +58,11 @@ namespace WebLicense.Server.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<CustomerInfo> Add(CustomerInfo customer)
+        public async Task<CompanyInfo> Add(CompanyInfo customer)
         {
             try
             {
-                var data = await sender.Send(new AddCustomer(customer));
+                var data = await sender.Send(new AddCompany(customer));
                 data.ThrowOnFail();
 
                 return data.Data;
@@ -76,11 +76,11 @@ namespace WebLicense.Server.Controllers
 
         [AllowAnonymous]
         [HttpPatch]
-        public async Task<CustomerInfo> Update(CustomerInfo customer)
+        public async Task<CompanyInfo> Update(CompanyInfo customer)
         {
             try
             {
-                var data = await sender.Send(new UpdateCustomer(customer));
+                var data = await sender.Send(new UpdateCompany(customer));
                 data.ThrowOnFail();
 
                 return data.Data;
