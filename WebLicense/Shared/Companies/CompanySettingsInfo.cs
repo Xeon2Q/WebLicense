@@ -7,10 +7,10 @@ namespace WebLicense.Shared.Companies
     public sealed class CompanySettingsInfo
     {
         [Required]
-        public int? ServiceProviderCompanyId { get; set; }
+        public int? CompanyId { get; set; }
 
         [Required]
-        public int? ServiceConsumerCompanyId { get; set; }
+        public int? ProviderCompanyId { get; set; }
 
         [Range(0, int.MaxValue)]
         [Display(ResourceType = typeof(Model), Name = "Customer_Settings_MaxActiveLicensesCount")]
@@ -58,8 +58,8 @@ namespace WebLicense.Shared.Companies
         {
             if (settings == null) return;
 
-            ServiceProviderCompanyId = settings.ServiceProviderCompanyId;
-            ServiceConsumerCompanyId = settings.ServiceConsumerCompanyId;
+            ProviderCompanyId = settings.ProviderCompanyId;
+            CompanyId = settings.CompanyId;
 
             MaxActiveLicensesCount = settings.MaxActiveLicensesCount;
             MaxTotalLicensesCount = settings.MaxTotalLicensesCount;

@@ -26,11 +26,8 @@ namespace WebLicense.Core.Models.Companies
         public string ReferenceId { get; set; }
 
         // navigation
-        [Comment("List of Companies which provides services to this Company")]
-        public ICollection<Company> Providers { get; set; }
-        [Comment("List of Companies which uses services from this Company")]
-        public ICollection<Company> Clients { get; set; }
         public ICollection<CompanySettings> Settings { get; set; }
+        public ICollection<CompanySettings> ClientSettings { get; set; }
 
         public ICollection<User> Users { get; set; }
         public ICollection<CompanyUser> CompanyUsers { get; set; }

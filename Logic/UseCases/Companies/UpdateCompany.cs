@@ -51,8 +51,7 @@ namespace WebLicense.Logic.UseCases.Companies
                 var info = request.Company;
                 var model = await db.Set<Company>().AsTracking().Where(q => q.Id == info.Id.Value)
                                     .Include(q => q.Settings)
-                                    .Include(q => q.Clients)
-                                    .Include(q => q.Providers)
+                                    .Include(q => q.ClientSettings)
                                     .Include(q => q.CompanyUsers).FirstOrDefaultAsync(cancellationToken);
                 if (model == null) throw new CaseException(Exceptions.Company_NotFoundOrDeleted, "Company not found or deleted");
 
@@ -77,7 +76,7 @@ namespace WebLicense.Logic.UseCases.Companies
             if (info.ReferenceId != null && info.ReferenceId != model.ReferenceId) model.ReferenceId = info.ReferenceId;
             if (info.Logo != null && info.Logo != model.Logo) model.Logo = info.Logo;
 
-            var settings = model.Settings?.FirstOrDefault(q => q.ServiceProviderCompanyId == info.Settings?.ServiceProviderCompanyId);
+            var settings = model.Settings?.FirstOrDefault(q => q.ProviderCompanyId == info.Settings?.ProviderCompanyId);
             if (settings != null)
             {
                 if (info.Settings.MaxActiveLicensesCount.HasValue && info.Settings.MaxActiveLicensesCount != settings.MaxActiveLicensesCount) settings.MaxActiveLicensesCount = info.Settings.MaxActiveLicensesCount.Value;

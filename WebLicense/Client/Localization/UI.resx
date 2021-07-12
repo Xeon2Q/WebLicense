@@ -123,4 +123,10 @@
   <data name="Customer-Settings-Notifications" xml:space="preserve">
     <value>Notifications settings</value>
   </data>
+  <data name="Save" xml:space="preserve">
+    <value>##Save</value>
+  </data>
+  <data name="Submit" xml:space="preserve">
+    <value>##Submit</value>
+  </data>
 </root>

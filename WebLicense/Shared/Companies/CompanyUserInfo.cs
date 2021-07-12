@@ -1,4 +1,4 @@
-﻿using WebLicense.Core.Models.Identity;
+﻿using WebLicense.Core.Models.Companies;
 
 namespace WebLicense.Shared.Companies
 {
@@ -10,19 +10,22 @@ namespace WebLicense.Shared.Companies
 
         public string Email { get; init; }
 
+        public bool? IsManager { get; set; }
+
         #region C-tor
 
         public CompanyUserInfo()
         {
         }
 
-        public CompanyUserInfo(User user)
+        public CompanyUserInfo(CompanyUser user)
         {
             if (user == null) return;
 
-            Id = user.Id;
-            Name = user.UserName;
-            Email = user.Email;
+            Id = user.UserId;
+            Name = user.User?.UserName;
+            Email = user.User?.Email;
+            IsManager = user.IsManager;
         }
 
         #endregion

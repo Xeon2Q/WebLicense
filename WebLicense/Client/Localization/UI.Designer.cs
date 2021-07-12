@@ -77,5 +77,23 @@ namespace WebLicense.Client.Localization {
                 return ResourceManager.GetString("Customer-Settings-Notifications", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ##Save.
+        /// </summary>
+        public static string Save {
+            get {
+                return ResourceManager.GetString("Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ##Submit.
+        /// </summary>
+        public static string Submit {
+            get {
+                return ResourceManager.GetString("Submit", resourceCulture);
+            }
+        }
     }
 }

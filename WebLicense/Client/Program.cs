@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using WebLicense.Client.Auxiliary;
@@ -13,10 +14,17 @@ namespace WebLicense.Client
     {
         public static async Task Main(string[] args)
         {
+            ServicePointManager.CheckCertificateRevocationList = false;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls13;
+            ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, errors) => true;
+
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
 
-            builder.Services.AddHttpClient("WebLicense.ServerAPI", client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress))
+            builder.Services.AddHttpClient("WebLicense.ServerAPI", client =>
+                   {
+                       client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress);
+                   })
                 .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
 
             // Supply HttpClient instances that include access tokens when making requests to the server project

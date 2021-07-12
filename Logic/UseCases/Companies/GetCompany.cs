@@ -45,8 +45,7 @@ namespace WebLicense.Logic.UseCases.Companies
                 var company = await db.Companies.AsNoTrackingWithIdentityResolution().Where(q => q.Id == request.Id)
                                        .Include(q => q.Users)
                                        .Include(q => q.Settings)
-                                       .Include(q => q.Clients)
-                                       .Include(q => q.Providers)
+                                       .Include(q => q.ClientSettings)
                                        .FirstOrDefaultAsync(cancellationToken);
 
                 if (company == null) throw new CaseException(Exceptions.Company_NotFoundOrDeleted, $"Company({request.Id}) not found or deleted");

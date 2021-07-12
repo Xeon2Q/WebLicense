@@ -8,16 +8,10 @@ namespace WebLicense.Access.Configuration
     {
         public void Configure(EntityTypeBuilder<Company> builder)
         {
-            builder.HasMany(q => q.Settings).WithOne(q => q.ServiceProviderCompany).HasForeignKey(q => q.ServiceProviderCompanyId).IsRequired();
-            builder.HasMany(q => q.Settings).WithOne(q => q.ServiceConsumerCompany).HasForeignKey(q => q.ServiceConsumerCompanyId).IsRequired();
-            builder.HasMany(q => q.Updates).WithOne(q => q.Company).HasForeignKey(q => q.CompanyId).IsRequired();
+            builder.HasMany(q => q.Settings).WithOne(q => q.Company).HasForeignKey(q => q.CompanyId).IsRequired();
+            builder.HasMany(q => q.ClientSettings).WithOne(q => q.ProviderCompany).HasForeignKey(q => q.ProviderCompanyId).IsRequired();
 
-            builder.HasMany(q => q.Providers)
-                   .WithMany(q => q.Clients)
-                   .UsingEntity<CompanySettings>(
-                       q => q.HasOne(w => w.ServiceProviderCompany).WithMany(w => w.Settings).HasForeignKey(w => w.ServiceProviderCompanyId).IsRequired(),
-                       q => q.HasOne(w => w.ServiceConsumerCompany).WithMany(w => w.Settings).HasForeignKey(w => w.ServiceConsumerCompanyId).IsRequired(),
-                       q => q.HasKey(w => new {w.ServiceProviderCompanyId, w.ServiceConsumerCompanyId}));
+            builder.HasMany(q => q.Updates).WithOne(q => q.Company).HasForeignKey(q => q.CompanyId).IsRequired();
 
             builder.HasMany(q => q.Users)
                    .WithMany(q => q.Companies)

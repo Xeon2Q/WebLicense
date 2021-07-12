@@ -41,8 +41,8 @@ namespace WebLicense.Shared.Companies
             ReferenceId = company.ReferenceId;
             Logo = company.Logo;
 
-            if (company.Settings != null && company.Settings.Any()) Settings = new CompanySettingsInfo(company.Settings.FirstOrDefault(q => q.ServiceConsumerCompanyId == company.Id));
-            if (company.Users != null && company.Users.Any()) Users = company.Users.Select(q => new CompanyUserInfo(q)).ToList();
+            if (company.Settings != null && company.Settings.Any()) Settings = new CompanySettingsInfo(company.Settings.FirstOrDefault(q => q.CompanyId == company.Id));
+            if (company.Users != null && company.Users.Any()) Users = company.CompanyUsers.Select(q => new CompanyUserInfo(q)).ToList();
         }
 
         #endregion

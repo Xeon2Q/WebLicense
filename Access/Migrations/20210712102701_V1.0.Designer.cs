@@ -9,7 +9,7 @@ using WebLicense.Access;
 namespace WebLicense.Access.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20210705120026_V1.0")]
+    [Migration("20210712102701_V1.0")]
     partial class V10
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -128,60 +128,14 @@ namespace WebLicense.Access.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<byte[]>("Logo")
-                        .HasColumnType("BLOB");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("TEXT")
-                        .HasComment("The Name of the Company");
-
-                    b.Property<string>("ReferenceId")
-                        .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("TEXT")
-                        .HasComment("Reference ID is using to register new users for the Company.");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.HasIndex("ReferenceId")
-                        .IsUnique();
-
-                    b.ToTable("Companies");
-                });
-
-            modelBuilder.Entity("WebLicense.Core.Models.Companies.CompanyUser", b =>
-                {
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<long>("UserId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("CompanyId", "UserId");
-
-                    b.HasIndex("CompanyId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("CompanyUser");
-                });
-
-            modelBuilder.Entity("WebLicense.Core.Models.Customers.Customer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Code")
                         .IsRequired()
                         .HasMaxLength(60)
                         .HasColumnType("TEXT")
                         .HasComment("Secure ID of the Customer.");
+
+                    b.Property<byte[]>("Logo")
+                        .HasColumnType("BLOB");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -203,32 +157,15 @@ namespace WebLicense.Access.Migrations
                     b.HasIndex("ReferenceId")
                         .IsUnique();
 
-                    b.ToTable("Customers");
+                    b.ToTable("Companies");
                 });
 
-            modelBuilder.Entity("WebLicense.Core.Models.Customers.CustomerManager", b =>
+            modelBuilder.Entity("WebLicense.Core.Models.Companies.CompanySettings", b =>
                 {
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<long>("UserId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("CustomerId", "UserId");
-
-                    b.HasIndex("CustomerId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("CustomerManager");
-                });
-
-            modelBuilder.Entity("WebLicense.Core.Models.Customers.CustomerSettings", b =>
-                {
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("CompanyId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ProviderCompanyId")
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("CanActivateLicenses")
@@ -267,16 +204,16 @@ namespace WebLicense.Access.Migrations
                         .HasColumnType("INTEGER")
                         .HasComment("Must be TRUE if Customer wants to receive notifications about his licenses.");
 
-                    b.HasKey("CustomerId", "CompanyId");
+                    b.HasKey("CompanyId", "ProviderCompanyId");
 
-                    b.HasIndex("CompanyId");
+                    b.HasIndex("ProviderCompanyId");
 
                     b.HasIndex("ReceiveNotifications");
 
-                    b.ToTable("CustomerSettings");
+                    b.ToTable("CompanySettings");
                 });
 
-            modelBuilder.Entity("WebLicense.Core.Models.Customers.CustomerUpdate", b =>
+            modelBuilder.Entity("WebLicense.Core.Models.Companies.CompanyUpdate", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -286,12 +223,12 @@ namespace WebLicense.Access.Migrations
                         .HasMaxLength(2147483647)
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTimeOffset>("Created")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -303,30 +240,33 @@ namespace WebLicense.Access.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Created");
+                    b.HasIndex("CompanyId");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex("Created");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("CustomerUpdates");
+                    b.ToTable("CompanyUpdates");
                 });
 
-            modelBuilder.Entity("WebLicense.Core.Models.Customers.CustomerUser", b =>
+            modelBuilder.Entity("WebLicense.Core.Models.Companies.CompanyUser", b =>
                 {
-                    b.Property<int>("CustomerId")
+                    b.Property<int>("CompanyId")
                         .HasColumnType("INTEGER");
 
                     b.Property<long>("UserId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("CustomerId", "UserId");
+                    b.Property<bool>("IsManager")
+                        .HasColumnType("INTEGER");
 
-                    b.HasIndex("CustomerId");
+                    b.HasKey("CompanyId", "UserId");
+
+                    b.HasIndex("CompanyId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("CustomerUser");
+                    b.ToTable("CompanyUser");
                 });
 
             modelBuilder.Entity("WebLicense.Core.Models.Identity.Role", b =>
@@ -359,28 +299,28 @@ namespace WebLicense.Access.Migrations
                         new
                         {
                             Id = 9223372036854775807L,
-                            ConcurrencyStamp = "126b9a8a-47b0-4915-a3ad-552400ee0a02",
+                            ConcurrencyStamp = "e4bc0265-8574-4b82-ae30-ce000f7c1e0f",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 9223372036854775806L,
-                            ConcurrencyStamp = "68dd2006-ae3d-4e79-94c5-ac0920c885ac",
+                            ConcurrencyStamp = "e85ce8bd-b449-4197-9031-d783bb56d8d5",
                             Name = "Customer Admin",
                             NormalizedName = "CUSTOMER ADMIN"
                         },
                         new
                         {
                             Id = 9223372036854775805L,
-                            ConcurrencyStamp = "5e64429f-aebc-46c3-9dec-fb08074d8b6b",
+                            ConcurrencyStamp = "db1486f4-d9f9-49c0-8e32-9a1bbf2cc38c",
                             Name = "Customer Manager",
                             NormalizedName = "CUSTOMER MANAGER"
                         },
                         new
                         {
                             Id = 9223372036854775804L,
-                            ConcurrencyStamp = "949365aa-820e-4902-8dfa-96b0e57ab773",
+                            ConcurrencyStamp = "fdd727e1-a966-4878-b10e-8311a1967b04",
                             Name = "Customer User",
                             NormalizedName = "CUSTOMER USER"
                         });
@@ -653,7 +593,7 @@ namespace WebLicense.Access.Migrations
                         {
                             Id = 9223372036854775807L,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9fae4759-3d89-4090-8ff4-eaf51f37a1da",
+                            ConcurrencyStamp = "6658e20b-7c8e-4c9c-ac80-ca4ef9c48383",
                             Email = "admin-one@weblicense.com",
                             EmailConfirmed = true,
                             EulaAccepted = true,
@@ -661,9 +601,9 @@ namespace WebLicense.Access.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN-ONE@WEBLICENSE.COM",
                             NormalizedUserName = "ADMINISTRATOR",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGkumYFqNrkH1vKCsOzOicno6+jKUo/ZLNd3XMEngIcNP5OtHy+tLVvQJSOpjQm6qg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEElHx+Iv/sRqXJ/WwFJ9njFC6Vnkktk//H3tS9t2AiO2YwRkWpH0lmd7JVwcfdgI3A==",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "C0EF0F033150454CBF58223B5F8DF2C64670B6DE2FE44F5D9D5397830425B2C2B880241DD2DA4068B9FFE03005450821",
+                            SecurityStamp = "E4BDC2E37EEF4984A7C1F6700D722A79A6049D5DF54846F0A87639F2DA047A6EFEB2E5279A804A869FEBD62434413B22",
                             TwoFactorEnabled = false,
                             UserName = "Administrator"
                         });
@@ -757,6 +697,44 @@ namespace WebLicense.Access.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("WebLicense.Core.Models.Companies.CompanySettings", b =>
+                {
+                    b.HasOne("WebLicense.Core.Models.Companies.Company", "Company")
+                        .WithMany("Settings")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebLicense.Core.Models.Companies.Company", "ProviderCompany")
+                        .WithMany("ClientSettings")
+                        .HasForeignKey("ProviderCompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Company");
+
+                    b.Navigation("ProviderCompany");
+                });
+
+            modelBuilder.Entity("WebLicense.Core.Models.Companies.CompanyUpdate", b =>
+                {
+                    b.HasOne("WebLicense.Core.Models.Companies.Company", "Company")
+                        .WithMany("Updates")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebLicense.Core.Models.Identity.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Company");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("WebLicense.Core.Models.Companies.CompanyUser", b =>
                 {
                     b.HasOne("WebLicense.Core.Models.Companies.Company", "Company")
@@ -772,82 +750,6 @@ namespace WebLicense.Access.Migrations
                         .IsRequired();
 
                     b.Navigation("Company");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("WebLicense.Core.Models.Customers.CustomerManager", b =>
-                {
-                    b.HasOne("WebLicense.Core.Models.Customers.Customer", "Customer")
-                        .WithMany("CustomerManagers")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WebLicense.Core.Models.Identity.User", "User")
-                        .WithMany("CustomerManagers")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("WebLicense.Core.Models.Customers.CustomerSettings", b =>
-                {
-                    b.HasOne("WebLicense.Core.Models.Companies.Company", "Company")
-                        .WithMany("CompanyCustomers")
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WebLicense.Core.Models.Customers.Customer", "Customer")
-                        .WithMany("Settings")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Company");
-
-                    b.Navigation("Customer");
-                });
-
-            modelBuilder.Entity("WebLicense.Core.Models.Customers.CustomerUpdate", b =>
-                {
-                    b.HasOne("WebLicense.Core.Models.Customers.Customer", "Customer")
-                        .WithMany("Updates")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WebLicense.Core.Models.Identity.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("WebLicense.Core.Models.Customers.CustomerUser", b =>
-                {
-                    b.HasOne("WebLicense.Core.Models.Customers.Customer", "Customer")
-                        .WithMany("CustomerUsers")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WebLicense.Core.Models.Identity.User", "User")
-                        .WithMany("CustomerUsers")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
 
                     b.Navigation("User");
                 });
@@ -905,16 +807,9 @@ namespace WebLicense.Access.Migrations
 
             modelBuilder.Entity("WebLicense.Core.Models.Companies.Company", b =>
                 {
-                    b.Navigation("CompanyCustomers");
+                    b.Navigation("ClientSettings");
 
                     b.Navigation("CompanyUsers");
-                });
-
-            modelBuilder.Entity("WebLicense.Core.Models.Customers.Customer", b =>
-                {
-                    b.Navigation("CustomerManagers");
-
-                    b.Navigation("CustomerUsers");
 
                     b.Navigation("Settings");
 
@@ -924,10 +819,6 @@ namespace WebLicense.Access.Migrations
             modelBuilder.Entity("WebLicense.Core.Models.Identity.User", b =>
                 {
                     b.Navigation("CompanyUsers");
-
-                    b.Navigation("CustomerManagers");
-
-                    b.Navigation("CustomerUsers");
                 });
 #pragma warning restore 612, 618
         }

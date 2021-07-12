@@ -15,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using WebLicense.Access;
@@ -41,6 +42,10 @@ namespace WebLicense.Server
 
         public void ConfigureServices(IServiceCollection services)
         {
+            ServicePointManager.CheckCertificateRevocationList = false;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls13;
+            ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, errors) => true;
+
             ConfigureSettings(services);
             ConfigureDatabase(services);
             ConfigureLocalization(services);

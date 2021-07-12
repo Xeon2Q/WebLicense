@@ -56,28 +56,14 @@ namespace WebLicense.Access.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false, comment: "The Name of the Company"),
-                    ReferenceId = table.Column<string>(type: "TEXT", maxLength: 40, nullable: false, comment: "Reference ID is using to register new users for the Company."),
-                    Logo = table.Column<byte[]>(type: "BLOB", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Companies", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Customers",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false, comment: "The Name of the Customer"),
                     Code = table.Column<string>(type: "TEXT", maxLength: 60, nullable: false, comment: "Secure ID of the Customer."),
+                    Logo = table.Column<byte[]>(type: "BLOB", nullable: true),
                     ReferenceId = table.Column<string>(type: "TEXT", maxLength: 40, nullable: false, comment: "Reference ID is using to register new users for the Customer.")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Customers", x => x.Id);
+                    table.PrimaryKey("PK_Companies", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -226,11 +212,76 @@ namespace WebLicense.Access.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CompanySettings",
+                columns: table => new
+                {
+                    CompanyId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ProviderCompanyId = table.Column<int>(type: "INTEGER", nullable: false),
+                    MaxActiveLicensesCount = table.Column<int>(type: "INTEGER", nullable: false),
+                    MaxTotalLicensesCount = table.Column<int>(type: "INTEGER", nullable: false),
+                    CreateActiveLicenses = table.Column<bool>(type: "INTEGER", nullable: false),
+                    CanActivateLicenses = table.Column<bool>(type: "INTEGER", nullable: false),
+                    CanDeactivateLicenses = table.Column<bool>(type: "INTEGER", nullable: false),
+                    CanDeleteLicenses = table.Column<bool>(type: "INTEGER", nullable: false),
+                    CanActivateMachines = table.Column<bool>(type: "INTEGER", nullable: false),
+                    CanDeactivateMachines = table.Column<bool>(type: "INTEGER", nullable: false),
+                    CanDeleteMachines = table.Column<bool>(type: "INTEGER", nullable: false),
+                    NotificationsEmail = table.Column<string>(type: "TEXT", maxLength: 200, nullable: true, comment: "Email address used for notifications."),
+                    ReceiveNotifications = table.Column<bool>(type: "INTEGER", nullable: false, comment: "Must be TRUE if Customer wants to receive notifications about his licenses.")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CompanySettings", x => new { x.CompanyId, x.ProviderCompanyId });
+                    table.ForeignKey(
+                        name: "FK_CompanySettings_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CompanySettings_Companies_ProviderCompanyId",
+                        column: x => x.ProviderCompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CompanyUpdates",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    CompanyId = table.Column<int>(type: "INTEGER", nullable: false),
+                    UserId = table.Column<long>(type: "INTEGER", nullable: false),
+                    Created = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", maxLength: 2000, nullable: false),
+                    Changes = table.Column<string>(type: "TEXT", maxLength: 2147483647, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CompanyUpdates", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CompanyUpdates_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CompanyUpdates_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CompanyUser",
                 columns: table => new
                 {
                     CompanyId = table.Column<int>(type: "INTEGER", nullable: false),
-                    UserId = table.Column<long>(type: "INTEGER", nullable: false)
+                    UserId = table.Column<long>(type: "INTEGER", nullable: false),
+                    IsManager = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -249,142 +300,30 @@ namespace WebLicense.Access.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "CustomerManager",
-                columns: table => new
-                {
-                    CustomerId = table.Column<int>(type: "INTEGER", nullable: false),
-                    UserId = table.Column<long>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CustomerManager", x => new { x.CustomerId, x.UserId });
-                    table.ForeignKey(
-                        name: "FK_CustomerManager_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CustomerManager_Customers_CustomerId",
-                        column: x => x.CustomerId,
-                        principalTable: "Customers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CustomerSettings",
-                columns: table => new
-                {
-                    CompanyId = table.Column<int>(type: "INTEGER", nullable: false),
-                    CustomerId = table.Column<int>(type: "INTEGER", nullable: false),
-                    MaxActiveLicensesCount = table.Column<int>(type: "INTEGER", nullable: false),
-                    MaxTotalLicensesCount = table.Column<int>(type: "INTEGER", nullable: false),
-                    CreateActiveLicenses = table.Column<bool>(type: "INTEGER", nullable: false),
-                    CanActivateLicenses = table.Column<bool>(type: "INTEGER", nullable: false),
-                    CanDeactivateLicenses = table.Column<bool>(type: "INTEGER", nullable: false),
-                    CanDeleteLicenses = table.Column<bool>(type: "INTEGER", nullable: false),
-                    CanActivateMachines = table.Column<bool>(type: "INTEGER", nullable: false),
-                    CanDeactivateMachines = table.Column<bool>(type: "INTEGER", nullable: false),
-                    CanDeleteMachines = table.Column<bool>(type: "INTEGER", nullable: false),
-                    NotificationsEmail = table.Column<string>(type: "TEXT", maxLength: 200, nullable: true, comment: "Email address used for notifications."),
-                    ReceiveNotifications = table.Column<bool>(type: "INTEGER", nullable: false, comment: "Must be TRUE if Customer wants to receive notifications about his licenses.")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CustomerSettings", x => new { x.CustomerId, x.CompanyId });
-                    table.ForeignKey(
-                        name: "FK_CustomerSettings_Companies_CompanyId",
-                        column: x => x.CompanyId,
-                        principalTable: "Companies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CustomerSettings_Customers_CustomerId",
-                        column: x => x.CustomerId,
-                        principalTable: "Customers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CustomerUpdates",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    CustomerId = table.Column<int>(type: "INTEGER", nullable: false),
-                    UserId = table.Column<long>(type: "INTEGER", nullable: false),
-                    Created = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
-                    Description = table.Column<string>(type: "TEXT", maxLength: 2000, nullable: false),
-                    Changes = table.Column<string>(type: "TEXT", maxLength: 2147483647, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CustomerUpdates", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CustomerUpdates_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CustomerUpdates_Customers_CustomerId",
-                        column: x => x.CustomerId,
-                        principalTable: "Customers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CustomerUser",
-                columns: table => new
-                {
-                    CustomerId = table.Column<int>(type: "INTEGER", nullable: false),
-                    UserId = table.Column<long>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CustomerUser", x => new { x.CustomerId, x.UserId });
-                    table.ForeignKey(
-                        name: "FK_CustomerUser_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CustomerUser_Customers_CustomerId",
-                        column: x => x.CustomerId,
-                        principalTable: "Customers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[] { 9223372036854775807L, "e4bc0265-8574-4b82-ae30-ce000f7c1e0f", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 9223372036854775807L, "126b9a8a-47b0-4915-a3ad-552400ee0a02", "Admin", "ADMIN" });
+                values: new object[] { 9223372036854775806L, "e85ce8bd-b449-4197-9031-d783bb56d8d5", "Customer Admin", "CUSTOMER ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 9223372036854775806L, "68dd2006-ae3d-4e79-94c5-ac0920c885ac", "Customer Admin", "CUSTOMER ADMIN" });
+                values: new object[] { 9223372036854775805L, "db1486f4-d9f9-49c0-8e32-9a1bbf2cc38c", "Customer Manager", "CUSTOMER MANAGER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 9223372036854775805L, "5e64429f-aebc-46c3-9dec-fb08074d8b6b", "Customer Manager", "CUSTOMER MANAGER" });
-
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 9223372036854775804L, "949365aa-820e-4902-8dfa-96b0e57ab773", "Customer User", "CUSTOMER USER" });
+                values: new object[] { 9223372036854775804L, "fdd727e1-a966-4878-b10e-8311a1967b04", "Customer User", "CUSTOMER USER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "EulaAccepted", "GdprAccepted", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { 9223372036854775807L, 0, "9fae4759-3d89-4090-8ff4-eaf51f37a1da", "admin-one@weblicense.com", true, true, true, false, null, "ADMIN-ONE@WEBLICENSE.COM", "ADMINISTRATOR", "AQAAAAEAACcQAAAAEGkumYFqNrkH1vKCsOzOicno6+jKUo/ZLNd3XMEngIcNP5OtHy+tLVvQJSOpjQm6qg==", null, true, "C0EF0F033150454CBF58223B5F8DF2C64670B6DE2FE44F5D9D5397830425B2C2B880241DD2DA4068B9FFE03005450821", false, "Administrator" });
+                values: new object[] { 9223372036854775807L, 0, "6658e20b-7c8e-4c9c-ac80-ca4ef9c48383", "admin-one@weblicense.com", true, true, true, false, null, "ADMIN-ONE@WEBLICENSE.COM", "ADMINISTRATOR", "AQAAAAEAACcQAAAAEElHx+Iv/sRqXJ/WwFJ9njFC6Vnkktk//H3tS9t2AiO2YwRkWpH0lmd7JVwcfdgI3A==", null, true, "E4BDC2E37EEF4984A7C1F6700D722A79A6049D5DF54846F0A87639F2DA047A6EFEB2E5279A804A869FEBD62434413B22", false, "Administrator" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoleClaims",
@@ -549,9 +488,9 @@ namespace WebLicense.Access.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Companies_Name",
+                name: "IX_Companies_Code",
                 table: "Companies",
-                column: "Name",
+                column: "Code",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -561,6 +500,31 @@ namespace WebLicense.Access.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_CompanySettings_ProviderCompanyId",
+                table: "CompanySettings",
+                column: "ProviderCompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CompanySettings_ReceiveNotifications",
+                table: "CompanySettings",
+                column: "ReceiveNotifications");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CompanyUpdates_CompanyId",
+                table: "CompanyUpdates",
+                column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CompanyUpdates_Created",
+                table: "CompanyUpdates",
+                column: "Created");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CompanyUpdates_UserId",
+                table: "CompanyUpdates",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CompanyUser_CompanyId",
                 table: "CompanyUser",
                 column: "CompanyId");
@@ -568,63 +532,6 @@ namespace WebLicense.Access.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_CompanyUser_UserId",
                 table: "CompanyUser",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CustomerManager_CustomerId",
-                table: "CustomerManager",
-                column: "CustomerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CustomerManager_UserId",
-                table: "CustomerManager",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Customers_Code",
-                table: "Customers",
-                column: "Code",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Customers_ReferenceId",
-                table: "Customers",
-                column: "ReferenceId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CustomerSettings_CompanyId",
-                table: "CustomerSettings",
-                column: "CompanyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CustomerSettings_ReceiveNotifications",
-                table: "CustomerSettings",
-                column: "ReceiveNotifications");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CustomerUpdates_Created",
-                table: "CustomerUpdates",
-                column: "Created");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CustomerUpdates_CustomerId",
-                table: "CustomerUpdates",
-                column: "CustomerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CustomerUpdates_UserId",
-                table: "CustomerUpdates",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CustomerUser_CustomerId",
-                table: "CustomerUser",
-                column: "CustomerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CustomerUser_UserId",
-                table: "CustomerUser",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -672,19 +579,13 @@ namespace WebLicense.Access.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "CompanySettings");
+
+            migrationBuilder.DropTable(
+                name: "CompanyUpdates");
+
+            migrationBuilder.DropTable(
                 name: "CompanyUser");
-
-            migrationBuilder.DropTable(
-                name: "CustomerManager");
-
-            migrationBuilder.DropTable(
-                name: "CustomerSettings");
-
-            migrationBuilder.DropTable(
-                name: "CustomerUpdates");
-
-            migrationBuilder.DropTable(
-                name: "CustomerUser");
 
             migrationBuilder.DropTable(
                 name: "DeviceCodes");
@@ -696,13 +597,10 @@ namespace WebLicense.Access.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Companies");
-
-            migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Customers");
+                name: "Companies");
         }
     }
 }

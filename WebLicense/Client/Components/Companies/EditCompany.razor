@@ -1,22 +1,19 @@
 ﻿@inject IStringLocalizer<Properties> LocP
 @inject IStringLocalizer<UI> LocUI
 
-<EditForm Model="@Data">
+<EditForm Model="@Data" OnValidSubmit="SaveCallback)">
     <DataAnnotationsValidator></DataAnnotationsValidator>
 
     <ul class="nav nav-pills mb-5" id="pills-tab" role="tablist">
         <li class="nav-item me-2" role="presentation">
             <button class="nav-link active" id="pills-main-tab" data-bs-toggle="pill" data-bs-target="#pills-main" type="button" role="tab" aria-controls="pills-main" aria-selected="true">Main</button>
         </li>
-        <li class="nav-item me-2" role="presentation">
-            <button class="nav-link" id="pills-settings-tab" data-bs-toggle="pill" data-bs-target="#pills-settings" type="button" role="tab" aria-controls="pills-settings" aria-selected="false">Settings</button>
-        </li>
-        <li class="nav-item me-2" role="presentation">
-            <button class="nav-link" id="pills-administrators-tab" data-bs-toggle="pill" data-bs-target="#pills-administrators" type="button" role="tab" aria-controls="pills-administrators" aria-selected="false">Administrators</button>
-        </li>
-        <li class="nav-item me-2" role="presentation">
-            <button class="nav-link" id="pills-managers-tab" data-bs-toggle="pill" data-bs-target="#pills-managers" type="button" role="tab" aria-controls="pills-managers" aria-selected="false">Managers</button>
-        </li>
+        @if (!IsAdd)
+        {
+            <li class="nav-item me-2" role="presentation">
+                <button class="nav-link" id="pills-settings-tab" data-bs-toggle="pill" data-bs-target="#pills-settings" type="button" role="tab" aria-controls="pills-settings" aria-selected="false">Settings</button>
+            </li>
+        }
         <li class="nav-item me-2" role="presentation">
             <button class="nav-link" id="pills-users-tab" data-bs-toggle="pill" data-bs-target="#pills-users" type="button" role="tab" aria-controls="pills-users" aria-selected="false">Users</button>
         </li>
@@ -24,39 +21,43 @@
     <div class="tab-content" id="pills-tabContent">
         <div class="tab-pane fade col-8 col-xxl-5 min-w-600px show active" id="pills-main" role="tabpanel" aria-labelledby="pills-main-tab">
             <XInputFloatingText CssClass2="mb-3" @bind-Value="Data.Name"></XInputFloatingText>
-            <XInputFloatingText CssClass2="mb-3" @bind-Value="Data.Code"></XInputFloatingText>
-            <XInputFloatingText CssClass2="mb-3" @bind-Value="Data.ReferenceId"></XInputFloatingText>
+            @if (!IsAdd)
+            {
+                <XInputFloatingText CssClass2="mb-3" @bind-Value="Data.Code"></XInputFloatingText>
+                <XInputFloatingText CssClass2="mb-3" @bind-Value="Data.ReferenceId"></XInputFloatingText>
+            }
         </div>
 
-        <div class="tab-pane fade col-8 col-xxl-5 min-w-600px" id="pills-settings" role="tabpanel" aria-labelledby="pills-settings-tab">
-            <h4 class="text-info">@LocUI["Customer-Settings-Notifications"]</h4>
-            <div class="row g-0">
-                <XInputText CssClass2="mb-3" @bind-Value="Data.Settings.NotificationsEmail"></XInputText>
-                <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.ReceiveNotifications" IsLarge="true"></XInputCheckBox>
+        @if (!IsAdd)
+        {
+            <div class="tab-pane fade col-8 col-xxl-5 min-w-600px" id="pills-settings" role="tabpanel" aria-labelledby="pills-settings-tab">
+                <h4 class="text-info">@LocUI["Customer-Settings-Notifications"]</h4>
+                <div class="row g-0">
+                    <XInputText CssClass2="mb-3" @bind-Value="Data.Settings.NotificationsEmail"></XInputText>
+                    <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.ReceiveNotifications" IsLarge="true"></XInputCheckBox>
+                </div>
+
+                <hr class="my-2" />
+
+                <h4 class="text-info mt-3">@LocUI["Customer-Settings-Licenses"]</h4>
+                <div class="row mb-4">
+                    <XInputNumber CssClass2="col-6 pe-2" @bind-Value="Data.Settings.MaxActiveLicensesCount"></XInputNumber>
+                    <XInputNumber CssClass2="col-6 ps-2" @bind-Value="Data.Settings.MaxTotalLicensesCount"></XInputNumber>
+                </div>
+                <div class="row g-0">
+                    <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CreateActiveLicenses" IsLarge="true"></XInputCheckBox>
+                    <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanActivateLicenses" IsLarge="true"></XInputCheckBox>
+                    <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanDeactivateLicenses" IsLarge="true"></XInputCheckBox>
+                    <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanDeleteLicenses" IsLarge="true"></XInputCheckBox>
+                    <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanActivateMachines" IsLarge="true"></XInputCheckBox>
+                    <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanDeactivateMachines" IsLarge="true"></XInputCheckBox>
+                    <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanDeleteMachines" IsLarge="true"></XInputCheckBox>
+                </div>
             </div>
-
-            <hr class="my-2" />
-
-            <h4 class="text-info mt-3">@LocUI["Customer-Settings-Licenses"]</h4>
-            <div class="row mb-4">
-                <XInputNumber CssClass2="col-6 pe-2" @bind-Value="Data.Settings.MaxActiveLicensesCount"></XInputNumber>
-                <XInputNumber CssClass2="col-6 ps-2" @bind-Value="Data.Settings.MaxTotalLicensesCount"></XInputNumber>
-            </div>
-            <div class="row g-0">
-                <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CreateActiveLicenses" IsLarge="true"></XInputCheckBox>
-                <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanActivateLicenses" IsLarge="true"></XInputCheckBox>
-                <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanDeactivateLicenses" IsLarge="true"></XInputCheckBox>
-                <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanDeleteLicenses" IsLarge="true"></XInputCheckBox>
-                <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanActivateMachines" IsLarge="true"></XInputCheckBox>
-                <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanDeactivateMachines" IsLarge="true"></XInputCheckBox>
-                <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanDeleteMachines" IsLarge="true"></XInputCheckBox>
-            </div>
-        </div>
-
-        <div class="tab-pane fade" id="pills-administrators" role="tabpanel" aria-labelledby="pills-administrators-tab">3</div>
-
-        <div class="tab-pane fade" id="pills-managers" role="tabpanel" aria-labelledby="pills-managers-tab">4</div>
+        }
 
         <div class="tab-pane fade" id="pills-users" role="tabpanel" aria-labelledby="pills-users-tab">5</div>
     </div>
+    
+    <button type="submit" class="btn @SubmitButtonClass">@SubmitButtonText</button>
 </EditForm>

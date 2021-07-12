@@ -9,11 +9,11 @@ namespace WebLicense.Core.Models.Companies
     [Index(nameof(ReceiveNotifications))]
     public sealed class CompanySettings
     {
-        public int ServiceProviderCompanyId { get; set; }
-        public Company ServiceProviderCompany { get; set; }
+        public int CompanyId { get; set; }
+        public Company Company { get; set; }
 
-        public int ServiceConsumerCompanyId { get; set; }
-        public Company ServiceConsumerCompany { get; set; }
+        public int ProviderCompanyId { get; set; }
+        public Company ProviderCompany { get; set; }
 
         [Range(0, int.MaxValue)]
         public int MaxActiveLicensesCount { get; set; } = 1;
