@@ -7,11 +7,11 @@ namespace WebLicense.Shared
     {
         #region C-tor | Properties
 
-        public int Total { get; }
+        public int Total { get; set; }
 
-        public int TotalFiltered { get; }
+        public int TotalFiltered { get; set; }
 
-        public IReadOnlyCollection<T> Data { get; }
+        public IList<T> Data { get; set; }
 
         public ListData() : this(0, 0, null)
         {

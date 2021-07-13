@@ -1,7 +1,7 @@
 ﻿@inject IStringLocalizer<Properties> LocP
 @inject IStringLocalizer<UI> LocUI
 
-<EditForm Model="@Data" OnValidSubmit="SaveCallback)">
+<EditForm Model="@Data" OnValidSubmit="SaveCallback" OnInvalidSubmit="InvalidCallback">
     <DataAnnotationsValidator></DataAnnotationsValidator>
 
     <ul class="nav nav-pills mb-5" id="pills-tab" role="tablist">
@@ -59,5 +59,5 @@
         <div class="tab-pane fade" id="pills-users" role="tabpanel" aria-labelledby="pills-users-tab">5</div>
     </div>
     
-    <button type="submit" class="btn @SubmitButtonClass">@SubmitButtonText</button>
+    <input type="submit" class="btn @SubmitButtonClass" value="@SubmitButtonText"/>
 </EditForm>

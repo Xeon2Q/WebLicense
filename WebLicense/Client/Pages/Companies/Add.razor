@@ -5,4 +5,4 @@
 <h1>Add new Customer</h1>
 <hr class="my-3" />
 
-<EditCompany @bind-Data="@Data" @bind-Data:event="DataChanged" IsAdd="true" SubmitButtonClass="btn-success mt-3" SubmitButtonText="@LocUI["Submit"]"></EditCompany>
+<EditCompany @bind-Data="@Data" @bind-Data:event="DataChanged" OnSave="Save" IsAdd="true" SubmitButtonClass="btn-success mt-3" SubmitButtonText="@LocUI["Submit"]"></EditCompany>

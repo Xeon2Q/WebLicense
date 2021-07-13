@@ -58,11 +58,11 @@ namespace WebLicense.Server.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<CompanyInfo> Add(CompanyInfo customer)
+        public async Task<CompanyInfo> Add(CompanyInfo company)
         {
             try
             {
-                var data = await sender.Send(new AddCompany(customer));
+                var data = await sender.Send(new AddCompany(company));
                 data.ThrowOnFail();
 
                 return data.Data;

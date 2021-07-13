@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using WebLicense.Shared.Companies;
 
@@ -20,6 +18,9 @@ namespace WebLicense.Client.Components.Companies
         public EventCallback<CompanyInfo> DataChanged { get; set; }
 
         [Parameter]
+        public EventCallback<CompanyInfo> OnSave { get; set; }
+
+        [Parameter]
         public string SubmitButtonClass { get; set; }
 
         [Parameter]
@@ -29,14 +30,13 @@ namespace WebLicense.Client.Components.Companies
 
         #region Methods
 
-        private async Task SyncChanges()
+        public void SaveCallback(EditContext ecx)
         {
-            if (DataChanged.HasDelegate) await DataChanged.InvokeAsync(Data);
+            OnSave.InvokeAsync(Data);
         }
 
-        private void SaveCallback(EditContext obj)
+        public void InvalidCallback(EditContext ecx)
         {
-
         }
 
         #endregion

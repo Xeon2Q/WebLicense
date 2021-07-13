@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
+using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components.Authorization;
+using WebLicense.Client.Auxiliary;
 using WebLicense.Client.Auxiliary.Extensions;
 using WebLicense.Shared.Companies;
 
@@ -14,12 +16,18 @@ namespace WebLicense.Client.Pages.Companies
         #region C-tor | Properties
 
         [Inject]
+        private NavigationManager Navigation { get; set; }
+
+        [Inject]
         private HttpClient Client { get; set; }
 
         [Inject]
         private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
 
         public CompanyInfo Data { get; set; } = new();
+
+        [Inject]
+        public JsLog Log { get; set; }
 
         #endregion
 
@@ -49,6 +57,20 @@ namespace WebLicense.Client.Pages.Companies
             };
 
             return entity;
+        }
+
+        protected async Task Save(CompanyInfo info)
+        {
+            try
+            {
+                await Client.Post($"{Navigation.BaseUri}api/companies", info);
+
+                Navigation.NavigateTo("/companies");
+            }
+            catch (Exception e)
+            {
+                await Log.LogAsync(e.Message);
+            }
         }
 
         #endregion

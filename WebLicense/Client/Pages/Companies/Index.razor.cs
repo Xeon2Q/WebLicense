@@ -4,10 +4,7 @@ using Radzen;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Json;
-using System.Text.Json;
 using System.Threading.Tasks;
-using WebLicense.Client.Auxiliary;
 using WebLicense.Client.Auxiliary.Extensions;
 using WebLicense.Shared;
 using WebLicense.Shared.Companies;
@@ -19,10 +16,10 @@ namespace WebLicense.Client.Pages.Companies
         #region C-tor | Properties
 
         [Inject]
-        public JsLog Log { get; set; }
+        private HttpClient Client { get; set; }
 
         [Inject]
-        private HttpClient Client { get; set; }
+        private NavigationManager Navigation { get; set; }
 
         public int TotalCount { get; set; }
 
@@ -40,15 +37,15 @@ namespace WebLicense.Client.Pages.Companies
 
             try
             {
-                await Log.LogAsync(JsonSerializer.Serialize(args));
+                var parameters = new Dictionary<string, object>
+                {
+                    {"skip", args.Skip},
+                    {"top", args.Top},
+                    {"filters", args.FiltersToUrlEncodedString()},
+                    {"sorts", args.SortsToUrlEncodedString()}
+                }.Select(q => (q.Key, q.Value)).ToArray();
 
-                var parameters = new List<string>();
-                if (args.Skip > 0) parameters.Add($"skip={args.Skip.Value}");
-                if (args.Top > 0) parameters.Add($"take={args.Top.Value}");
-                if (args.Filters?.Any() ?? false) parameters.Add($"filters={args.FiltersToUrlEncodedString()}");
-                if (args.Sorts?.Any() ?? false) parameters.Add($"sorts={args.SortsToUrlEncodedString()}");
-
-                var data = await Client.GetFromJsonAsync<ListData<CompanyInfo>>($"api/companies?{string.Join('&', parameters)}");
+                var data = await Client.GetJson<ListData<CompanyInfo>>($"{Navigation.BaseUri}api/companies", parameters);
 
                 TotalCount = data?.Total ?? 0;
                 Data = data?.Data;

@@ -48,7 +48,9 @@ html, body {
 /* #region Radzen overrides */
 /* - paginator */
 .rz-datatable {
+    background-color: var(--gray42) !important;
     border-color: var(--gray63) !important;
+    color: var(--grayE0);
 }
 .rz-datatable .rz-paginator {
     background-color: var(--black) !important;
@@ -129,6 +131,9 @@ html, body {
 }
 .rz-datatable-data td .rz-cell-data, .rz-grid-table td .rz-cell-data {
     color: var(--grayD0) !important;
+}
+.rz-datatable-emptymessage {
+    text-align: center;
 }
 /* other controls */
 .rz-colorpicker, .rz-lookup-search input, .rz-spinner, .rz-calendar .rz-inputtext, .rz-multiselect, .rz-dropdown, .mask, .rz-textarea, .rz-textbox {
