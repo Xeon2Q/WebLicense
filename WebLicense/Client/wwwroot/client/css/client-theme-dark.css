@@ -43,6 +43,9 @@ html, body {
 }
 
 /* #region Bootstrap overrides */
+.no-box-shadow {
+    box-shadow: none !important;
+}
 /* #endregion */
 
 /* #region Radzen overrides */

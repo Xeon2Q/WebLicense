@@ -8,7 +8,7 @@
     --secondary: #0277BD;
     --secondary-hover: #005EA4;
     --success: #388E3C;
-    --success-hover: #1F7523;
+    --success-hover: #81c784;
     --danger: #BF360C;
     --danger-hover: #A61D00;
     --warning: #F9A825;
@@ -449,6 +449,7 @@
 /*#endregion*/
 /*#region !--  ------------------------------------------------------*/
 /*#endregion*/
+
 /*#region !-- Some pieces -------------------------------------------*/
 a, .btn-link {
     color: var(--link);
@@ -469,5 +470,8 @@ kbd {
 }
 .border-bottom {
     border-color: #666666 !important;
+}
+.btn-link.text-success:hover {
+    color: var(--success-hover) !important;
 }
 /*#endregion*/

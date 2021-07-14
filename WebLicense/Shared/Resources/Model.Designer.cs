@@ -61,128 +61,245 @@ namespace WebLicense.Shared.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ##Code.
+        ///   Looks up a localized string similar to #Code.
         /// </summary>
-        public static string Customer_Code {
+        public static string Company_Code {
             get {
-                return ResourceManager.GetString("Customer-Code", resourceCulture);
+                return ResourceManager.GetString("Company-Code", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ##Name.
+        ///   Looks up a localized string similar to #Name.
         /// </summary>
-        public static string Customer_Name {
+        public static string Company_Name {
             get {
-                return ResourceManager.GetString("Customer-Name", resourceCulture);
+                return ResourceManager.GetString("Company-Name", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ##ReferenceId.
+        ///   Looks up a localized string similar to #ReferenceId.
         /// </summary>
-        public static string Customer_ReferenceId {
+        public static string Company_ReferenceId {
             get {
-                return ResourceManager.GetString("Customer-ReferenceId", resourceCulture);
+                return ResourceManager.GetString("Company-ReferenceId", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ##Can activate Licenses.
+        ///   Looks up a localized string similar to #Can activate Licenses.
         /// </summary>
-        public static string Customer_Settings_CanActivateLicenses {
+        public static string Company_Settings_CanActivateLicenses {
             get {
-                return ResourceManager.GetString("Customer-Settings-CanActivateLicenses", resourceCulture);
+                return ResourceManager.GetString("Company-Settings-CanActivateLicenses", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ##Can activate Machines.
+        ///   Looks up a localized string similar to #Can activate Machines.
         /// </summary>
-        public static string Customer_Settings_CanActivateMachines {
+        public static string Company_Settings_CanActivateMachines {
             get {
-                return ResourceManager.GetString("Customer-Settings-CanActivateMachines", resourceCulture);
+                return ResourceManager.GetString("Company-Settings-CanActivateMachines", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ##Can deactivate Licenses.
+        ///   Looks up a localized string similar to #Can deactivate Licenses.
         /// </summary>
-        public static string Customer_Settings_CanDeactivateLicenses {
+        public static string Company_Settings_CanDeactivateLicenses {
             get {
-                return ResourceManager.GetString("Customer-Settings-CanDeactivateLicenses", resourceCulture);
+                return ResourceManager.GetString("Company-Settings-CanDeactivateLicenses", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ##Can deactivate Machines.
+        ///   Looks up a localized string similar to #Can deactivate Machines.
         /// </summary>
-        public static string Customer_Settings_CanDeactivateMachines {
+        public static string Company_Settings_CanDeactivateMachines {
             get {
-                return ResourceManager.GetString("Customer-Settings-CanDeactivateMachines", resourceCulture);
+                return ResourceManager.GetString("Company-Settings-CanDeactivateMachines", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ##Can delete Licenses.
+        ///   Looks up a localized string similar to #Can delete Licenses.
         /// </summary>
-        public static string Customer_Settings_CanDeleteLicenses {
+        public static string Company_Settings_CanDeleteLicenses {
             get {
-                return ResourceManager.GetString("Customer_Settings_CanDeleteLicenses", resourceCulture);
+                return ResourceManager.GetString("Company_Settings_CanDeleteLicenses", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ##Can delete Machines.
+        ///   Looks up a localized string similar to #Can delete Machines.
         /// </summary>
-        public static string Customer_Settings_CanDeleteMachines {
+        public static string Company_Settings_CanDeleteMachines {
             get {
-                return ResourceManager.GetString("Customer-Settings-CanDeleteMachines", resourceCulture);
+                return ResourceManager.GetString("Company-Settings-CanDeleteMachines", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ##Create new Licenses activated by default.
+        ///   Looks up a localized string similar to #Create new Licenses activated by default.
         /// </summary>
-        public static string Customer_Settings_CreateActiveLicenses {
+        public static string Company_Settings_CreateActiveLicenses {
             get {
-                return ResourceManager.GetString("Customer-Settings-CreateActiveLicenses", resourceCulture);
+                return ResourceManager.GetString("Company-Settings-CreateActiveLicenses", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ##Maximum active Licenses.
+        ///   Looks up a localized string similar to #Maximum active Licenses.
         /// </summary>
-        public static string Customer_Settings_MaxActiveLicensesCount {
+        public static string Company_Settings_MaxActiveLicensesCount {
             get {
-                return ResourceManager.GetString("Customer-Settings-MaxActiveLicensesCount", resourceCulture);
+                return ResourceManager.GetString("Company-Settings-MaxActiveLicensesCount", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ##Maximum total Licenses.
+        ///   Looks up a localized string similar to #Maximum total Licenses.
         /// </summary>
-        public static string Customer_Settings_MaxTotalLicensesCount {
+        public static string Company_Settings_MaxTotalLicensesCount {
             get {
-                return ResourceManager.GetString("Customer-Settings-MaxTotalLicensesCount", resourceCulture);
+                return ResourceManager.GetString("Company-Settings-MaxTotalLicensesCount", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ##Email for notifications.
+        ///   Looks up a localized string similar to #Email for notifications.
         /// </summary>
-        public static string Customer_Settings_NotificationsEmail {
+        public static string Company_Settings_NotificationsEmail {
             get {
-                return ResourceManager.GetString("Customer-Settings-NotificationsEmail", resourceCulture);
+                return ResourceManager.GetString("Company-Settings-NotificationsEmail", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ##Want to receive notifications.
+        ///   Looks up a localized string similar to #Want to receive notifications.
         /// </summary>
-        public static string Customer_Settings_ReceiveNotifications {
+        public static string Company_Settings_ReceiveNotifications {
             get {
-                return ResourceManager.GetString("Customer-Settings-ReceiveNotifications", resourceCulture);
+                return ResourceManager.GetString("Company-Settings-ReceiveNotifications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #Manager.
+        /// </summary>
+        public static string CompanyUser_IsManager {
+            get {
+                return ResourceManager.GetString("CompanyUser-IsManager", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #ID.
+        /// </summary>
+        public static string Id {
+            get {
+                return ResourceManager.GetString("Id", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #Two-factor authentication.
+        /// </summary>
+        public static string User_2FAEnabled {
+            get {
+                return ResourceManager.GetString("User-2FAEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #Companies.
+        /// </summary>
+        public static string User_Companies {
+            get {
+                return ResourceManager.GetString("User-Companies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #Email address.
+        /// </summary>
+        public static string User_Email {
+            get {
+                return ResourceManager.GetString("User-Email", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #Email confirmed.
+        /// </summary>
+        public static string User_EmailConfirmed {
+            get {
+                return ResourceManager.GetString("User-EmailConfirmed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #EULA.
+        /// </summary>
+        public static string User_EulaAccepted {
+            get {
+                return ResourceManager.GetString("User-EulaAccepted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #GDPR.
+        /// </summary>
+        public static string User_GdprAccepted {
+            get {
+                return ResourceManager.GetString("User-GdprAccepted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #Is locked.
+        /// </summary>
+        public static string User_LockoutEnabled {
+            get {
+                return ResourceManager.GetString("User-LockoutEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #Locked until.
+        /// </summary>
+        public static string User_LockoutEnd {
+            get {
+                return ResourceManager.GetString("User-LockoutEnd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #Name.
+        /// </summary>
+        public static string User_Name {
+            get {
+                return ResourceManager.GetString("User-Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #Phone number.
+        /// </summary>
+        public static string User_Phone {
+            get {
+                return ResourceManager.GetString("User-Phone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #Phone confirmed.
+        /// </summary>
+        public static string User_PhoneConfirmed {
+            get {
+                return ResourceManager.GetString("User-PhoneConfirmed", resourceCulture);
             }
         }
     }

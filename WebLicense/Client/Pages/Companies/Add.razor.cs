@@ -52,7 +52,7 @@ namespace WebLicense.Client.Pages.Companies
                 Settings = null,
                 Users = new List<CompanyUserInfo>
                 {
-                    new() {Id = user.GetId(), Name = user.GetName(), IsManager = true}
+                    new() {Id = user.GetId(), Name = user.GetName(), Email = user.GetEmail(), IsManager = true}
                 }
             };
 

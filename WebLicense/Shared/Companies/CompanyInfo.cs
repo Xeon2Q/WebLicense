@@ -10,13 +10,13 @@ namespace WebLicense.Shared.Companies
     {
         public int? Id { get; set; }
 
-        [Required, Display(ResourceType = typeof(Model), Name = "Customer_Name")]
+        [Required, Display(ResourceType = typeof(Model), Name = "Company_Name")]
         public string Name { get; set; }
 
-        [Display(ResourceType = typeof(Model), Name = "Customer_Code")]
+        [Display(ResourceType = typeof(Model), Name = "Company_Code")]
         public string Code { get; set; }
 
-        [Display(ResourceType = typeof(Model), Name = "Customer_ReferenceId")]
+        [Display(ResourceType = typeof(Model), Name = "Company_ReferenceId")]
         public string ReferenceId { get; set; }
 
         public byte[] Logo { get; set; }

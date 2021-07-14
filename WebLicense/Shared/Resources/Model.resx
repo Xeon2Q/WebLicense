@@ -117,46 +117,85 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Customer-Code" xml:space="preserve">
-    <value>##Code</value>
+  <data name="Company-Code" xml:space="preserve">
+    <value>#Code</value>
   </data>
-  <data name="Customer-Name" xml:space="preserve">
-    <value>##Name</value>
+  <data name="Company-Name" xml:space="preserve">
+    <value>#Name</value>
   </data>
-  <data name="Customer-ReferenceId" xml:space="preserve">
-    <value>##ReferenceId</value>
+  <data name="Company-ReferenceId" xml:space="preserve">
+    <value>#ReferenceId</value>
   </data>
-  <data name="Customer-Settings-CanActivateLicenses" xml:space="preserve">
-    <value>##Can activate Licenses</value>
+  <data name="Company-Settings-CanActivateLicenses" xml:space="preserve">
+    <value>#Can activate Licenses</value>
   </data>
-  <data name="Customer-Settings-CanActivateMachines" xml:space="preserve">
-    <value>##Can activate Machines</value>
+  <data name="Company-Settings-CanActivateMachines" xml:space="preserve">
+    <value>#Can activate Machines</value>
   </data>
-  <data name="Customer-Settings-CanDeactivateLicenses" xml:space="preserve">
-    <value>##Can deactivate Licenses</value>
+  <data name="Company-Settings-CanDeactivateLicenses" xml:space="preserve">
+    <value>#Can deactivate Licenses</value>
   </data>
-  <data name="Customer-Settings-CanDeactivateMachines" xml:space="preserve">
-    <value>##Can deactivate Machines</value>
+  <data name="Company-Settings-CanDeactivateMachines" xml:space="preserve">
+    <value>#Can deactivate Machines</value>
   </data>
-  <data name="Customer-Settings-CanDeleteMachines" xml:space="preserve">
-    <value>##Can delete Machines</value>
+  <data name="Company-Settings-CanDeleteMachines" xml:space="preserve">
+    <value>#Can delete Machines</value>
   </data>
-  <data name="Customer-Settings-CreateActiveLicenses" xml:space="preserve">
-    <value>##Create new Licenses activated by default</value>
+  <data name="Company-Settings-CreateActiveLicenses" xml:space="preserve">
+    <value>#Create new Licenses activated by default</value>
   </data>
-  <data name="Customer-Settings-MaxActiveLicensesCount" xml:space="preserve">
-    <value>##Maximum active Licenses</value>
+  <data name="Company-Settings-MaxActiveLicensesCount" xml:space="preserve">
+    <value>#Maximum active Licenses</value>
   </data>
-  <data name="Customer-Settings-MaxTotalLicensesCount" xml:space="preserve">
-    <value>##Maximum total Licenses</value>
+  <data name="Company-Settings-MaxTotalLicensesCount" xml:space="preserve">
+    <value>#Maximum total Licenses</value>
   </data>
-  <data name="Customer-Settings-NotificationsEmail" xml:space="preserve">
-    <value>##Email for notifications</value>
+  <data name="Company-Settings-NotificationsEmail" xml:space="preserve">
+    <value>#Email for notifications</value>
   </data>
-  <data name="Customer-Settings-ReceiveNotifications" xml:space="preserve">
-    <value>##Want to receive notifications</value>
+  <data name="Company-Settings-ReceiveNotifications" xml:space="preserve">
+    <value>#Want to receive notifications</value>
   </data>
-  <data name="Customer_Settings_CanDeleteLicenses" xml:space="preserve">
-    <value>##Can delete Licenses</value>
+  <data name="CompanyUser-IsManager" xml:space="preserve">
+    <value>#Manager</value>
+  </data>
+  <data name="Company_Settings_CanDeleteLicenses" xml:space="preserve">
+    <value>#Can delete Licenses</value>
+  </data>
+  <data name="Id" xml:space="preserve">
+    <value>#ID</value>
+  </data>
+  <data name="User-2FAEnabled" xml:space="preserve">
+    <value>#Two-factor authentication</value>
+  </data>
+  <data name="User-Companies" xml:space="preserve">
+    <value>#Companies</value>
+  </data>
+  <data name="User-Email" xml:space="preserve">
+    <value>#Email address</value>
+  </data>
+  <data name="User-EmailConfirmed" xml:space="preserve">
+    <value>#Email confirmed</value>
+  </data>
+  <data name="User-EulaAccepted" xml:space="preserve">
+    <value>#EULA</value>
+  </data>
+  <data name="User-GdprAccepted" xml:space="preserve">
+    <value>#GDPR</value>
+  </data>
+  <data name="User-LockoutEnabled" xml:space="preserve">
+    <value>#Is locked</value>
+  </data>
+  <data name="User-LockoutEnd" xml:space="preserve">
+    <value>#Locked until</value>
+  </data>
+  <data name="User-Name" xml:space="preserve">
+    <value>#Name</value>
+  </data>
+  <data name="User-Phone" xml:space="preserve">
+    <value>#Phone number</value>
+  </data>
+  <data name="User-PhoneConfirmed" xml:space="preserve">
+    <value>#Phone confirmed</value>
   </data>
 </root>
