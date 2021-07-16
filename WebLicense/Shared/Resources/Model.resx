@@ -156,6 +156,9 @@
   <data name="Company-Settings-ReceiveNotifications" xml:space="preserve">
     <value>#Want to receive notifications</value>
   </data>
+  <data name="CompanyUser-IsInvite" xml:space="preserve">
+    <value>#Invite</value>
+  </data>
   <data name="CompanyUser-IsManager" xml:space="preserve">
     <value>#Manager</value>
   </data>

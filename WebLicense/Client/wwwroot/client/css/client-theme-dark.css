@@ -113,6 +113,11 @@ html, body {
     border-color: var(--gray63) !important;
     background-color: var(--gray42) !important;
 }
+/* - footer */
+.rz-datatable-tfoot td, .rz-grid-table tfoot td {
+    background-color: var(--gray10) !important;
+    color: var(--grayE0) !important;
+}
 /* - data */
 .rz-datatable-even > td {
     background-color: var(--gray33) !important;

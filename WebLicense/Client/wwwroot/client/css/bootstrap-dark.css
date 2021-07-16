@@ -27,6 +27,8 @@
     --form-fg-active: #010203;
     --form-bg-disabled: #757575;
     --form-bg-group: #B9BCBF;
+    --modal-bg: #303050;
+    --modal-border: #606090;
 }
 
 /*#region !-- Texts -------------------------------------------------*/
@@ -439,8 +441,21 @@
 }
 /*#endregion*/
 
-/*#region !--  ------------------------------------------------------*/
+/*#region !-- Modals ------------------------------------------------------*/
+.modal-content {
+    background-color: var(--modal-bg) !important;
+    border-color: var(--modal-border) !important;
+}
+.modal-header {
+    border-bottom-color: var(--modal-border) !important;
+    padding: .5rem .75rem !important;
+}
+.modal-footer {
+    border-top-color: var(--modal-border) !important;
+    padding: .5rem .5rem !important;
+}
 /*#endregion*/
+
 /*#region !--  ------------------------------------------------------*/
 /*#endregion*/
 /*#region !--  ------------------------------------------------------*/

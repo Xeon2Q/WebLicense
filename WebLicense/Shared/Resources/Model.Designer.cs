@@ -187,6 +187,15 @@ namespace WebLicense.Shared.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to #Invite.
+        /// </summary>
+        public static string CompanyUser_IsInvite {
+            get {
+                return ResourceManager.GetString("CompanyUser-IsInvite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to #Manager.
         /// </summary>
         public static string CompanyUser_IsManager {

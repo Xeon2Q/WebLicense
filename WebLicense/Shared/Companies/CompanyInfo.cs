@@ -23,7 +23,7 @@ namespace WebLicense.Shared.Companies
 
         public CompanySettingsInfo Settings { get; set; }
 
-        public ICollection<CompanyUserInfo> Users { get; set; }
+        public IList<CompanyUserInfo> Users { get; set; }
 
         #region C-tor
 

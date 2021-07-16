@@ -300,30 +300,50 @@ namespace WebLicense.Access.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 9223372036854775807L, "e4bc0265-8574-4b82-ae30-ce000f7c1e0f", "Admin", "ADMIN" });
+            migrationBuilder.CreateTable(
+                name: "CompanyUserInvites",
+                columns: table => new
+                {
+                    CompanyId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Email = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
+                    Code = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Created = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CompanyUserInvites", x => new { x.CompanyId, x.Email });
+                    table.ForeignKey(
+                        name: "FK_CompanyUserInvites_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 9223372036854775806L, "e85ce8bd-b449-4197-9031-d783bb56d8d5", "Customer Admin", "CUSTOMER ADMIN" });
+                values: new object[] { 9223372036854775807L, "f70e5df6-a4f7-4b3d-a409-8b67b19f2fe4", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 9223372036854775805L, "db1486f4-d9f9-49c0-8e32-9a1bbf2cc38c", "Customer Manager", "CUSTOMER MANAGER" });
+                values: new object[] { 9223372036854775806L, "70fc5c3e-d918-4ea3-b88f-b56edbc20a28", "Customer Admin", "CUSTOMER ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 9223372036854775804L, "fdd727e1-a966-4878-b10e-8311a1967b04", "Customer User", "CUSTOMER USER" });
+                values: new object[] { 9223372036854775805L, "7134b0cd-7565-42f9-85b7-0c030b6342a4", "Customer Manager", "CUSTOMER MANAGER" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[] { 9223372036854775804L, "613b8f88-d2bb-49a7-87fd-3c0de732d136", "Customer User", "CUSTOMER USER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "EulaAccepted", "GdprAccepted", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { 9223372036854775807L, 0, "6658e20b-7c8e-4c9c-ac80-ca4ef9c48383", "admin-one@weblicense.com", true, true, true, false, null, "ADMIN-ONE@WEBLICENSE.COM", "ADMINISTRATOR", "AQAAAAEAACcQAAAAEElHx+Iv/sRqXJ/WwFJ9njFC6Vnkktk//H3tS9t2AiO2YwRkWpH0lmd7JVwcfdgI3A==", null, true, "E4BDC2E37EEF4984A7C1F6700D722A79A6049D5DF54846F0A87639F2DA047A6EFEB2E5279A804A869FEBD62434413B22", false, "Administrator" });
+                values: new object[] { 9223372036854775807L, 0, "1a0c61d2-bf70-49a7-8ed4-c08b9aa828cc", "admin-one@weblicense.com", true, true, true, false, null, "ADMIN-ONE@WEBLICENSE.COM", "ADMINISTRATOR", "AQAAAAEAACcQAAAAEGaD+ffKpL1CNqRmqzD2N/q+2HPSaMkU+apmTy6x66azxStK/QtpZg4ys3Nn01V1Yw==", null, true, "B5196464B29041C4B8E2460B0E9DEC51CCAB97C645244B6F85D7EE911AFD40D95514D5841AEC404EB17DECEA681C04DF", false, "Administrator" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoleClaims",
@@ -535,6 +555,27 @@ namespace WebLicense.Access.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CompanyUserInvites_Code",
+                table: "CompanyUserInvites",
+                column: "Code",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CompanyUserInvites_CompanyId",
+                table: "CompanyUserInvites",
+                column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CompanyUserInvites_Created",
+                table: "CompanyUserInvites",
+                column: "Created");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CompanyUserInvites_Email",
+                table: "CompanyUserInvites",
+                column: "Email");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_DeviceCodes_DeviceCode",
                 table: "DeviceCodes",
                 column: "DeviceCode",
@@ -586,6 +627,9 @@ namespace WebLicense.Access.Migrations
 
             migrationBuilder.DropTable(
                 name: "CompanyUser");
+
+            migrationBuilder.DropTable(
+                name: "CompanyUserInvites");
 
             migrationBuilder.DropTable(
                 name: "DeviceCodes");

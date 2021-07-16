@@ -31,6 +31,7 @@ namespace WebLicense.Core.Models.Companies
 
         public ICollection<User> Users { get; set; }
         public ICollection<CompanyUser> CompanyUsers { get; set; }
+        public ICollection<CompanyUserInvite> CompanyUserInvites { get; set; }
 
         public ICollection<CompanyUpdate> Updates { get; set; }
     }

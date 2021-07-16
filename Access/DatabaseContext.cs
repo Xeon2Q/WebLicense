@@ -40,6 +40,7 @@ namespace WebLicense.Access
         public DbSet<Company> Companies { get; set; }
         public DbSet<CompanySettings> CompanySettings { get; set; }
         public DbSet<CompanyUpdate> CompanyUpdates { get; set; }
+        public DbSet<CompanyUserInvite> CompanyUserInvites { get; set; }
 
         //public DbSet<Log> Logs { get; set; }
 

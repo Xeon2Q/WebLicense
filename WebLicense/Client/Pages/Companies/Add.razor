@@ -1,8 +1,7 @@
 ﻿@page "/companies/add"
 @using WebLicense.Client.Components.Companies;
-@inject IStringLocalizer<UI> LocUI
 
 <h1>Add new Customer</h1>
 <hr class="my-3" />
 
-<EditCompany @bind-Data="@Data" @bind-Data:event="DataChanged" OnSave="Save" IsAdd="true" SubmitButtonClass="btn-success mt-3" SubmitButtonText="@LocUI["Submit"]"></EditCompany>
+<EditCompany @bind-Data="@Data" @bind-Data:event="DataChanged" OnSave="Save" IsAdd="true" SubmitButtonClass="btn-success mt-5" SubmitButtonText="@UI.Submit"></EditCompany>

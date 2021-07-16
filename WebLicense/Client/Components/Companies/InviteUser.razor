@@ -1,0 +1,26 @@
+﻿<EditForm EditContext="Context">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+    <div class="modal fade" id="@Id" tabindex="-1" aria-labelledby="invite-user-title-label" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="invite-user-title-label">Invite user to Company @(string.IsNullOrWhiteSpace(CompanyName) ? "" : $"\"{CompanyName}\"")</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <XInputFloatingText @bind-Value="@Email"></XInputFloatingText>
+                </div>
+                <div class="modal-footer">
+                    @if (Context.Validate())
+                    {
+                        <button type="submit" class="btn btn-sm btn-success min-w-100px">Invite</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-sm btn-light min-w-100px" data-bs-dismiss="modal">Close</button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</EditForm>

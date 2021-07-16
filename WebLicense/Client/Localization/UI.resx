@@ -117,16 +117,31 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Customer-Settings-Licenses" xml:space="preserve">
+  <data name="Actions" xml:space="preserve">
+    <value>#Actions</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>#Add</value>
+  </data>
+  <data name="Company-Settings-Licenses" xml:space="preserve">
     <value>Licenses settings</value>
   </data>
-  <data name="Customer-Settings-Notifications" xml:space="preserve">
+  <data name="Company-Settings-Notifications" xml:space="preserve">
     <value>Notifications settings</value>
   </data>
+  <data name="Delete" xml:space="preserve">
+    <value>#Delete</value>
+  </data>
+  <data name="Invite" xml:space="preserve">
+    <value>#Invite</value>
+  </data>
+  <data name="InviteUser" xml:space="preserve">
+    <value>#Invite user...</value>
+  </data>
   <data name="Save" xml:space="preserve">
-    <value>##Save</value>
+    <value>#Save</value>
   </data>
   <data name="Submit" xml:space="preserve">
-    <value>##Submit</value>
+    <value>#Submit</value>
   </data>
 </root>

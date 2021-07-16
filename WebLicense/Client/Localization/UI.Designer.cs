@@ -61,25 +61,70 @@ namespace WebLicense.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to #Actions.
+        /// </summary>
+        public static string Actions {
+            get {
+                return ResourceManager.GetString("Actions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #Add.
+        /// </summary>
+        public static string Add {
+            get {
+                return ResourceManager.GetString("Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Licenses settings.
         /// </summary>
-        public static string Customer_Settings_Licenses {
+        public static string Company_Settings_Licenses {
             get {
-                return ResourceManager.GetString("Customer-Settings-Licenses", resourceCulture);
+                return ResourceManager.GetString("Company-Settings-Licenses", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Notifications settings.
         /// </summary>
-        public static string Customer_Settings_Notifications {
+        public static string Company_Settings_Notifications {
             get {
-                return ResourceManager.GetString("Customer-Settings-Notifications", resourceCulture);
+                return ResourceManager.GetString("Company-Settings-Notifications", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ##Save.
+        ///   Looks up a localized string similar to #Delete.
+        /// </summary>
+        public static string Delete {
+            get {
+                return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #Invite.
+        /// </summary>
+        public static string Invite {
+            get {
+                return ResourceManager.GetString("Invite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #Invite user....
+        /// </summary>
+        public static string InviteUser {
+            get {
+                return ResourceManager.GetString("InviteUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #Save.
         /// </summary>
         public static string Save {
             get {
@@ -88,7 +133,7 @@ namespace WebLicense.Client.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ##Submit.
+        ///   Looks up a localized string similar to #Submit.
         /// </summary>
         public static string Submit {
             get {

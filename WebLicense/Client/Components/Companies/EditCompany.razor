@@ -1,12 +1,10 @@
 ﻿@using WebLicense.Shared.Companies
 @using WebLicense.Shared.Resources
-@inject IStringLocalizer<Properties> LocP
-@inject IStringLocalizer<UI> LocUI
 
 <EditForm Model="@Data" OnValidSubmit="SaveCallback" OnInvalidSubmit="InvalidCallback">
     <DataAnnotationsValidator></DataAnnotationsValidator>
 
-    <ul class="nav nav-pills mb-5" id="pills-tab" role="tablist">
+    <ul class="nav nav-pills mb-4" id="pills-tab" role="tablist">
         <li class="nav-item me-2" role="presentation">
             <button class="nav-link active" id="pills-main-tab" data-bs-toggle="pill" data-bs-target="#pills-main" type="button" role="tab" aria-controls="pills-main" aria-selected="true">Main</button>
         </li>
@@ -33,7 +31,7 @@
         @if (!IsAdd)
         {
             <div class="tab-pane fade col-8 col-xxl-5 min-w-600px" id="pills-settings" role="tabpanel" aria-labelledby="pills-settings-tab">
-                <h4 class="text-info">@LocUI["Customer-Settings-Notifications"]</h4>
+                <h4 class="text-info">@UI.Company_Settings_Notifications</h4>
                 <div class="row g-0">
                     <XInputText CssClass2="mb-3" @bind-Value="Data.Settings.NotificationsEmail"></XInputText>
                     <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.ReceiveNotifications" IsLarge="true"></XInputCheckBox>
@@ -41,7 +39,7 @@
 
                 <hr class="my-2" />
 
-                <h4 class="text-info mt-3">@LocUI["Customer-Settings-Licenses"]</h4>
+                <h4 class="text-info mt-3">@UI.Company_Settings_Licenses</h4>
                 <div class="row mb-4">
                     <XInputNumber CssClass2="col-6 pe-2" @bind-Value="Data.Settings.MaxActiveLicensesCount"></XInputNumber>
                     <XInputNumber CssClass2="col-6 ps-2" @bind-Value="Data.Settings.MaxTotalLicensesCount"></XInputNumber>
@@ -59,21 +57,43 @@
         }
 
         <div class="tab-pane fade" id="pills-users" role="tabpanel" aria-labelledby="pills-users-tab">
+            <div class="grid-toolbar">
+                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#inviteuser-form">@UI.InviteUser</button>
+                <InviteUser Id="inviteuser-form" CompanyName="@Data.Name" Email="" OnSubmit="AddInvitedUser"></InviteUser>
+            </div>
+
             <RadzenDataGrid TItem="CompanyUserInfo" Data="@Data.Users"
-                            AllowPaging="false" 
+                            AllowPaging="false"
                             AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" LogicalFilterOperator="LogicalFilterOperator.Or" FilterMode="FilterMode.Advanced"
                             AllowSorting="true" AllowMultiColumnSorting="true">
                 <Columns>
-                    <RadzenDataGridColumn TItem="CompanyUserInfo" Property="@nameof(CompanyUserInfo.Id)" Filterable="false" Title="@Model.Id" Width="150px" TextAlign="TextAlign.Center" SortOrder="SortOrder.Ascending" />
+                    <RadzenDataGridColumn TItem="CompanyUserInfo" Filterable="false" Sortable="false" Title="@Model.Id" Width="100px" TextAlign="TextAlign.Center">
+                        <Template Context="item">
+                            @(1 + Data.Users.IndexOf(item))
+                        </Template>
+                    </RadzenDataGridColumn>
                     <RadzenDataGridColumn TItem="CompanyUserInfo" Property="@nameof(CompanyUserInfo.IsManager)" Title="@Model.CompanyUser_IsManager" Width="150px" TextAlign="TextAlign.Center">
-                        <Template Context="cui">
-                            <button class="btn btn-link no-box-shadow @(cui.IsManager == true ? "text-success" : "")" @onclick="@(q => cui.IsManager = cui.IsManager != true)">
-                                <i class="bi @(cui.IsManager == true ? "bi-check-circle" : "bi-x")"></i>
+                        <Template Context="item">
+                            <button class="btn btn-link no-box-shadow @(item.IsManager == true ? "text-success" : "")" @onclick="@(() => ChangeUser(item.Id, !item.IsManager))">
+                                <i class="bi @(item.IsManager == true ? "bi-check-circle" : "bi-x")"></i>
                             </button>
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="CompanyUserInfo" Property="@nameof(CompanyUserInfo.IsInvite)" Title="@Model.CompanyUser_IsInvite" Width="150px" TextAlign="TextAlign.Center">
+                        <Template Context="item">
+                            @if (item.IsInvite == true)
+                            {
+                                <i class="bi bi-check-circle text-info"></i>
+                            }
                         </Template>
                     </RadzenDataGridColumn>
                     <RadzenDataGridColumn TItem="CompanyUserInfo" Property="@nameof(CompanyUserInfo.Name)" Title="@Model.User_Name" />
                     <RadzenDataGridColumn TItem="CompanyUserInfo" Property="@nameof(CompanyUserInfo.Email)" Title="@Model.User_Email" />
+                    <RadzenDataGridColumn TItem="CompanyUserInfo" Filterable="false" Sortable="false" Title="@UI.Actions" Width="200px" TextAlign="TextAlign.Center">
+                        <Template Context="item">
+                            <button class="btn btn-warning btn-sm" @onclick="@(() => DeleteUser(item))">@UI.Delete</button>
+                        </Template>
+                    </RadzenDataGridColumn>
                 </Columns>
             </RadzenDataGrid>
         </div>

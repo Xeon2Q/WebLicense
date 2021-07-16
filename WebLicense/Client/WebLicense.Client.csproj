@@ -29,11 +29,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Localization\Properties.Designer.cs">
-	    <DesignTime>True</DesignTime>
-	    <AutoGen>True</AutoGen>
-	    <DependentUpon>Properties.resx</DependentUpon>
-	  </Compile>
 	  <Compile Update="Localization\UI.Designer.cs">
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>
@@ -48,10 +43,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Update="Localization\Properties.resx">
-	    <Generator>PublicResXFileCodeGenerator</Generator>
-	    <LastGenOutput>Properties.Designer.cs</LastGenOutput>
-	  </EmbeddedResource>
 	  <EmbeddedResource Update="Localization\UI.resx">
 	    <Generator>PublicResXFileCodeGenerator</Generator>
 	    <LastGenOutput>UI.Designer.cs</LastGenOutput>
