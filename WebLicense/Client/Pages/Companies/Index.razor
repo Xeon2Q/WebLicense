@@ -14,8 +14,8 @@
                 AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" LogicalFilterOperator="LogicalFilterOperator.Or" FilterMode="FilterMode.Advanced"
                 AllowSorting="true" AllowMultiColumnSorting="true">
     <Columns>
-        <RadzenDataGridColumn TItem="CompanyInfo" Property="@nameof(CompanyInfo.Id)" Filterable="false" Title="ID" Width="50px" TextAlign="TextAlign.Center" SortOrder="SortOrder.Ascending"/>
-        <RadzenDataGridColumn TItem="CompanyInfo" Property="@nameof(CompanyInfo.Name)" Title="Name"/>
+        <RadzenDataGridColumn TItem="CompanyInfo" Property="@nameof(CompanyInfo.Id)" Filterable="false" Sortable="false" Title="ID" Width="50px" TextAlign="TextAlign.Center"/>
+        <RadzenDataGridColumn TItem="CompanyInfo" Property="@nameof(CompanyInfo.Name)" Title="Name" SortOrder="SortOrder.Ascending"/>
         <RadzenDataGridColumn TItem="CompanyInfo" Property="@nameof(CompanyInfo.Code)" Title="Code"/>
         <RadzenDataGridColumn TItem="CompanyInfo" Property="@nameof(CompanyInfo.ReferenceId)" Title="Reference ID"/>
     </Columns>

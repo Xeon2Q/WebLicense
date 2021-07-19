@@ -79,6 +79,15 @@ namespace WebLicense.Client.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to #Close.
+        /// </summary>
+        public static string Close {
+            get {
+                return ResourceManager.GetString("Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Licenses settings.
         /// </summary>
         public static string Company_Settings_Licenses {

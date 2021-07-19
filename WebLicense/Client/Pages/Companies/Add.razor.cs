@@ -27,7 +27,7 @@ namespace WebLicense.Client.Pages.Companies
         public CompanyInfo Data { get; set; } = new();
 
         [Inject]
-        public JsLog Log { get; set; }
+        public JsUtils Js { get; set; }
 
         #endregion
 
@@ -69,7 +69,7 @@ namespace WebLicense.Client.Pages.Companies
             }
             catch (Exception e)
             {
-                await Log.LogAsync(e.Message);
+                await Js.LogAsync(e.Message);
             }
         }
 

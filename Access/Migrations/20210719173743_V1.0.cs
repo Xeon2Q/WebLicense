@@ -306,8 +306,10 @@ namespace WebLicense.Access.Migrations
                 {
                     CompanyId = table.Column<int>(type: "INTEGER", nullable: false),
                     Email = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
+                    IsManager = table.Column<bool>(type: "INTEGER", nullable: false),
                     Code = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    Created = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    Created = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Processed = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -323,27 +325,27 @@ namespace WebLicense.Access.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 9223372036854775807L, "f70e5df6-a4f7-4b3d-a409-8b67b19f2fe4", "Admin", "ADMIN" });
+                values: new object[] { 9223372036854775807L, "5ea55469-55b3-4461-94ef-53d91961b471", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 9223372036854775806L, "70fc5c3e-d918-4ea3-b88f-b56edbc20a28", "Customer Admin", "CUSTOMER ADMIN" });
+                values: new object[] { 9223372036854775806L, "1ebb74ca-e9ad-4a97-8647-598a66216b35", "Customer Admin", "CUSTOMER ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 9223372036854775805L, "7134b0cd-7565-42f9-85b7-0c030b6342a4", "Customer Manager", "CUSTOMER MANAGER" });
+                values: new object[] { 9223372036854775805L, "bc437f9a-0bd6-4752-bf58-2642f5586a53", "Customer Manager", "CUSTOMER MANAGER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 9223372036854775804L, "613b8f88-d2bb-49a7-87fd-3c0de732d136", "Customer User", "CUSTOMER USER" });
+                values: new object[] { 9223372036854775804L, "704d1268-9af8-4288-a39b-bfc3617d3c01", "Customer User", "CUSTOMER USER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "EulaAccepted", "GdprAccepted", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { 9223372036854775807L, 0, "1a0c61d2-bf70-49a7-8ed4-c08b9aa828cc", "admin-one@weblicense.com", true, true, true, false, null, "ADMIN-ONE@WEBLICENSE.COM", "ADMINISTRATOR", "AQAAAAEAACcQAAAAEGaD+ffKpL1CNqRmqzD2N/q+2HPSaMkU+apmTy6x66azxStK/QtpZg4ys3Nn01V1Yw==", null, true, "B5196464B29041C4B8E2460B0E9DEC51CCAB97C645244B6F85D7EE911AFD40D95514D5841AEC404EB17DECEA681C04DF", false, "Administrator" });
+                values: new object[] { 9223372036854775807L, 0, "666ad19a-941a-4ed8-bf43-4d87d06bb5ba", "admin-one@weblicense.com", true, true, true, false, null, "ADMIN-ONE@WEBLICENSE.COM", "ADMINISTRATOR", "AQAAAAEAACcQAAAAENJgMrnnLAd910zozRW4GFJnQV0FuqfhRAeXMDrYvC6loWIOifaS5KsRLfH1yyzSCw==", null, true, "366B1DB39A3B42A58B19F837BFF3A7FAD542C42C78DC41A9834E50F21DF757E95DB4C60A710A489F94ED5B84F3087A4E", false, "Administrator" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoleClaims",
@@ -574,6 +576,11 @@ namespace WebLicense.Access.Migrations
                 name: "IX_CompanyUserInvites_Email",
                 table: "CompanyUserInvites",
                 column: "Email");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CompanyUserInvites_Processed",
+                table: "CompanyUserInvites",
+                column: "Processed");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DeviceCodes_DeviceCode",

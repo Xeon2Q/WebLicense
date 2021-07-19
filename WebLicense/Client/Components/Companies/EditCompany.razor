@@ -59,7 +59,7 @@
         <div class="tab-pane fade" id="pills-users" role="tabpanel" aria-labelledby="pills-users-tab">
             <div class="grid-toolbar">
                 <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#inviteuser-form">@UI.InviteUser</button>
-                <InviteUser Id="inviteuser-form" CompanyName="@Data.Name" Email="" OnSubmit="AddInvitedUser"></InviteUser>
+                <InviteUser Id="inviteuser-form" CompanyName="@Data.Name" OnSubmit="AddInvitedUser"></InviteUser>
             </div>
 
             <RadzenDataGrid TItem="CompanyUserInfo" Data="@Data.Users"
@@ -74,7 +74,7 @@
                     </RadzenDataGridColumn>
                     <RadzenDataGridColumn TItem="CompanyUserInfo" Property="@nameof(CompanyUserInfo.IsManager)" Title="@Model.CompanyUser_IsManager" Width="150px" TextAlign="TextAlign.Center">
                         <Template Context="item">
-                            <button class="btn btn-link no-box-shadow @(item.IsManager == true ? "text-success" : "")" @onclick="@(() => ChangeUser(item.Id, !item.IsManager))">
+                            <button type="button" class="btn btn-link no-box-shadow @(item.IsManager == true ? "text-success" : "")" @onclick="@(() => ChangeUser(item.Id, !item.IsManager))">
                                 <i class="bi @(item.IsManager == true ? "bi-check-circle" : "bi-x")"></i>
                             </button>
                         </Template>
@@ -87,11 +87,11 @@
                             }
                         </Template>
                     </RadzenDataGridColumn>
-                    <RadzenDataGridColumn TItem="CompanyUserInfo" Property="@nameof(CompanyUserInfo.Name)" Title="@Model.User_Name" />
+                    <RadzenDataGridColumn TItem="CompanyUserInfo" Property="@nameof(CompanyUserInfo.Name)" Title="@Model.User_Name" SortOrder="SortOrder.Ascending" />
                     <RadzenDataGridColumn TItem="CompanyUserInfo" Property="@nameof(CompanyUserInfo.Email)" Title="@Model.User_Email" />
                     <RadzenDataGridColumn TItem="CompanyUserInfo" Filterable="false" Sortable="false" Title="@UI.Actions" Width="200px" TextAlign="TextAlign.Center">
                         <Template Context="item">
-                            <button class="btn btn-warning btn-sm" @onclick="@(() => DeleteUser(item))">@UI.Delete</button>
+                            <button type="button" class="btn btn-warning btn-sm" @onclick="@(() => DeleteUser(item))">@UI.Delete</button>
                         </Template>
                     </RadzenDataGridColumn>
                 </Columns>
@@ -99,5 +99,5 @@
         </div>
     </div>
     
-    <input type="submit" class="btn @SubmitButtonClass" value="@SubmitButtonText"/>
+    <button type="submit" class="btn @SubmitButtonClass">@SubmitButtonText</button>
 </EditForm>

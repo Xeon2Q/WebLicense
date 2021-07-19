@@ -1,24 +1,30 @@
-﻿<EditForm EditContext="Context">
+﻿<EditForm EditContext="Context" OnValidSubmit="ValidSubmit" OnInvalidSubmit="InvalidSubmit">
     <DataAnnotationsValidator></DataAnnotationsValidator>
     <div class="modal fade" id="@Id" tabindex="-1" aria-labelledby="invite-user-title-label" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="invite-user-title-label">Invite user to Company @(string.IsNullOrWhiteSpace(CompanyName) ? "" : $"\"{CompanyName}\"")</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="@UI.Close"></button>
                 </div>
                 <div class="modal-body">
-                    <XInputFloatingText @bind-Value="@Email"></XInputFloatingText>
+                    <XInputFloatingText @bind-Value="@Model.Email"></XInputFloatingText>
                 </div>
                 <div class="modal-footer">
-                    @if (Context.Validate())
-                    {
-                        <button type="submit" class="btn btn-sm btn-success min-w-100px">Invite</button>
-                    }
-                    else
-                    {
-                        <button type="button" class="btn btn-sm btn-light min-w-100px" data-bs-dismiss="modal">Close</button>
-                    }
+                    <div class="container">
+                        <div class="row">
+                            <div class="col">
+                                @if (!Context.Validate())
+                                {
+                                    <label class="text-warning mt-1">@Context.GetValidationMessages().FirstOrDefault()?.Trim()</label>
+                                }
+                            </div>
+                            <div class="col-auto">
+                                <button type="submit" class="btn btn-sm min-w-100px btn-success @(Context.Validate() ? "" : "disabled")">@UI.Invite</button>
+                                <button type="button" data-bs-dismiss="modal" class="btn btn-sm min-w-100px btn-light">@UI.Close</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

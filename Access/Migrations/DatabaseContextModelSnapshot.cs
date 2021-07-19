@@ -285,6 +285,12 @@ namespace WebLicense.Access.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("IsManager")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Processed")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("CompanyId", "Email");
 
                     b.HasIndex("Code")
@@ -295,6 +301,8 @@ namespace WebLicense.Access.Migrations
                     b.HasIndex("Created");
 
                     b.HasIndex("Email");
+
+                    b.HasIndex("Processed");
 
                     b.ToTable("CompanyUserInvites");
                 });
@@ -329,28 +337,28 @@ namespace WebLicense.Access.Migrations
                         new
                         {
                             Id = 9223372036854775807L,
-                            ConcurrencyStamp = "f70e5df6-a4f7-4b3d-a409-8b67b19f2fe4",
+                            ConcurrencyStamp = "5ea55469-55b3-4461-94ef-53d91961b471",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 9223372036854775806L,
-                            ConcurrencyStamp = "70fc5c3e-d918-4ea3-b88f-b56edbc20a28",
+                            ConcurrencyStamp = "1ebb74ca-e9ad-4a97-8647-598a66216b35",
                             Name = "Customer Admin",
                             NormalizedName = "CUSTOMER ADMIN"
                         },
                         new
                         {
                             Id = 9223372036854775805L,
-                            ConcurrencyStamp = "7134b0cd-7565-42f9-85b7-0c030b6342a4",
+                            ConcurrencyStamp = "bc437f9a-0bd6-4752-bf58-2642f5586a53",
                             Name = "Customer Manager",
                             NormalizedName = "CUSTOMER MANAGER"
                         },
                         new
                         {
                             Id = 9223372036854775804L,
-                            ConcurrencyStamp = "613b8f88-d2bb-49a7-87fd-3c0de732d136",
+                            ConcurrencyStamp = "704d1268-9af8-4288-a39b-bfc3617d3c01",
                             Name = "Customer User",
                             NormalizedName = "CUSTOMER USER"
                         });
@@ -623,7 +631,7 @@ namespace WebLicense.Access.Migrations
                         {
                             Id = 9223372036854775807L,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "1a0c61d2-bf70-49a7-8ed4-c08b9aa828cc",
+                            ConcurrencyStamp = "666ad19a-941a-4ed8-bf43-4d87d06bb5ba",
                             Email = "admin-one@weblicense.com",
                             EmailConfirmed = true,
                             EulaAccepted = true,
@@ -631,9 +639,9 @@ namespace WebLicense.Access.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN-ONE@WEBLICENSE.COM",
                             NormalizedUserName = "ADMINISTRATOR",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGaD+ffKpL1CNqRmqzD2N/q+2HPSaMkU+apmTy6x66azxStK/QtpZg4ys3Nn01V1Yw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAENJgMrnnLAd910zozRW4GFJnQV0FuqfhRAeXMDrYvC6loWIOifaS5KsRLfH1yyzSCw==",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "B5196464B29041C4B8E2460B0E9DEC51CCAB97C645244B6F85D7EE911AFD40D95514D5841AEC404EB17DECEA681C04DF",
+                            SecurityStamp = "366B1DB39A3B42A58B19F837BFF3A7FAD542C42C78DC41A9834E50F21DF757E95DB4C60A710A489F94ED5B84F3087A4E",
                             TwoFactorEnabled = false,
                             UserName = "Administrator"
                         });
