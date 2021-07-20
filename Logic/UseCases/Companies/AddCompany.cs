@@ -62,7 +62,7 @@ namespace WebLicense.Logic.UseCases.Companies
                 var result = await db.Companies.AddAsync(company, cancellationToken);
                 await db.SaveChangesAsync(cancellationToken);
 
-                return await sender.Send(new GetCompany(result.Entity.Id), cancellationToken);
+                return await sender.Send(new GetCompany(result.Entity.Id, 0), cancellationToken);
             }
             catch (Exception e)
             {

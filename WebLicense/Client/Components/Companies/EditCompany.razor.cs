@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using WebLicense.Shared.Companies;
@@ -47,14 +48,13 @@ namespace WebLicense.Client.Components.Companies
             Data.Users = Data.Users.Where(q => q != item).ToList();
         }
 
-        public void ChangeUser(long? id, bool? manager)
+        public void ChangeUser(string email, bool? manager)
         {
-            if (Data?.Users == null || id == null) return;
+            if (Data?.Users == null || !manager.HasValue || string.IsNullOrWhiteSpace(email)) return;
 
-            var user = Data.Users.FirstOrDefault(q => q.Id == id.Value);
-            if (user == null) return;
-
-            if (manager.HasValue) user.IsManager = manager.Value;
+            var user = Data.Users.FirstOrDefault(q => string.Equals(q.Email, email, StringComparison.OrdinalIgnoreCase));
+            
+            if (user != null) user.IsManager = manager.Value;
         }
 
         public void AddInvitedUser(string email)
@@ -62,6 +62,8 @@ namespace WebLicense.Client.Components.Companies
             if (string.IsNullOrWhiteSpace(email)) return;
 
             var users = Data.Users.ToList();
+            if (users.Any(q => string.Equals(q.Email, email, StringComparison.OrdinalIgnoreCase))) return;
+
             users.Add(new CompanyUserInfo{Email = email.Trim(), Id = 0, IsInvite = true, IsManager = false, Name = string.Empty});
 
             Data.Users = users;

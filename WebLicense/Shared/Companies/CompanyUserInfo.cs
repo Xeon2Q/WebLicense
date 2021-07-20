@@ -46,7 +46,7 @@ namespace WebLicense.Shared.Companies
             Id = user.CompanyId;
             Name = null;
             Email = user.Email;
-            IsManager = false;
+            IsManager = user.IsManager;
             IsInvite = true;
         }
 

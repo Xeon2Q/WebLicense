@@ -31,28 +31,31 @@
         @if (!IsAdd)
         {
             <div class="tab-pane fade col-8 col-xxl-5 min-w-600px" id="pills-settings" role="tabpanel" aria-labelledby="pills-settings-tab">
-                <h4 class="text-info">@UI.Company_Settings_Notifications</h4>
-                <div class="row g-0">
-                    <XInputText CssClass2="mb-3" @bind-Value="Data.Settings.NotificationsEmail"></XInputText>
-                    <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.ReceiveNotifications" IsLarge="true"></XInputCheckBox>
-                </div>
+                @if (Data.Settings != null)
+                {
+                    <h4 class="text-info">@UI.Company_Settings_Notifications</h4>
+                    <div class="row g-0">
+                        <XInputText CssClass2="mb-3" @bind-Value="Data.Settings.NotificationsEmail"></XInputText>
+                        <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.ReceiveNotifications" IsLarge="true"></XInputCheckBox>
+                    </div>
 
-                <hr class="my-2" />
+                    <hr class="my-2"/>
 
-                <h4 class="text-info mt-3">@UI.Company_Settings_Licenses</h4>
-                <div class="row mb-4">
-                    <XInputNumber CssClass2="col-6 pe-2" @bind-Value="Data.Settings.MaxActiveLicensesCount"></XInputNumber>
-                    <XInputNumber CssClass2="col-6 ps-2" @bind-Value="Data.Settings.MaxTotalLicensesCount"></XInputNumber>
-                </div>
-                <div class="row g-0">
-                    <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CreateActiveLicenses" IsLarge="true"></XInputCheckBox>
-                    <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanActivateLicenses" IsLarge="true"></XInputCheckBox>
-                    <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanDeactivateLicenses" IsLarge="true"></XInputCheckBox>
-                    <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanDeleteLicenses" IsLarge="true"></XInputCheckBox>
-                    <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanActivateMachines" IsLarge="true"></XInputCheckBox>
-                    <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanDeactivateMachines" IsLarge="true"></XInputCheckBox>
-                    <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanDeleteMachines" IsLarge="true"></XInputCheckBox>
-                </div>
+                    <h4 class="text-info mt-3">@UI.Company_Settings_Licenses</h4>
+                    <div class="row mb-4">
+                        <XInputNumber CssClass2="col-6 pe-2" @bind-Value="Data.Settings.MaxActiveLicensesCount"></XInputNumber>
+                        <XInputNumber CssClass2="col-6 ps-2" @bind-Value="Data.Settings.MaxTotalLicensesCount"></XInputNumber>
+                    </div>
+                    <div class="row g-0">
+                        <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CreateActiveLicenses" IsLarge="true"></XInputCheckBox>
+                        <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanActivateLicenses" IsLarge="true"></XInputCheckBox>
+                        <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanDeactivateLicenses" IsLarge="true"></XInputCheckBox>
+                        <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanDeleteLicenses" IsLarge="true"></XInputCheckBox>
+                        <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanActivateMachines" IsLarge="true"></XInputCheckBox>
+                        <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanDeactivateMachines" IsLarge="true"></XInputCheckBox>
+                        <XInputCheckBox CssClass2="mb-3" @bind-Value="@Data.Settings.CanDeleteMachines" IsLarge="true"></XInputCheckBox>
+                    </div>
+                }
             </div>
         }
 
@@ -61,11 +64,11 @@
                 <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#inviteuser-form">@UI.InviteUser</button>
                 <InviteUser Id="inviteuser-form" CompanyName="@Data.Name" OnSubmit="AddInvitedUser"></InviteUser>
             </div>
-
+            
             <RadzenDataGrid TItem="CompanyUserInfo" Data="@Data.Users"
                             AllowPaging="false"
                             AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" LogicalFilterOperator="LogicalFilterOperator.Or" FilterMode="FilterMode.Advanced"
-                            AllowSorting="true" AllowMultiColumnSorting="true">
+                            AllowSorting="true" AllowMultiColumnSorting="false">
                 <Columns>
                     <RadzenDataGridColumn TItem="CompanyUserInfo" Filterable="false" Sortable="false" Title="@Model.Id" Width="100px" TextAlign="TextAlign.Center">
                         <Template Context="item">
@@ -74,7 +77,7 @@
                     </RadzenDataGridColumn>
                     <RadzenDataGridColumn TItem="CompanyUserInfo" Property="@nameof(CompanyUserInfo.IsManager)" Title="@Model.CompanyUser_IsManager" Width="150px" TextAlign="TextAlign.Center">
                         <Template Context="item">
-                            <button type="button" class="btn btn-link no-box-shadow @(item.IsManager == true ? "text-success" : "")" @onclick="@(() => ChangeUser(item.Id, !item.IsManager))">
+                            <button type="button" class="btn btn-link no-box-shadow @(item.IsManager == true ? "text-success" : "")" @onclick="@(() => ChangeUser(item.Email, !item.IsManager))">
                                 <i class="bi @(item.IsManager == true ? "bi-check-circle" : "bi-x")"></i>
                             </button>
                         </Template>

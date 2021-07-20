@@ -45,7 +45,7 @@ namespace WebLicense.Client.Pages.Companies
                     {"sorts", args.SortsToUrlEncodedString()}
                 }.Select(q => (q.Key, q.Value)).ToArray();
 
-                var data = await Client.GetJson<ListData<CompanyInfo>>($"{Navigation.BaseUri}api/companies", parameters);
+                var data = await Client.GetJson<ListData<CompanyInfo>>($"{Navigation.BaseUri}api/companies/list", parameters);
 
                 TotalCount = data?.Total ?? 0;
                 Data = data?.Data;
@@ -56,6 +56,13 @@ namespace WebLicense.Client.Pages.Companies
             }
 
             IsLoading = false;
+        }
+
+        public void GoToEditCompany(int? id)
+        {
+            if (!id.HasValue || id < 0) return;
+
+            Navigation.NavigateTo($"/companies/edit/{id.Value}", true);
         }
 
         #endregion

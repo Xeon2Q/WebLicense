@@ -23,7 +23,7 @@ namespace WebLicense.Shared.Companies
 
         public CompanySettingsInfo Settings { get; set; }
 
-        public IList<CompanyUserInfo> Users { get; set; }
+        public List<CompanyUserInfo> Users { get; set; }
 
         #region C-tor
 
@@ -42,7 +42,11 @@ namespace WebLicense.Shared.Companies
             Logo = company.Logo;
 
             if (company.Settings != null && company.Settings.Any()) Settings = new CompanySettingsInfo(company.Settings.FirstOrDefault(q => q.CompanyId == company.Id));
-            if (company.Users != null && company.Users.Any()) Users = company.CompanyUsers.Select(q => new CompanyUserInfo(q)).ToList();
+
+            Users = new List<CompanyUserInfo>();
+
+            if (company.Users != null && company.Users.Any()) Users.AddRange(company.CompanyUsers.Select(q => new CompanyUserInfo(q)));
+            if (company.CompanyUserInvites != null && company.CompanyUserInvites.Any()) Users.AddRange(company.CompanyUserInvites.Select(q => new CompanyUserInfo(q)));
         }
 
         #endregion

@@ -9,6 +9,9 @@ namespace WebLicense.Access.Configuration
     {
         public void Configure(EntityTypeBuilder<UserRole> builder)
         {
+            builder.HasOne(q => q.Role).WithMany().HasForeignKey(q => q.RoleId);
+            builder.HasOne(q => q.User).WithMany(q => q.UserRoles).HasForeignKey(q => q.UserId);
+
             Seed(builder);
         }
 

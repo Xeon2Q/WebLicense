@@ -52,6 +52,9 @@ a, .btn-link {
 .form-switch-lg .form-check-label {
     margin-top: 0.25rem;
 }
+.form-floating > .form-control:focus ~ label, .form-floating > .form-control:not(:placeholder-shown) ~ label, .form-floating > .form-select ~ label {
+    transform: scale(.7) translateY(-.5rem) translateX(.15rem) !important;
+}
 /* bootstrap */
 
 #blazor-error-ui {

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using WebLicense.Core.Models.Companies;
 using WebLicense.Logic.Auxiliary;
 using WebLicense.Logic.UseCases.Companies;
+using WebLicense.Server.Auxiliary.Extensions;
 using WebLicense.Shared;
 using WebLicense.Shared.Companies;
 
@@ -34,6 +35,26 @@ namespace WebLicense.Server.Controllers
 
         [AllowAnonymous]
         [HttpGet]
+        [Route("{id:int}")]
+        public async Task<CompanyInfo> Get(int id)
+        {
+            try
+            {
+                var data = await sender.Send(new GetCompany(id, User.GetId<long>()));
+                data.ThrowOnFail();
+
+                return data.Data;
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+                throw;
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("list")]
         public async Task<ListData<CompanyInfo>> Get(int skip = 0, int take = 100, string filters = null, string sorts = null)
         {
             try

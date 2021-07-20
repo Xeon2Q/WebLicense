@@ -11,6 +11,7 @@ namespace WebLicense.Core.Models.Identity
         public bool GdprAccepted { get; set; }
 
         // navigation
+        public ICollection<UserRole> UserRoles { get; set; }
         public ICollection<Company> Companies { get; set; }
         public ICollection<CompanyUser> CompanyUsers { get; set; }
     }

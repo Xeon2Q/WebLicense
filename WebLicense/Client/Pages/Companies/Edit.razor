@@ -1,0 +1,7 @@
+﻿@page "/companies/edit/{Id:int}"
+@using WebLicense.Client.Components.Companies;
+
+<h1>Edit Customer "@Data.Name"</h1>
+<hr class="my-3" />
+
+<EditCompany @bind-Data="@Data" @bind-Data:event="DataChanged" OnSave="Save" IsAdd="false" SubmitButtonClass="btn-success mt-5" SubmitButtonText="@UI.Submit"></EditCompany>
