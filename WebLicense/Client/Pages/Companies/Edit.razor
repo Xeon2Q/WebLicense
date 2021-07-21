@@ -1,5 +1,7 @@
 ﻿@page "/companies/edit/{Id:int}"
 @using WebLicense.Client.Components.Companies;
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
 
 <h1>Edit Customer "@Data.Name"</h1>
 <hr class="my-3" />

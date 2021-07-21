@@ -17,14 +17,17 @@ namespace WebLicense.Logic.UseCases.Companies
     public sealed class UpdateCompany : IRequest<CaseResult<CompanyInfo>>, IValidate
     {
         internal CompanyInfo Company { get; }
+        internal long UserId { get; }
 
-        public UpdateCompany(CompanyInfo customer)
+        public UpdateCompany(CompanyInfo customer, long userId)
         {
             Company = customer;
+            UserId = userId;
         }
 
         public void Validate()
         {
+            if (UserId < 1) throw new CaseException(Exceptions.User_Id_LessOne, "'UserId' < 1");
             if (Company == null) throw new CaseException(Exceptions.Company_Null, "Request is null");
             if (!Company.Id.HasValue) throw new CaseException(Exceptions.Company_Id_Null, "Company 'Id' is null");
             if (Company.Id < 1) throw new CaseException(Exceptions.Company_Id_LessOne, "Company 'Id' < 1");
@@ -59,7 +62,7 @@ namespace WebLicense.Logic.UseCases.Companies
 
                 await db.SaveChangesAsync(cancellationToken);
 
-                return await sender.Send(new GetCompany(model.Id), cancellationToken);
+                return await sender.Send(new GetCompany(model.Id, request.UserId), cancellationToken);
             }
             catch (Exception e)
             {

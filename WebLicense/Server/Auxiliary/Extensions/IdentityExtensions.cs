@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Security.Claims;
+using IdentityModel;
 using IdentityServer4.Extensions;
 
 namespace WebLicense.Server.Auxiliary.Extensions
@@ -12,9 +13,12 @@ namespace WebLicense.Server.Auxiliary.Extensions
 
             try
             {
-                return Convert.ChangeType(principal.GetSubjectId(), typeof(T)) is T id ? id : default;
+                var sid = principal.FindFirst(q => q.Type == JwtClaimTypes.Id)?.Value;
+                if (sid == null) return default;
+
+                return Convert.ChangeType(sid, typeof(T)) is T id ? id : default;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return default;
             }

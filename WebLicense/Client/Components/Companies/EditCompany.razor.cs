@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using WebLicense.Client.Auxiliary;
 using WebLicense.Shared.Companies;
 
 namespace WebLicense.Client.Components.Companies
@@ -28,9 +29,17 @@ namespace WebLicense.Client.Components.Companies
         [Parameter]
         public string SubmitButtonText { get; set; }
 
+        [Inject]
+        public JsUtils Js { get; set; }
+
         #endregion
 
         #region Methods
+
+        protected override void OnParametersSet()
+        {
+            Js.Log($"{Data == null} | {Data?.Settings == null} | {Data?.Users == null}");
+        }
 
         public void SaveCallback(EditContext ecx)
         {

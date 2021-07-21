@@ -33,7 +33,6 @@ namespace WebLicense.Server.Controllers
 
         #region Actions
 
-        [AllowAnonymous]
         [HttpGet]
         [Route("{id:int}")]
         public async Task<CompanyInfo> Get(int id)
@@ -52,10 +51,9 @@ namespace WebLicense.Server.Controllers
             }
         }
 
-        [AllowAnonymous]
         [HttpGet]
         [Route("list")]
-        public async Task<ListData<CompanyInfo>> Get(int skip = 0, int take = 100, string filters = null, string sorts = null)
+        public async Task<ListData<CompanyInfo>> List(int skip = 0, int take = 100, string filters = null, string sorts = null)
         {
             try
             {
@@ -77,13 +75,12 @@ namespace WebLicense.Server.Controllers
             }
         }
 
-        [AllowAnonymous]
         [HttpPost]
         public async Task<CompanyInfo> Add(CompanyInfo company)
         {
             try
             {
-                var data = await sender.Send(new AddCompany(company));
+                var data = await sender.Send(new AddCompany(company, User.GetId<long>()));
                 data.ThrowOnFail();
 
                 return data.Data;
@@ -95,13 +92,12 @@ namespace WebLicense.Server.Controllers
             }
         }
 
-        [AllowAnonymous]
         [HttpPatch]
         public async Task<CompanyInfo> Update(CompanyInfo customer)
         {
             try
             {
-                var data = await sender.Send(new UpdateCompany(customer));
+                var data = await sender.Send(new UpdateCompany(customer, User.GetId<long>()));
                 data.ThrowOnFail();
 
                 return data.Data;

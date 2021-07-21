@@ -17,14 +17,17 @@ namespace WebLicense.Logic.UseCases.Companies
     public sealed class AddCompany : IRequest<CaseResult<CompanyInfo>>, IValidate
     {
         internal CompanyInfo Company { get; }
+        internal long UserId { get; }
 
-        public AddCompany(CompanyInfo company)
+        public AddCompany(CompanyInfo company, long userId)
         {
             Company = company;
+            UserId = userId;
         }
 
         public void Validate()
         {
+            if (UserId < 1) throw new CaseException(Exceptions.User_Id_LessOne, "'UserId' < 1");
             if (string.IsNullOrWhiteSpace(Company.Name)) throw new CaseException(Exceptions.Company_Name_Empty, "Company 'Name' is empty");
             if (Company.Users == null || Company.Users.Count == 0) throw new CaseException(Exceptions.Company_Users_Empty, "Company 'Users' is empty");
             if (Company.Users.All(q => q == null || !q.Id.HasValue || q.Id < 1)) throw new CaseException(Exceptions.Company_Users_Invalid, "Company 'Users' are invalid");
@@ -62,7 +65,7 @@ namespace WebLicense.Logic.UseCases.Companies
                 var result = await db.Companies.AddAsync(company, cancellationToken);
                 await db.SaveChangesAsync(cancellationToken);
 
-                return await sender.Send(new GetCompany(result.Entity.Id, 0), cancellationToken);
+                return await sender.Send(new GetCompany(result.Entity.Id, request.UserId), cancellationToken);
             }
             catch (Exception e)
             {

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WebLicense.Access.Migrations
 {
-    public partial class V10 : Migration
+    public partial class V1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -325,27 +325,27 @@ namespace WebLicense.Access.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 9223372036854775807L, "5ea55469-55b3-4461-94ef-53d91961b471", "Admin", "ADMIN" });
+                values: new object[] { 9223372036854775807L, "9aaebf85-3508-4605-bb61-b7d424069dfb", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 9223372036854775806L, "1ebb74ca-e9ad-4a97-8647-598a66216b35", "Customer Admin", "CUSTOMER ADMIN" });
+                values: new object[] { 9223372036854775806L, "a303d507-fbd6-4402-bcde-7820d9e54fbe", "Customer Admin", "CUSTOMER ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 9223372036854775805L, "bc437f9a-0bd6-4752-bf58-2642f5586a53", "Customer Manager", "CUSTOMER MANAGER" });
+                values: new object[] { 9223372036854775805L, "820a3e19-0834-41f9-9dd7-0363769c6dff", "Customer Manager", "CUSTOMER MANAGER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 9223372036854775804L, "704d1268-9af8-4288-a39b-bfc3617d3c01", "Customer User", "CUSTOMER USER" });
+                values: new object[] { 9223372036854775804L, "8b618011-43de-4e83-8999-54a3b9b332ce", "Customer User", "CUSTOMER USER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "EulaAccepted", "GdprAccepted", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { 9223372036854775807L, 0, "666ad19a-941a-4ed8-bf43-4d87d06bb5ba", "admin-one@weblicense.com", true, true, true, false, null, "ADMIN-ONE@WEBLICENSE.COM", "ADMINISTRATOR", "AQAAAAEAACcQAAAAENJgMrnnLAd910zozRW4GFJnQV0FuqfhRAeXMDrYvC6loWIOifaS5KsRLfH1yyzSCw==", null, true, "366B1DB39A3B42A58B19F837BFF3A7FAD542C42C78DC41A9834E50F21DF757E95DB4C60A710A489F94ED5B84F3087A4E", false, "Administrator" });
+                values: new object[] { 9223372036854775807L, 0, "acd9a8a6-18f6-46d9-8a87-dfe56d2c6442", "admin-one@weblicense.com", true, true, true, false, null, "ADMIN-ONE@WEBLICENSE.COM", "ADMINISTRATOR", "AQAAAAEAACcQAAAAEChGqwnGXaUJSOohB7hEP3ETs5FRjsX1dvSWgQaa5T23r4i59DuNoi+OE/3bPdd5sg==", null, true, "E51E7135796B45D38558D0EC9DC73D586AA32E870ADA4DA9A520A346C004DF0317D945FFB67C427D844AEE019E4C25C9", false, "Administrator" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoleClaims",
@@ -497,6 +497,17 @@ namespace WebLicense.Access.Migrations
                 name: "IX_AspNetUserRoles_RoleId",
                 table: "AspNetUserRoles",
                 column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserRoles_RoleId_UserId",
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserRoles_UserId",
+                table: "AspNetUserRoles",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",

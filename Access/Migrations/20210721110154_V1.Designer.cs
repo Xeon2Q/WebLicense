@@ -9,8 +9,8 @@ using WebLicense.Access;
 namespace WebLicense.Access.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20210719173743_V1.0")]
-    partial class V10
+    [Migration("20210721110154_V1")]
+    partial class V1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -339,28 +339,28 @@ namespace WebLicense.Access.Migrations
                         new
                         {
                             Id = 9223372036854775807L,
-                            ConcurrencyStamp = "5ea55469-55b3-4461-94ef-53d91961b471",
+                            ConcurrencyStamp = "9aaebf85-3508-4605-bb61-b7d424069dfb",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 9223372036854775806L,
-                            ConcurrencyStamp = "1ebb74ca-e9ad-4a97-8647-598a66216b35",
+                            ConcurrencyStamp = "a303d507-fbd6-4402-bcde-7820d9e54fbe",
                             Name = "Customer Admin",
                             NormalizedName = "CUSTOMER ADMIN"
                         },
                         new
                         {
                             Id = 9223372036854775805L,
-                            ConcurrencyStamp = "bc437f9a-0bd6-4752-bf58-2642f5586a53",
+                            ConcurrencyStamp = "820a3e19-0834-41f9-9dd7-0363769c6dff",
                             Name = "Customer Manager",
                             NormalizedName = "CUSTOMER MANAGER"
                         },
                         new
                         {
                             Id = 9223372036854775804L,
-                            ConcurrencyStamp = "704d1268-9af8-4288-a39b-bfc3617d3c01",
+                            ConcurrencyStamp = "8b618011-43de-4e83-8999-54a3b9b332ce",
                             Name = "Customer User",
                             NormalizedName = "CUSTOMER USER"
                         });
@@ -633,7 +633,7 @@ namespace WebLicense.Access.Migrations
                         {
                             Id = 9223372036854775807L,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "666ad19a-941a-4ed8-bf43-4d87d06bb5ba",
+                            ConcurrencyStamp = "acd9a8a6-18f6-46d9-8a87-dfe56d2c6442",
                             Email = "admin-one@weblicense.com",
                             EmailConfirmed = true,
                             EulaAccepted = true,
@@ -641,9 +641,9 @@ namespace WebLicense.Access.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN-ONE@WEBLICENSE.COM",
                             NormalizedUserName = "ADMINISTRATOR",
-                            PasswordHash = "AQAAAAEAACcQAAAAENJgMrnnLAd910zozRW4GFJnQV0FuqfhRAeXMDrYvC6loWIOifaS5KsRLfH1yyzSCw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEChGqwnGXaUJSOohB7hEP3ETs5FRjsX1dvSWgQaa5T23r4i59DuNoi+OE/3bPdd5sg==",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "366B1DB39A3B42A58B19F837BFF3A7FAD542C42C78DC41A9834E50F21DF757E95DB4C60A710A489F94ED5B84F3087A4E",
+                            SecurityStamp = "E51E7135796B45D38558D0EC9DC73D586AA32E870ADA4DA9A520A346C004DF0317D945FFB67C427D844AEE019E4C25C9",
                             TwoFactorEnabled = false,
                             UserName = "Administrator"
                         });
@@ -705,6 +705,11 @@ namespace WebLicense.Access.Migrations
                     b.HasKey("UserId", "RoleId");
 
                     b.HasIndex("RoleId");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("RoleId", "UserId")
+                        .IsUnique();
 
                     b.ToTable("AspNetUserRoles");
 
@@ -834,17 +839,21 @@ namespace WebLicense.Access.Migrations
 
             modelBuilder.Entity("WebLicense.Core.Models.Identity.UserRole", b =>
                 {
-                    b.HasOne("WebLicense.Core.Models.Identity.Role", null)
+                    b.HasOne("WebLicense.Core.Models.Identity.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebLicense.Core.Models.Identity.User", null)
-                        .WithMany()
+                    b.HasOne("WebLicense.Core.Models.Identity.User", "User")
+                        .WithMany("UserRoles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("WebLicense.Core.Models.Identity.UserToken", b =>
@@ -872,6 +881,8 @@ namespace WebLicense.Access.Migrations
             modelBuilder.Entity("WebLicense.Core.Models.Identity.User", b =>
                 {
                     b.Navigation("CompanyUsers");
+
+                    b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618
         }
