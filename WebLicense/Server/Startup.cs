@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using IdentityModel;
 using IdentityServer4.Services;
 using MediatR;
@@ -17,7 +16,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
+using IdentityServer4.Configuration;
 using WebLicense.Access;
 using WebLicense.Core.Auxiliary;
 using WebLicense.Core.Models.Identity;
@@ -25,9 +24,6 @@ using WebLicense.Logic;
 using WebLicense.Logic.Auxiliary;
 using WebLicense.Server.Auxiliary.IdentityServices;
 using WebLicense.Server.Auxiliary.Middlewares;
-using WebLicense.Shared.Auxiliary.Claims;
-using WebLicense.Shared.Auxiliary.Policies;
-using WebLicense.Server.Auxiliary.Extensions;
 
 namespace WebLicense.Server
 {
@@ -63,7 +59,7 @@ namespace WebLicense.Server
             services.AddIdentityServer()
                     .AddApiAuthorization<User, DatabaseContext>(ConfigureApiAuthorization);
             
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove(JwtClaimTypes.Role);
+            //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove(JwtClaimTypes.Role);
 
             services.AddAuthentication()
                     .AddIdentityServerJwt()
@@ -73,7 +69,7 @@ namespace WebLicense.Server
                         options.ClientSecret = config[$"{nameof(AuthenticationSettings)}:{nameof(AuthenticationSettings.Microsoft)}:{nameof(AuthenticationSettings.Microsoft.Secret)}"];
                     });
 
-            services.AddAuthorization(ConfigureAuthorization);
+            services.AddAuthorization();
 
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -109,14 +105,14 @@ namespace WebLicense.Server
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseMiddleware<LogUserInformationMiddleware>();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();
                 endpoints.MapFallbackToFile("index.html");
             });
+
+            app.UseMiddleware<LogUserInformationMiddleware>();
         }
 
         #region Methods
@@ -196,46 +192,17 @@ namespace WebLicense.Server
 
         private void ConfigureApiAuthorization(ApiAuthorizationOptions options)
         {
-            void AddWLClaims(ICollection<string> claims)
-            {
-                claims.Add(WLClaims.Account.LoginExternal.ClaimType);
-                claims.Add(WLClaims.Account.ResetPassword.ClaimType);
-                claims.Add(WLClaims.Account.ChangePassword.ClaimType);
-                claims.Add(WLClaims.Account.Disable2FA.ClaimType);
-                claims.Add(WLClaims.Account.Enable2FA.ClaimType);
-                claims.Add(WLClaims.Administration.Account.ResetPassword.ClaimType);
-                claims.Add(WLClaims.Administration.Account.ChangePassword.ClaimType);
-                claims.Add(WLClaims.Administration.Account.Disable2FA.ClaimType);
-                claims.Add(WLClaims.Administration.Account.Enable2FA.ClaimType);
-            }
-
             var openId = options.IdentityResources["openid"];
             openId.UserClaims.Add(JwtClaimTypes.Id);
             openId.UserClaims.Add(JwtClaimTypes.Name);
             openId.UserClaims.Add(JwtClaimTypes.Role);
             openId.UserClaims.Add(ClaimTypes.Email);
-            AddWLClaims(openId.UserClaims);
 
             var api = options.ApiResources.Single();
             api.UserClaims.Add(JwtClaimTypes.Id);
             api.UserClaims.Add(JwtClaimTypes.Name);
             api.UserClaims.Add(JwtClaimTypes.Role);
             api.UserClaims.Add(ClaimTypes.Email);
-            AddWLClaims(api.UserClaims);
-        }
-
-        private void ConfigureAuthorization(AuthorizationOptions options)
-        {
-            options.AddPolicy(WLPolicies.Account.Policies.LoginExternal)
-                   .AddPolicy(WLPolicies.Account.Policies.ResetPassword)
-                   .AddPolicy(WLPolicies.Account.Policies.ChangePassword)
-                   .AddPolicy(WLPolicies.Account.Policies.Disable2FA)
-                   .AddPolicy(WLPolicies.Account.Policies.Enable2FA);
-
-            options.AddPolicy(WLPolicies.Administration.Account.Policies.ResetPassword)
-                   .AddPolicy(WLPolicies.Administration.Account.Policies.ChangePassword)
-                   .AddPolicy(WLPolicies.Administration.Account.Policies.Disable2FA)
-                   .AddPolicy(WLPolicies.Administration.Account.Policies.Enable2FA);
         }
 
         #endregion

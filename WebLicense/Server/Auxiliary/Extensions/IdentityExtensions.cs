@@ -18,7 +18,7 @@ namespace WebLicense.Server.Auxiliary.Extensions
 
                 return Convert.ChangeType(sid, typeof(T)) is T id ? id : default;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return default;
             }
