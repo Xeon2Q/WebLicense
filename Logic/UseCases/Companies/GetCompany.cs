@@ -1,18 +1,14 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Resources;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Resources;
 using WebLicense.Access;
-using WebLicense.Core.Enums;
 using WebLicense.Core.Models.Companies;
-using WebLicense.Core.Models.Identity;
 using WebLicense.Logic.Auxiliary;
 using WebLicense.Logic.UseCases.Auxiliary;
-using WebLicense.Logic.UseCases.Users;
 using WebLicense.Shared.Companies;
 
 namespace WebLicense.Logic.UseCases.Companies
@@ -20,18 +16,18 @@ namespace WebLicense.Logic.UseCases.Companies
     public sealed class GetCompany : IRequest<CaseResult<CompanyInfo>>, IValidate
     {
         internal int Id { get; }
-        internal long UserId { get; }
+        internal long CurrentUserId { get; }
 
-        public GetCompany(int id, long userId)
+        public GetCompany(int id, long currentUserId)
         {
             Id = id;
-            UserId = userId;
+            CurrentUserId = currentUserId;
         }
 
         public void Validate()
         {
             if (Id < 1) throw new CaseException(Exceptions.Id_LessOne, "'Id' < 1");
-            if (UserId < 1) throw new CaseException(Exceptions.User_Id_LessOne, "'UserId' < 1");
+            if (CurrentUserId < 1) throw new CaseException(Exceptions.User_Id_LessOne, "'CurrentUserId' < 1");
         }
     }
 
@@ -52,16 +48,14 @@ namespace WebLicense.Logic.UseCases.Companies
             {
                 request.Validate();
 
-                var roles = await GetUserRoles(request.UserId, cancellationToken);
-                if (!roles.Any()) throw new CaseException(Exceptions.Company_NotFoundOrDeleted, $"User({request.UserId}) does not have permissions to view Company({request.Id})");
+                var access = await sender.Send(new GetCompanyAccess(request.Id, request.CurrentUserId), cancellationToken);
+                if (!access.HasAccess) throw new CaseException(Exceptions.Company_NotFoundOrDeleted, $"User({request.CurrentUserId}) does not have permissions to view Company({request.Id})");
 
-                var company = await db.Companies.AsNoTrackingWithIdentityResolution().Where(q => q.Id == request.Id)
-                                      .Include(q => q.Users)
-                                      .Include(q => q.CompanyUserInvites)
-                                      .FirstOrDefaultAsync(cancellationToken);
+                var company = access.IsAdminAccess || access.IsManagerAccess || access.IsUserAccess
+                    ? await GetCompanyFullInformation(request.Id, cancellationToken)
+                    : await GetCompanyPartialInformation(request.Id, access, cancellationToken);
+
                 if (company == null) throw new CaseException(Exceptions.Company_NotFoundOrDeleted, $"Company({request.Id}) not found or deleted");
-
-                company.Settings = await GetAvailableCompanySettings(company, request.UserId, roles, cancellationToken);
 
                 return new CaseResult<CompanyInfo>(new CompanyInfo(company));
             }
@@ -73,46 +67,27 @@ namespace WebLicense.Logic.UseCases.Companies
 
         #region Methods
 
-        private async Task<IList<Role>> GetUserRoles(long userId, CancellationToken cancellationToken)
+        private async Task<Company> GetCompanyFullInformation(int companyId, CancellationToken cancellationToken)
         {
-            var roles = await sender.Send(new GetUserRoles(userId), cancellationToken);
-            roles.ThrowOnFail();
-
-            return roles.Data ?? new List<Role>(0);
+            return await db.Companies.AsNoTrackingWithIdentityResolution().AsSplitQuery().Where(q => q.Id == companyId)
+                           .Include(q => q.Users)
+                           .Include(q => q.Settings).ThenInclude(q => q.ProviderCompany)
+                           .Include(q => q.CompanyUsers)
+                           .Include(q => q.CompanyUserInvites)
+                           .FirstOrDefaultAsync(cancellationToken);
         }
 
-        private async Task<IList<CompanySettings>> GetAvailableCompanySettings(Company company, long userId, IList<Role> roles, CancellationToken cancellationToken)
+        private async Task<Company> GetCompanyPartialInformation(int companyId, CompanyAccessInfo access, CancellationToken cancellationToken)
         {
-            if (company == null || company.Id < 1 || roles == null || !roles.Any()) return null;
+            var company = await db.Companies.AsNoTrackingWithIdentityResolution().Where(q => q.Id == companyId).FirstOrDefaultAsync(cancellationToken);
 
-            // global admin role
-            if (roles.Any(q => q.Id == Roles.AdminId))
-            {
-                return await GetAllCompanySettings(company.Id, cancellationToken);
-            }
-
-            // user is in the company
-            if (company.Users != null && company.Users.Any(q => q.Id == userId))
-            {
-                return await GetAllCompanySettings(company.Id, cancellationToken);
-            }
-
-            // user is from provider company (-s)
-            return await GetProviderCompanySettingsByUserId(company.Id, userId, cancellationToken);
-        }
-
-        private async Task<IList<CompanySettings>> GetAllCompanySettings(int id, CancellationToken cancellationToken)
-        {
-            return await db.Set<CompanySettings>().AsNoTrackingWithIdentityResolution().Where(q => q.CompanyId == id).Distinct().ToListAsync(cancellationToken);
-        }
-
-        private async Task<IList<CompanySettings>> GetProviderCompanySettingsByUserId(int id, long userId, CancellationToken cancellationToken)
-        {
-            return await db.Set<CompanyUser>().AsNoTrackingWithIdentityResolution()
-                           .Where(q => q.UserId == userId)
-                           .SelectMany(q => q.Company.ClientSettings)
-                           .Where(q => q.CompanyId == id)
-                           .Distinct().ToListAsync(cancellationToken);
+            company.Settings = await db.CompanySettings.AsNoTrackingWithIdentityResolution()
+                                       .Where(q => q.CompanyId == companyId && access.ViewSettingsAllowedId.Contains(q.ProviderCompanyId))
+                                       .Include(q => q.ProviderCompany).ToListAsync(cancellationToken);
+            company.ClientSettings = await db.CompanySettings.AsNoTrackingWithIdentityResolution()
+                                             .Where(q => q.ProviderCompanyId == companyId && access.ViewClientSettingsAllowedId.Contains(q.CompanyId))
+                                             .Include(q => q.Company).ToListAsync(cancellationToken);
+            return company;
         }
 
         #endregion

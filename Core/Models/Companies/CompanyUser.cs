@@ -5,6 +5,7 @@ namespace WebLicense.Core.Models.Companies
 {
     [Index(nameof(CompanyId))]
     [Index(nameof(UserId))]
+    [Index(nameof(IsManager))]
     public sealed class CompanyUser
     {
         public int CompanyId { get; set; }

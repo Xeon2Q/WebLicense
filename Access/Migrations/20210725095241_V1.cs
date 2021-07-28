@@ -276,31 +276,6 @@ namespace WebLicense.Access.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CompanyUser",
-                columns: table => new
-                {
-                    CompanyId = table.Column<int>(type: "INTEGER", nullable: false),
-                    UserId = table.Column<long>(type: "INTEGER", nullable: false),
-                    IsManager = table.Column<bool>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CompanyUser", x => new { x.CompanyId, x.UserId });
-                    table.ForeignKey(
-                        name: "FK_CompanyUser_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CompanyUser_Companies_CompanyId",
-                        column: x => x.CompanyId,
-                        principalTable: "Companies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "CompanyUserInvites",
                 columns: table => new
                 {
@@ -322,30 +297,55 @@ namespace WebLicense.Access.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 9223372036854775807L, "9aaebf85-3508-4605-bb61-b7d424069dfb", "Admin", "ADMIN" });
+            migrationBuilder.CreateTable(
+                name: "CompanyUsers",
+                columns: table => new
+                {
+                    CompanyId = table.Column<int>(type: "INTEGER", nullable: false),
+                    UserId = table.Column<long>(type: "INTEGER", nullable: false),
+                    IsManager = table.Column<bool>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CompanyUsers", x => new { x.CompanyId, x.UserId });
+                    table.ForeignKey(
+                        name: "FK_CompanyUsers_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CompanyUsers_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 9223372036854775806L, "a303d507-fbd6-4402-bcde-7820d9e54fbe", "Customer Admin", "CUSTOMER ADMIN" });
+                values: new object[] { 9223372036854775807L, "0a50d526-a713-4338-9ad3-719932ee6ec9", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 9223372036854775805L, "820a3e19-0834-41f9-9dd7-0363769c6dff", "Customer Manager", "CUSTOMER MANAGER" });
+                values: new object[] { 9223372036854775806L, "015eac73-8122-484e-8e12-ebec128761e2", "Customer Admin", "CUSTOMER ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 9223372036854775804L, "8b618011-43de-4e83-8999-54a3b9b332ce", "Customer User", "CUSTOMER USER" });
+                values: new object[] { 9223372036854775805L, "899099a1-0f47-464b-9948-b7b8989c4124", "Customer Manager", "CUSTOMER MANAGER" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[] { 9223372036854775804L, "8c59273e-1dcb-4088-b0a0-96feb0dc2181", "Customer User", "CUSTOMER USER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "EulaAccepted", "GdprAccepted", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { 9223372036854775807L, 0, "acd9a8a6-18f6-46d9-8a87-dfe56d2c6442", "admin-one@weblicense.com", true, true, true, false, null, "ADMIN-ONE@WEBLICENSE.COM", "ADMINISTRATOR", "AQAAAAEAACcQAAAAEChGqwnGXaUJSOohB7hEP3ETs5FRjsX1dvSWgQaa5T23r4i59DuNoi+OE/3bPdd5sg==", null, true, "E51E7135796B45D38558D0EC9DC73D586AA32E870ADA4DA9A520A346C004DF0317D945FFB67C427D844AEE019E4C25C9", false, "Administrator" });
+                values: new object[] { 9223372036854775807L, 0, "5c25734a-1c0a-49da-936f-61d8e0fe72aa", "admin-one@weblicense.com", true, true, true, false, null, "ADMIN-ONE@WEBLICENSE.COM", "ADMINISTRATOR", "AQAAAAEAACcQAAAAELfRIkHUzs1mo9e8ibm7MeFRCeWKE6CGzPMxHM7Hhc3PF4qcHTyy8dg7WN3poZsi5w==", null, true, "BDD22C5C1C8B41E280AFB89135ECBF5C85096EDF1FA045C9B73C2C400843F941897CD31D11B74298910466D7E90247ED", false, "Administrator" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoleClaims",
@@ -558,16 +558,6 @@ namespace WebLicense.Access.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CompanyUser_CompanyId",
-                table: "CompanyUser",
-                column: "CompanyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CompanyUser_UserId",
-                table: "CompanyUser",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_CompanyUserInvites_Code",
                 table: "CompanyUserInvites",
                 column: "Code",
@@ -592,6 +582,21 @@ namespace WebLicense.Access.Migrations
                 name: "IX_CompanyUserInvites_Processed",
                 table: "CompanyUserInvites",
                 column: "Processed");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CompanyUsers_CompanyId",
+                table: "CompanyUsers",
+                column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CompanyUsers_IsManager",
+                table: "CompanyUsers",
+                column: "IsManager");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CompanyUsers_UserId",
+                table: "CompanyUsers",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DeviceCodes_DeviceCode",
@@ -644,10 +649,10 @@ namespace WebLicense.Access.Migrations
                 name: "CompanyUpdates");
 
             migrationBuilder.DropTable(
-                name: "CompanyUser");
+                name: "CompanyUserInvites");
 
             migrationBuilder.DropTable(
-                name: "CompanyUserInvites");
+                name: "CompanyUsers");
 
             migrationBuilder.DropTable(
                 name: "DeviceCodes");

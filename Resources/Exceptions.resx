@@ -144,6 +144,9 @@
   <data name="Id_LessOne" xml:space="preserve">
     <value>"Id" &lt; 1</value>
   </data>
+  <data name="InsufficientPermissions" xml:space="preserve">
+    <value>#You don't have permissions for this action</value>
+  </data>
   <data name="Role_and_User_Null" xml:space="preserve">
     <value>Both "Role" and "User" are null</value>
   </data>

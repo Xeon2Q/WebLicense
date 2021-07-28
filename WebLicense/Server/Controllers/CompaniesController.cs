@@ -18,10 +18,10 @@ namespace WebLicense.Server.Controllers
     [Route("api/[controller]")]
     public class CompaniesController : ControllerBase
     {
+        #region C-tor | Fields
+
         private readonly ISender sender;
         private readonly ILogger<CompaniesController> logger;
-
-        #region C-tor | Fields
 
         public CompaniesController(ISender sender, ILogger<CompaniesController> logger)
         {
@@ -32,6 +32,8 @@ namespace WebLicense.Server.Controllers
         #endregion
 
         #region Actions
+
+        #region Company methods
 
         [HttpGet]
         [Route("{id:int}")]
@@ -52,8 +54,8 @@ namespace WebLicense.Server.Controllers
         }
 
         [HttpGet]
-        [Route("list")]
-        public async Task<ListData<CompanyInfo>> List(int skip = 0, int take = 100, string filters = null, string sorts = null)
+        [Route("list/clients")]
+        public async Task<ListData<CompanyInfo>> ClientList(int skip = 0, int take = 100, string filters = null, string sorts = null)
         {
             try
             {
@@ -63,7 +65,31 @@ namespace WebLicense.Server.Controllers
                 var criteriaFilter = CriteriaFilter.TryParse(filters);
                 var criteriaSort = CriteriaSort.TryParse(sorts);
 
-                var data = await sender.Send(new GetCompanies(new Criteria<Company>(skip, take, criteriaSort, criteriaFilter)));
+                var data = await sender.Send(new GetClientCompanies(new Criteria<Company>(skip, take, criteriaSort, criteriaFilter), User.GetId<long>()));
+                data.ThrowOnFail();
+
+                return data.Data;
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("list/providers")]
+        public async Task<ListData<CompanyInfo>> ProviderList(int skip = 0, int take = 100, string filters = null, string sorts = null)
+        {
+            try
+            {
+                if (skip < 0) skip = 0;
+                if (take > 1000) take = 1000;
+                if (skip > 1000) skip = 1000;
+                var criteriaFilter = CriteriaFilter.TryParse(filters);
+                var criteriaSort = CriteriaSort.TryParse(sorts);
+
+                var data = await sender.Send(new GetProviderCompanies(new Criteria<Company>(skip, take, criteriaSort, criteriaFilter), User.GetId<long>()));
                 data.ThrowOnFail();
 
                 return data.Data;
@@ -115,7 +141,7 @@ namespace WebLicense.Server.Controllers
         {
             try
             {
-                var data = await sender.Send(new DeleteCompany(id));
+                var data = await sender.Send(new DeleteCompany(id, User.GetId<long>()));
                 data.ThrowOnFail();
             }
             catch (Exception e)
@@ -124,6 +150,27 @@ namespace WebLicense.Server.Controllers
                 throw;
             }
         }
+
+        #endregion
+
+        #region Access methods
+
+        [HttpGet]
+        [Route("{id:int}/access")]
+        public async Task<CompanyAccessInfo> GetAccess(int id)
+        {
+            try
+            {
+                return await sender.Send(new GetCompanyAccess(id, User.GetId<long>()));
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+                throw;
+            }
+        }
+
+        #endregion
 
         #endregion
     }

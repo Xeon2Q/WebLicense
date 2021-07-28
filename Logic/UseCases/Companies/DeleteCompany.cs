@@ -15,25 +15,30 @@ namespace WebLicense.Logic.UseCases.Companies
     public sealed class DeleteCompany : IRequest<CaseResult>, IValidate
     {
         internal int Id { get; }
+        internal long CurrentUserId { get; }
 
-        public DeleteCompany(int id)
+        public DeleteCompany(int id, long currentUserId)
         {
             Id = id;
+            CurrentUserId = currentUserId;
         }
 
         public void Validate()
         {
             if (Id < 1) throw new CaseException(Exceptions.Id_LessOne, "'Id' < 1");
+            if (CurrentUserId < 1) throw new CaseException(Exceptions.User_Id_LessOne, "'CurrentUserId' < 1");
         }
     }
 
     internal sealed class DeleteCompanyHandler : IRequestHandler<DeleteCompany, CaseResult>
     {
         private readonly DatabaseContext db;
+        private readonly ISender sender;
 
-        public DeleteCompanyHandler(DatabaseContext db)
+        public DeleteCompanyHandler(DatabaseContext db, ISender sender)
         {
             this.db = db ?? throw new ArgumentNullException(nameof(db));
+            this.sender = sender ?? throw new ArgumentNullException(nameof(sender));
         }
 
         public async Task<CaseResult> Handle(DeleteCompany request, CancellationToken cancellationToken)
@@ -41,6 +46,10 @@ namespace WebLicense.Logic.UseCases.Companies
             try
             {
                 request.Validate();
+
+                var access = await sender.Send(new GetCompanyAccess(request.Id, request.CurrentUserId), cancellationToken);
+                if (!access.IsUserAccess) throw new CaseException(Exceptions.Company_NotFoundOrDeleted, $"User({request.CurrentUserId}) does not have permissions to view Company({request.Id})");
+                if (!access.IsManagerAccess) throw new CaseException(Exceptions.InsufficientPermissions, $"User({request.CurrentUserId}) does not have permissions to delete Company({request.Id})");
 
                 db.Detach<Company>(q => q.Id == request.Id);
                 db.Companies.Remove(new Company {Id = request.Id});

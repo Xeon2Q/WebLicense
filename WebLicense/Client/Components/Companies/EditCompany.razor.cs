@@ -18,6 +18,9 @@ namespace WebLicense.Client.Components.Companies
         public CompanyInfo Data { get; set; }
 
         [Parameter]
+        public CompanyAccessInfo Access { get; set; }
+
+        [Parameter]
         public EventCallback<CompanyInfo> DataChanged { get; set; }
 
         [Parameter]
@@ -38,7 +41,6 @@ namespace WebLicense.Client.Components.Companies
 
         protected override void OnParametersSet()
         {
-            Js.Log($"{Data == null} | {Data?.Settings == null} | {Data?.Users == null}");
         }
 
         public void SaveCallback(EditContext ecx)

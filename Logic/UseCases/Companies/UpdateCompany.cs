@@ -1,11 +1,11 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Resources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Resources;
 using WebLicense.Access;
 using WebLicense.Core.Models.Companies;
 using WebLicense.Logic.Auxiliary;
@@ -17,17 +17,17 @@ namespace WebLicense.Logic.UseCases.Companies
     public sealed class UpdateCompany : IRequest<CaseResult<CompanyInfo>>, IValidate
     {
         internal CompanyInfo Company { get; }
-        internal long UserId { get; }
+        internal long CurrentUserId { get; }
 
-        public UpdateCompany(CompanyInfo customer, long userId)
+        public UpdateCompany(CompanyInfo customer, long currentUserId)
         {
             Company = customer;
-            UserId = userId;
+            CurrentUserId = currentUserId;
         }
 
         public void Validate()
         {
-            if (UserId < 1) throw new CaseException(Exceptions.User_Id_LessOne, "'UserId' < 1");
+            if (CurrentUserId < 1) throw new CaseException(Exceptions.User_Id_LessOne, "'CurrentUserId' < 1");
             if (Company == null) throw new CaseException(Exceptions.Company_Null, "Request is null");
             if (!Company.Id.HasValue) throw new CaseException(Exceptions.Company_Id_Null, "Company 'Id' is null");
             if (Company.Id < 1) throw new CaseException(Exceptions.Company_Id_LessOne, "Company 'Id' < 1");
@@ -51,6 +51,9 @@ namespace WebLicense.Logic.UseCases.Companies
             {
                 request.Validate();
 
+                var access = await sender.Send(new GetCompanyAccess(request.Company.Id ?? 0, request.CurrentUserId), cancellationToken);
+                if (!access.HasAccess) throw new CaseException(Exceptions.Company_NotFoundOrDeleted, $"User({request.CurrentUserId}) does not have permissions to view Company({request.Company.Id})");
+
                 var info = request.Company;
                 var model = await db.Set<Company>().AsTracking().Where(q => q.Id == info.Id.Value)
                                     .Include(q => q.Settings)
@@ -58,11 +61,11 @@ namespace WebLicense.Logic.UseCases.Companies
                                     .Include(q => q.CompanyUsers).FirstOrDefaultAsync(cancellationToken);
                 if (model == null) throw new CaseException(Exceptions.Company_NotFoundOrDeleted, "Company not found or deleted");
 
-                UpdateModel(model, info);
+                UpdateModel(model, info, access);
 
                 await db.SaveChangesAsync(cancellationToken);
 
-                return await sender.Send(new GetCompany(model.Id, request.UserId), cancellationToken);
+                return await sender.Send(new GetCompany(model.Id, request.CurrentUserId), cancellationToken);
             }
             catch (Exception e)
             {
@@ -72,30 +75,36 @@ namespace WebLicense.Logic.UseCases.Companies
 
         #region Methods
 
-        private void UpdateModel(Company model, CompanyInfo info)
+        private void UpdateModel(Company model, CompanyInfo info, CompanyAccessInfo access)
         {
-            if (info.Name != null && info.Name != model.Name) model.Name = info.Name;
-            if (info.Code != null && info.Code != model.Code) model.Code = info.Code;
-            if (info.ReferenceId != null && info.ReferenceId != model.ReferenceId) model.ReferenceId = info.ReferenceId;
-            if (info.Logo != null && info.Logo != model.Logo) model.Logo = info.Logo;
-
-            var settings = model.Settings?.FirstOrDefault(q => q.ProviderCompanyId == info.Settings?.ProviderCompanyId);
-            if (settings != null)
+            if (access.IsManagerAccess)
             {
-                if (info.Settings.MaxActiveLicensesCount.HasValue && info.Settings.MaxActiveLicensesCount != settings.MaxActiveLicensesCount) settings.MaxActiveLicensesCount = info.Settings.MaxActiveLicensesCount.Value;
-                if (info.Settings.MaxTotalLicensesCount.HasValue && info.Settings.MaxTotalLicensesCount != settings.MaxTotalLicensesCount) settings.MaxTotalLicensesCount = info.Settings.MaxTotalLicensesCount.Value;
-                if (info.Settings.CreateActiveLicenses.HasValue && info.Settings.CreateActiveLicenses != settings.CreateActiveLicenses) settings.CreateActiveLicenses = info.Settings.CreateActiveLicenses.Value;
-                if (info.Settings.CanActivateLicenses.HasValue && info.Settings.CanActivateLicenses != settings.CanActivateLicenses) settings.CanActivateLicenses = info.Settings.CanActivateLicenses.Value;
-                if (info.Settings.CanDeactivateLicenses.HasValue && info.Settings.CanDeactivateLicenses != settings.CanDeactivateLicenses) settings.CanDeactivateLicenses = info.Settings.CanDeactivateLicenses.Value;
-                if (info.Settings.CanDeleteLicenses.HasValue && info.Settings.CanDeleteLicenses != settings.CanDeleteLicenses) settings.CanDeleteLicenses = info.Settings.CanDeleteLicenses.Value;
-                if (info.Settings.CanActivateMachines.HasValue && info.Settings.CanActivateMachines != settings.CanActivateMachines) settings.CanActivateMachines = info.Settings.CanActivateMachines.Value;
-                if (info.Settings.CanDeactivateMachines.HasValue && info.Settings.CanDeactivateMachines != settings.CanDeactivateMachines) settings.CanDeactivateMachines = info.Settings.CanDeactivateMachines.Value;
-                if (info.Settings.CanDeleteMachines.HasValue && info.Settings.CanDeleteMachines != settings.CanDeleteMachines) settings.CanDeleteMachines = info.Settings.CanDeleteMachines.Value;
-                if (info.Settings.NotificationsEmail != null && info.Settings.NotificationsEmail != settings.NotificationsEmail) settings.NotificationsEmail = !string.IsNullOrWhiteSpace(info.Settings.NotificationsEmail) ? info.Settings.NotificationsEmail.Trim() : null;
-                if (info.Settings.ReceiveNotifications.HasValue && info.Settings.ReceiveNotifications != settings.ReceiveNotifications) settings.ReceiveNotifications = info.Settings.ReceiveNotifications.Value;
+                if (info.Name != null && info.Name != model.Name) model.Name = info.Name;
+                if (info.Code != null && info.Code != model.Code) model.Code = info.Code;
+                if (info.ReferenceId != null && info.ReferenceId != model.ReferenceId) model.ReferenceId = info.ReferenceId;
+                if (info.Logo != null && info.Logo != model.Logo) model.Logo = info.Logo;
             }
 
-            if (info.Users != null)
+            if (info.Settings?.ProviderCompanyId != null && (access.IsAdminAccess || access.EditSettingsAllowedId.Contains(info.Settings.ProviderCompanyId.Value)))
+            {
+                var settings = model.Settings?.FirstOrDefault(q => q.ProviderCompanyId == info.Settings.ProviderCompanyId);
+                if (settings != null)
+                {
+                    if (info.Settings.MaxActiveLicensesCount.HasValue && info.Settings.MaxActiveLicensesCount != settings.MaxActiveLicensesCount) settings.MaxActiveLicensesCount = info.Settings.MaxActiveLicensesCount.Value;
+                    if (info.Settings.MaxTotalLicensesCount.HasValue && info.Settings.MaxTotalLicensesCount != settings.MaxTotalLicensesCount) settings.MaxTotalLicensesCount = info.Settings.MaxTotalLicensesCount.Value;
+                    if (info.Settings.CreateActiveLicenses.HasValue && info.Settings.CreateActiveLicenses != settings.CreateActiveLicenses) settings.CreateActiveLicenses = info.Settings.CreateActiveLicenses.Value;
+                    if (info.Settings.CanActivateLicenses.HasValue && info.Settings.CanActivateLicenses != settings.CanActivateLicenses) settings.CanActivateLicenses = info.Settings.CanActivateLicenses.Value;
+                    if (info.Settings.CanDeactivateLicenses.HasValue && info.Settings.CanDeactivateLicenses != settings.CanDeactivateLicenses) settings.CanDeactivateLicenses = info.Settings.CanDeactivateLicenses.Value;
+                    if (info.Settings.CanDeleteLicenses.HasValue && info.Settings.CanDeleteLicenses != settings.CanDeleteLicenses) settings.CanDeleteLicenses = info.Settings.CanDeleteLicenses.Value;
+                    if (info.Settings.CanActivateMachines.HasValue && info.Settings.CanActivateMachines != settings.CanActivateMachines) settings.CanActivateMachines = info.Settings.CanActivateMachines.Value;
+                    if (info.Settings.CanDeactivateMachines.HasValue && info.Settings.CanDeactivateMachines != settings.CanDeactivateMachines) settings.CanDeactivateMachines = info.Settings.CanDeactivateMachines.Value;
+                    if (info.Settings.CanDeleteMachines.HasValue && info.Settings.CanDeleteMachines != settings.CanDeleteMachines) settings.CanDeleteMachines = info.Settings.CanDeleteMachines.Value;
+                    if (info.Settings.NotificationsEmail != null && info.Settings.NotificationsEmail != settings.NotificationsEmail) settings.NotificationsEmail = !string.IsNullOrWhiteSpace(info.Settings.NotificationsEmail) ? info.Settings.NotificationsEmail.Trim() : null;
+                    if (info.Settings.ReceiveNotifications.HasValue && info.Settings.ReceiveNotifications != settings.ReceiveNotifications) settings.ReceiveNotifications = info.Settings.ReceiveNotifications.Value;
+                }
+            }
+
+            if (info.Users != null && access.IsManagerAccess)
             {
                 model.CompanyUsers = model.CompanyUsers?.Where(q => info.Users.Any(w => w.Id == q.UserId)).ToList() ?? new List<CompanyUser>();
                 

@@ -3,7 +3,7 @@
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize]
 
-<h1>Edit Customer "@Data.Name"</h1>
+<h1>Edit Company "@Data.Name"</h1>
 <hr class="my-3" />
 
 <EditCompany @bind-Data="@Data" @bind-Data:event="DataChanged" OnSave="Save" IsAdd="false" SubmitButtonClass="btn-success mt-5" SubmitButtonText="@UI.Submit"></EditCompany>

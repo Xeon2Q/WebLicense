@@ -142,6 +142,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to #You don&apos;t have permissions for this action.
+        /// </summary>
+        public static string InsufficientPermissions {
+            get {
+                return ResourceManager.GetString("InsufficientPermissions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Both &quot;Role&quot; and &quot;User&quot; are null.
         /// </summary>
         public static string Role_and_User_Null {
