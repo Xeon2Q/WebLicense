@@ -59,7 +59,7 @@ namespace WebLicense.Server
             services.AddIdentityServer()
                     .AddApiAuthorization<User, DatabaseContext>(ConfigureApiAuthorization);
             
-            //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove(JwtClaimTypes.Role);
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove(JwtClaimTypes.Role);
 
             services.AddAuthentication()
                     .AddIdentityServerJwt()

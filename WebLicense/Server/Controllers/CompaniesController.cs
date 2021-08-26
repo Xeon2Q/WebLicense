@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
+using WebLicense.Core.Enums;
 using WebLicense.Core.Models.Companies;
 using WebLicense.Logic.Auxiliary;
 using WebLicense.Logic.UseCases.Companies;
@@ -42,54 +43,6 @@ namespace WebLicense.Server.Controllers
             try
             {
                 var data = await sender.Send(new GetCompany(id, User.GetId<long>()));
-                data.ThrowOnFail();
-
-                return data.Data;
-            }
-            catch (Exception e)
-            {
-                logger.LogError(e, e.Message);
-                throw;
-            }
-        }
-
-        [HttpGet]
-        [Route("list/clients")]
-        public async Task<ListData<CompanyInfo>> ClientList(int skip = 0, int take = 100, string filters = null, string sorts = null)
-        {
-            try
-            {
-                if (skip < 0) skip = 0;
-                if (take > 1000) take = 1000;
-                if (skip > 1000) skip = 1000;
-                var criteriaFilter = CriteriaFilter.TryParse(filters);
-                var criteriaSort = CriteriaSort.TryParse(sorts);
-
-                var data = await sender.Send(new GetClientCompanies(new Criteria<Company>(skip, take, criteriaSort, criteriaFilter), User.GetId<long>()));
-                data.ThrowOnFail();
-
-                return data.Data;
-            }
-            catch (Exception e)
-            {
-                logger.LogError(e, e.Message);
-                throw;
-            }
-        }
-
-        [HttpGet]
-        [Route("list/providers")]
-        public async Task<ListData<CompanyInfo>> ProviderList(int skip = 0, int take = 100, string filters = null, string sorts = null)
-        {
-            try
-            {
-                if (skip < 0) skip = 0;
-                if (take > 1000) take = 1000;
-                if (skip > 1000) skip = 1000;
-                var criteriaFilter = CriteriaFilter.TryParse(filters);
-                var criteriaSort = CriteriaSort.TryParse(sorts);
-
-                var data = await sender.Send(new GetProviderCompanies(new Criteria<Company>(skip, take, criteriaSort, criteriaFilter), User.GetId<long>()));
                 data.ThrowOnFail();
 
                 return data.Data;
@@ -143,6 +96,83 @@ namespace WebLicense.Server.Controllers
             {
                 var data = await sender.Send(new DeleteCompany(id, User.GetId<long>()));
                 data.ThrowOnFail();
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region Lists
+
+        [HttpGet]
+        [Route("list")]
+        [Authorize(Roles = Roles.Admin)]
+        public async Task<ListData<CompanyInfo>> List(int skip = 0, int take = 100, string filters = null, string sorts = null)
+        {
+            try
+            {
+                if (skip < 0) skip = 0;
+                if (take > 1000) take = 1000;
+                if (skip > 1000) skip = 1000;
+                var criteriaFilter = CriteriaFilter.TryParse(filters);
+                var criteriaSort = CriteriaSort.TryParse(sorts);
+
+                var data = await sender.Send(new GetCompanies(new Criteria<Company>(skip, take, criteriaSort, criteriaFilter)));
+                data.ThrowOnFail();
+
+                return data.Data;
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("list/clients")]
+        public async Task<ListData<CompanyInfo>> ClientList(int skip = 0, int take = 100, string filters = null, string sorts = null)
+        {
+            try
+            {
+                if (skip < 0) skip = 0;
+                if (take > 1000) take = 1000;
+                if (skip > 1000) skip = 1000;
+                var criteriaFilter = CriteriaFilter.TryParse(filters);
+                var criteriaSort = CriteriaSort.TryParse(sorts);
+
+                var data = await sender.Send(new GetClientCompanies(new Criteria<Company>(skip, take, criteriaSort, criteriaFilter), User.GetId<long>()));
+                data.ThrowOnFail();
+
+                return data.Data;
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+                throw;
+            }
+        }
+
+        [HttpGet]
+        [Route("list/providers")]
+        public async Task<ListData<CompanyInfo>> ProviderList(int skip = 0, int take = 100, string filters = null, string sorts = null)
+        {
+            try
+            {
+                if (skip < 0) skip = 0;
+                if (take > 1000) take = 1000;
+                if (skip > 1000) skip = 1000;
+                var criteriaFilter = CriteriaFilter.TryParse(filters);
+                var criteriaSort = CriteriaSort.TryParse(sorts);
+
+                var data = await sender.Send(new GetProviderCompanies(new Criteria<Company>(skip, take, criteriaSort, criteriaFilter), User.GetId<long>()));
+                data.ThrowOnFail();
+
+                return data.Data;
             }
             catch (Exception e)
             {

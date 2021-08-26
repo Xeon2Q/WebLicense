@@ -56,7 +56,7 @@ namespace WebLicense.Client.Pages.Companies
         {
             try
             {
-                await Client.Post($"{Navigation.BaseUri}api/companies", info);
+                await Client.Patch($"{Navigation.BaseUri}api/companies", info);
 
                 Navigation.NavigateTo("/companies");
             }

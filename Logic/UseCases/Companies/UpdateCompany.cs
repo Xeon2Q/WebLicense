@@ -79,36 +79,91 @@ namespace WebLicense.Logic.UseCases.Companies
         {
             if (access.IsManagerAccess)
             {
-                if (info.Name != null && info.Name != model.Name) model.Name = info.Name;
-                if (info.Code != null && info.Code != model.Code) model.Code = info.Code;
-                if (info.ReferenceId != null && info.ReferenceId != model.ReferenceId) model.ReferenceId = info.ReferenceId;
-                if (info.Logo != null && info.Logo != model.Logo) model.Logo = info.Logo;
+                UpdateModelCore(model, info);
             }
 
             if (info.Settings?.ProviderCompanyId != null && (access.IsAdminAccess || access.EditSettingsAllowedId.Contains(info.Settings.ProviderCompanyId.Value)))
             {
                 var settings = model.Settings?.FirstOrDefault(q => q.ProviderCompanyId == info.Settings.ProviderCompanyId);
-                if (settings != null)
-                {
-                    if (info.Settings.MaxActiveLicensesCount.HasValue && info.Settings.MaxActiveLicensesCount != settings.MaxActiveLicensesCount) settings.MaxActiveLicensesCount = info.Settings.MaxActiveLicensesCount.Value;
-                    if (info.Settings.MaxTotalLicensesCount.HasValue && info.Settings.MaxTotalLicensesCount != settings.MaxTotalLicensesCount) settings.MaxTotalLicensesCount = info.Settings.MaxTotalLicensesCount.Value;
-                    if (info.Settings.CreateActiveLicenses.HasValue && info.Settings.CreateActiveLicenses != settings.CreateActiveLicenses) settings.CreateActiveLicenses = info.Settings.CreateActiveLicenses.Value;
-                    if (info.Settings.CanActivateLicenses.HasValue && info.Settings.CanActivateLicenses != settings.CanActivateLicenses) settings.CanActivateLicenses = info.Settings.CanActivateLicenses.Value;
-                    if (info.Settings.CanDeactivateLicenses.HasValue && info.Settings.CanDeactivateLicenses != settings.CanDeactivateLicenses) settings.CanDeactivateLicenses = info.Settings.CanDeactivateLicenses.Value;
-                    if (info.Settings.CanDeleteLicenses.HasValue && info.Settings.CanDeleteLicenses != settings.CanDeleteLicenses) settings.CanDeleteLicenses = info.Settings.CanDeleteLicenses.Value;
-                    if (info.Settings.CanActivateMachines.HasValue && info.Settings.CanActivateMachines != settings.CanActivateMachines) settings.CanActivateMachines = info.Settings.CanActivateMachines.Value;
-                    if (info.Settings.CanDeactivateMachines.HasValue && info.Settings.CanDeactivateMachines != settings.CanDeactivateMachines) settings.CanDeactivateMachines = info.Settings.CanDeactivateMachines.Value;
-                    if (info.Settings.CanDeleteMachines.HasValue && info.Settings.CanDeleteMachines != settings.CanDeleteMachines) settings.CanDeleteMachines = info.Settings.CanDeleteMachines.Value;
-                    if (info.Settings.NotificationsEmail != null && info.Settings.NotificationsEmail != settings.NotificationsEmail) settings.NotificationsEmail = !string.IsNullOrWhiteSpace(info.Settings.NotificationsEmail) ? info.Settings.NotificationsEmail.Trim() : null;
-                    if (info.Settings.ReceiveNotifications.HasValue && info.Settings.ReceiveNotifications != settings.ReceiveNotifications) settings.ReceiveNotifications = info.Settings.ReceiveNotifications.Value;
-                }
+                UpdateModelSettings(settings, info.Settings);
             }
 
             if (info.Users != null && access.IsManagerAccess)
             {
+                UpdateModelUsers(model, info);
+
+                // users
                 model.CompanyUsers = model.CompanyUsers?.Where(q => info.Users.Any(w => w.Id == q.UserId)).ToList() ?? new List<CompanyUser>();
                 
                 GetNewUsers(info.Users, model.CompanyUsers.Select(q => q.UserId)).ForEach(q => model.CompanyUsers.Add(new CompanyUser {CompanyId = model.Id, UserId = q}));
+            }
+        }
+
+        private void UpdateModelCore(Company model, CompanyInfo info)
+        {
+            if (info.Name != null && info.Name != model.Name) model.Name = info.Name;
+            if (info.Code != null && info.Code != model.Code) model.Code = info.Code;
+            if (info.ReferenceId != null && info.ReferenceId != model.ReferenceId) model.ReferenceId = info.ReferenceId;
+            if (info.Logo != null && info.Logo != model.Logo) model.Logo = info.Logo;
+        }
+
+        private void UpdateModelSettings(CompanySettings model, CompanySettingsInfo info)
+        {
+            if (model == null || info == null) return;
+
+            if (info.MaxActiveLicensesCount.HasValue && info.MaxActiveLicensesCount != model.MaxActiveLicensesCount) model.MaxActiveLicensesCount = info.MaxActiveLicensesCount.Value;
+            if (info.MaxTotalLicensesCount.HasValue && info.MaxTotalLicensesCount != model.MaxTotalLicensesCount) model.MaxTotalLicensesCount = info.MaxTotalLicensesCount.Value;
+            if (info.CreateActiveLicenses.HasValue && info.CreateActiveLicenses != model.CreateActiveLicenses) model.CreateActiveLicenses = info.CreateActiveLicenses.Value;
+            if (info.CanActivateLicenses.HasValue && info.CanActivateLicenses != model.CanActivateLicenses) model.CanActivateLicenses = info.CanActivateLicenses.Value;
+            if (info.CanDeactivateLicenses.HasValue && info.CanDeactivateLicenses != model.CanDeactivateLicenses) model.CanDeactivateLicenses = info.CanDeactivateLicenses.Value;
+            if (info.CanDeleteLicenses.HasValue && info.CanDeleteLicenses != model.CanDeleteLicenses) model.CanDeleteLicenses = info.CanDeleteLicenses.Value;
+            if (info.CanActivateMachines.HasValue && info.CanActivateMachines != model.CanActivateMachines) model.CanActivateMachines = info.CanActivateMachines.Value;
+            if (info.CanDeactivateMachines.HasValue && info.CanDeactivateMachines != model.CanDeactivateMachines) model.CanDeactivateMachines = info.CanDeactivateMachines.Value;
+            if (info.CanDeleteMachines.HasValue && info.CanDeleteMachines != model.CanDeleteMachines) model.CanDeleteMachines = info.CanDeleteMachines.Value;
+            if (info.NotificationsEmail != null && info.NotificationsEmail != model.NotificationsEmail) model.NotificationsEmail = !string.IsNullOrWhiteSpace(info.NotificationsEmail) ? info.NotificationsEmail.Trim() : null;
+            if (info.ReceiveNotifications.HasValue && info.ReceiveNotifications != model.ReceiveNotifications) model.ReceiveNotifications = info.ReceiveNotifications.Value;
+        }
+
+        private void UpdateModelUsers(Company model, CompanyInfo info)
+        {
+            if (info?.Users == null) return;
+
+            model.CompanyUsers ??= new List<CompanyUser>();
+
+            // remove users
+            var removed = model.CompanyUsers.Where(q => info.Users.All(w => w.Id != q.UserId)).ToArray();
+            if (removed.Any()) db.Set<CompanyUser>().RemoveRange(removed);
+
+            // update users
+            foreach (var infoUser in info.Users.Where(q => !q.IsInvite && q.Id.HasValue))
+            {
+                var modelUser = model.CompanyUsers.FirstOrDefault(q => q.UserId == infoUser.Id);
+                if (modelUser == null) continue;
+
+                if (infoUser.IsManager.HasValue) modelUser.IsManager = infoUser.IsManager.Value;
+            }
+        }
+
+        private void UpdateModelInvites(Company model, CompanyInfo info)
+        {
+            if (info?.Users == null) return;
+
+            model.CompanyUserInvites ??= new List<CompanyUserInvite>();
+
+            // remove users
+            var removed = model.CompanyUserInvites.Where(q => info.Users.All(w => w.IsInvite && w.Email != q.Email)).ToArray();
+            if (removed.Any()) db.Set<CompanyUserInvite>().RemoveRange(removed);
+
+            // add invites
+            var added = info.Users.Where(q => q.IsInvite && !q.Id.HasValue).Select(q => new CompanyUserInvite{}).ToArray();
+
+            // update users
+            foreach (var infoUser in info.Users.Where(q => !q.IsInvite && q.Id.HasValue))
+            {
+                var modelUser = model.CompanyUsers.FirstOrDefault(q => q.UserId == infoUser.Id);
+                if (modelUser == null) continue;
+
+                if (infoUser.IsManager.HasValue) modelUser.IsManager = infoUser.IsManager.Value;
             }
         }
 

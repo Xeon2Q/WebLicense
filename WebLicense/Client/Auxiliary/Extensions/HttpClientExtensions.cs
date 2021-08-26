@@ -79,5 +79,32 @@ namespace WebLicense.Client.Auxiliary.Extensions
         }
 
         #endregion
+
+        #region Extensions- PATCH
+
+        public static async Task Patch(this HttpClient client, string absoluteUrl, object content, params (string paramName, object paramValue)[] parameters)
+        {
+            var query = ToQueryString(parameters);
+            var message = new HttpRequestMessage(HttpMethod.Patch, $"{absoluteUrl}{(string.IsNullOrWhiteSpace(query) ? "" : $"?{query}")}");
+            if (content != null) message.Content = new StringContent(ToJson(content), Encoding.UTF8, "application/json");
+
+            var response = await client.SendAsync(message);
+            response.EnsureSuccessStatusCode();
+        }
+
+        public static async Task<T> PatchJson<T>(this HttpClient client, string absoluteUrl, object content, params (string paramName, object paramValue)[] parameters)
+        {
+            var query = ToQueryString(parameters);
+            var message = new HttpRequestMessage(HttpMethod.Patch, $"{absoluteUrl}{(string.IsNullOrWhiteSpace(query) ? "" : $"?{query}")}");
+            if (content != null) message.Content = new StringContent(ToJson(content), Encoding.UTF8, "application/json");
+
+            var response = await client.SendAsync(message);
+            response.EnsureSuccessStatusCode();
+
+            var json = await response.Content.ReadAsStringAsync();
+            return FromJson<T>(json);
+        }
+
+        #endregion
     }
 }
