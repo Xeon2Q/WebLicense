@@ -58,7 +58,7 @@ namespace WebLicense.Logic.UseCases.Companies
                 var model = await db.Set<Company>().AsTracking().Where(q => q.Id == info.Id.Value)
                                     .Include(q => q.Settings)
                                     .Include(q => q.ClientSettings)
-                                    .Include(q => q.CompanyUsers).FirstOrDefaultAsync(cancellationToken);
+                                    .Include(q => q.CompanyUsers).ThenInclude(q => q.User).FirstOrDefaultAsync(cancellationToken);
                 if (model == null) throw new CaseException(Exceptions.Company_NotFoundOrDeleted, "Company not found or deleted");
 
                 UpdateModel(model, info, access);
@@ -91,11 +91,7 @@ namespace WebLicense.Logic.UseCases.Companies
             if (info.Users != null && access.IsManagerAccess)
             {
                 UpdateModelUsers(model, info);
-
-                // users
-                model.CompanyUsers = model.CompanyUsers?.Where(q => info.Users.Any(w => w.Id == q.UserId)).ToList() ?? new List<CompanyUser>();
-                
-                GetNewUsers(info.Users, model.CompanyUsers.Select(q => q.UserId)).ForEach(q => model.CompanyUsers.Add(new CompanyUser {CompanyId = model.Id, UserId = q}));
+                UpdateModelInvites(model, info);
             }
         }
 
@@ -142,6 +138,8 @@ namespace WebLicense.Logic.UseCases.Companies
 
                 if (infoUser.IsManager.HasValue) modelUser.IsManager = infoUser.IsManager.Value;
             }
+
+            // add new users functionality is not supported, because new users should be invited
         }
 
         private void UpdateModelInvites(Company model, CompanyInfo info)
@@ -151,31 +149,27 @@ namespace WebLicense.Logic.UseCases.Companies
             model.CompanyUserInvites ??= new List<CompanyUserInvite>();
 
             // remove users
-            var removed = model.CompanyUserInvites.Where(q => info.Users.All(w => w.IsInvite && w.Email != q.Email)).ToArray();
+            var removed = model.CompanyUserInvites.Where(q => info.Users.Where(w => w.IsInvite).All(w => w.Email != q.Email)).ToArray();
             if (removed.Any()) db.Set<CompanyUserInvite>().RemoveRange(removed);
 
-            // add invites
-            var added = info.Users.Where(q => q.IsInvite && !q.Id.HasValue).Select(q => new CompanyUserInvite{}).ToArray();
-
             // update users
-            foreach (var infoUser in info.Users.Where(q => !q.IsInvite && q.Id.HasValue))
+            foreach (var infoUser in info.Users.Where(q => q.IsInvite && q.Id.HasValue))
             {
                 var modelUser = model.CompanyUsers.FirstOrDefault(q => q.UserId == infoUser.Id);
                 if (modelUser == null) continue;
 
                 if (infoUser.IsManager.HasValue) modelUser.IsManager = infoUser.IsManager.Value;
             }
-        }
 
-        private List<long> GetNewUsers(IEnumerable<CompanyUserInfo> changedUsers, IEnumerable<long> existingUsers)
-        {
-            var cId = changedUsers.Where(q => q.Id.HasValue).Select(q => q.Id.Value).Distinct().ToList();
-            if (!cId.Any()) return new List<long>(0);
+            // add invites
+            var added = info.Users.Where(q => q.IsInvite && !q.Id.HasValue).GroupBy(q => q.Email.ToLower()).Select(q => q.FirstOrDefault(w => w.IsManager == true) ?? q.FirstOrDefault()).ToArray();
+            foreach (var infoUser in added)
+            {
+                var modelUser = model.CompanyUsers.FirstOrDefault(q => q.User != null && string.Equals(q.User.Email, infoUser.Email, StringComparison.OrdinalIgnoreCase));
+                if (modelUser != null) continue;
 
-            var eId = existingUsers.ToList();
-            if (!eId.Any()) return cId;
-
-            return cId.Where(q => !eId.Contains(q)).ToList();
+                model.CompanyUserInvites.Add(new CompanyUserInvite{Company = model, Email = infoUser.Email, IsManager = infoUser.IsManager == true, Processed = false});
+            }
         }
 
         #endregion

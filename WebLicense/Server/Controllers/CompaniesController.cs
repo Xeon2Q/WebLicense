@@ -88,7 +88,6 @@ namespace WebLicense.Server.Controllers
             }
         }
 
-        [AllowAnonymous]
         [HttpDelete]
         public async Task Delete(int id)
         {
