@@ -3,7 +3,7 @@
     public static class Roles
     {
         // global administrator role
-        public const long AdminId = 9223372036854775807;
+        public const long AdminId = 9223372036854775807; // long.MaxValue
         public const string Admin = "Admin";
         public const string AdminNormalized = "ADMIN";
 

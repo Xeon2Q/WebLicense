@@ -8,6 +8,7 @@ namespace WebLicense.Access.Configuration
 {
     public sealed class UserConfiguration : IEntityTypeConfiguration<User>
     {
+        // BUG: it is here for testing purpose only
         private const string InitialAdminPassword = "web-License?97Y13";
 
         public void Configure(EntityTypeBuilder<User> builder)

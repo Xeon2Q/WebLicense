@@ -12,10 +12,9 @@ using System.Data.Common;
 using System.Linq;
 using System.Threading;
 using WebLicense.Access;
-using WebLicense.Core.Models.Customers;
 using WebLicense.Core.Models.Identity;
 using WebLicense.Logic.Auxiliary;
-using WebLicense.Logic.UseCases.Customers;
+using WebLicense.Logic.UseCases.Companies;
 using Xunit.Abstractions;
 
 namespace UnitTests.Auxiliary
@@ -105,13 +104,13 @@ namespace UnitTests.Auxiliary
             db.SaveChanges();
 
             // seed customers
-            var customers = new List<Customer>
-            {
-                new(){Id = 100, Name = "Customer 100", Code = "CUS-100", ReferenceId = "CUS-100-REF", Settings = new CustomerSettings(), CustomerUsers = new List<CustomerUser>{new(){UserId = 100}}, CustomerManagers = new List<CustomerManager>{new(){UserId = 100}}},
-                new(){Id = 101, Name = "Customer 101", Code = "CUS-101", ReferenceId = "CUS-101-REF", Settings = new CustomerSettings(), CustomerUsers = new List<CustomerUser>{new(){UserId = 101}}, CustomerManagers = new List<CustomerManager>{new(){UserId = 101}}},
-                new(){Id = 102, Name = "Customer 102", Code = "CUS-102", ReferenceId = "CUS-102-REF", Settings = new CustomerSettings(), CustomerUsers = new List<CustomerUser>{new(){UserId = 102}}, CustomerManagers = new List<CustomerManager>{new(){UserId = 102}}}
-            };
-            db.Customers.AddRange(customers);
+            //var customers = new List<Customer>
+            //{
+            //    new(){Id = 100, Name = "Customer 100", Code = "CUS-100", ReferenceId = "CUS-100-REF", Settings = new CustomerSettings(), CustomerUsers = new List<CustomerUser>{new(){UserId = 100}}, CustomerManagers = new List<CustomerManager>{new(){UserId = 100}}},
+            //    new(){Id = 101, Name = "Customer 101", Code = "CUS-101", ReferenceId = "CUS-101-REF", Settings = new CustomerSettings(), CustomerUsers = new List<CustomerUser>{new(){UserId = 101}}, CustomerManagers = new List<CustomerManager>{new(){UserId = 101}}},
+            //    new(){Id = 102, Name = "Customer 102", Code = "CUS-102", ReferenceId = "CUS-102-REF", Settings = new CustomerSettings(), CustomerUsers = new List<CustomerUser>{new(){UserId = 102}}, CustomerManagers = new List<CustomerManager>{new(){UserId = 102}}}
+            //};
+            //db.Customers.AddRange(customers);
             db.SaveChanges();
         }
 
@@ -126,16 +125,16 @@ namespace UnitTests.Auxiliary
             var mock = new Mock<IMediator>();
 
             // customers
-            mock.Setup(q => q.Send(It.IsAny<GetCustomer>(), It.IsAny<CancellationToken>()))
-                .Returns((GetCustomer request, CancellationToken cancellationToken) => new GetCustomerHandler(db).Handle(request, cancellationToken));
-            mock.Setup(q => q.Send(It.IsAny<GetCompanies>(), It.IsAny<CancellationToken>()))
-                .Returns((GetCompanies request, CancellationToken cancellationToken) => new GetCustomersHandler(db).Handle(request, cancellationToken));
-            mock.Setup(q => q.Send(It.IsAny<AddCustomer>(), It.IsAny<CancellationToken>()))
-                .Returns((AddCustomer request, CancellationToken cancellationToken) => new AddCustomerHandler(db, mock.Object).Handle(request, cancellationToken));
-            mock.Setup(q => q.Send(It.IsAny<UpdateCompany>(), It.IsAny<CancellationToken>()))
-                .Returns((UpdateCompany request, CancellationToken cancellationToken) => new UpdateCustomerHandler(db, mock.Object).Handle(request, cancellationToken));
-            mock.Setup(q => q.Send(It.IsAny<DeleteCompany>(), It.IsAny<CancellationToken>()))
-                .Returns((DeleteCompany request, CancellationToken cancellationToken) => new DeleteCustomerHandler(db).Handle(request, cancellationToken));
+            //mock.Setup(q => q.Send(It.IsAny<GetCustomer>(), It.IsAny<CancellationToken>()))
+            //    .Returns((GetCustomer request, CancellationToken cancellationToken) => new GetCustomerHandler(db).Handle(request, cancellationToken));
+            //mock.Setup(q => q.Send(It.IsAny<GetCompanies>(), It.IsAny<CancellationToken>()))
+            //    .Returns((GetCompanies request, CancellationToken cancellationToken) => new GetCustomersHandler(db).Handle(request, cancellationToken));
+            //mock.Setup(q => q.Send(It.IsAny<AddCustomer>(), It.IsAny<CancellationToken>()))
+            //    .Returns((AddCustomer request, CancellationToken cancellationToken) => new AddCustomerHandler(db, mock.Object).Handle(request, cancellationToken));
+            //mock.Setup(q => q.Send(It.IsAny<UpdateCompany>(), It.IsAny<CancellationToken>()))
+            //    .Returns((UpdateCompany request, CancellationToken cancellationToken) => new UpdateCustomerHandler(db, mock.Object).Handle(request, cancellationToken));
+            //mock.Setup(q => q.Send(It.IsAny<DeleteCompany>(), It.IsAny<CancellationToken>()))
+            //    .Returns((DeleteCompany request, CancellationToken cancellationToken) => new DeleteCustomerHandler(db).Handle(request, cancellationToken));
 
             return mock.Object;
         }

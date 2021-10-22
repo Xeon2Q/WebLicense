@@ -58,7 +58,8 @@ namespace WebLicense.Logic.UseCases.Companies
                 var model = await db.Set<Company>().AsTracking().Where(q => q.Id == info.Id.Value)
                                     .Include(q => q.Settings)
                                     .Include(q => q.ClientSettings)
-                                    .Include(q => q.CompanyUsers).ThenInclude(q => q.User).FirstOrDefaultAsync(cancellationToken);
+                                    .Include(q => q.CompanyUsers).ThenInclude(q => q.User)
+                                    .Include(q => q.CompanyUserInvites).FirstOrDefaultAsync(cancellationToken);
                 if (model == null) throw new CaseException(Exceptions.Company_NotFoundOrDeleted, "Company not found or deleted");
 
                 UpdateModel(model, info, access);
@@ -149,11 +150,11 @@ namespace WebLicense.Logic.UseCases.Companies
             model.CompanyUserInvites ??= new List<CompanyUserInvite>();
 
             // remove users
-            var removed = model.CompanyUserInvites.Where(q => info.Users.Where(w => w.IsInvite).All(w => w.Email != q.Email)).ToArray();
+            var removed = model.CompanyUserInvites.Where(q => !info.Users.Any(w => w.IsInvite && string.Equals(w.Email, q.Email, StringComparison.OrdinalIgnoreCase))).ToArray();
             if (removed.Any()) db.Set<CompanyUserInvite>().RemoveRange(removed);
 
             // update users
-            foreach (var infoUser in info.Users.Where(q => q.IsInvite && q.Id.HasValue))
+            foreach (var infoUser in info.Users.Where(q => q.IsInvite && q.Id > 0))
             {
                 var modelUser = model.CompanyUsers.FirstOrDefault(q => q.UserId == infoUser.Id);
                 if (modelUser == null) continue;
@@ -162,7 +163,7 @@ namespace WebLicense.Logic.UseCases.Companies
             }
 
             // add invites
-            var added = info.Users.Where(q => q.IsInvite && !q.Id.HasValue).GroupBy(q => q.Email.ToLower()).Select(q => q.FirstOrDefault(w => w.IsManager == true) ?? q.FirstOrDefault()).ToArray();
+            var added = info.Users.Where(q => q.IsInvite && (!q.Id.HasValue || q.Id < 1)).GroupBy(q => q.Email.ToLower()).Select(q => q.FirstOrDefault(w => w.IsManager == true) ?? q.FirstOrDefault()).ToArray();
             foreach (var infoUser in added)
             {
                 var modelUser = model.CompanyUsers.FirstOrDefault(q => q.User != null && string.Equals(q.User.Email, infoUser.Email, StringComparison.OrdinalIgnoreCase));
