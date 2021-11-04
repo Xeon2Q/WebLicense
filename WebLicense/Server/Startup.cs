@@ -11,12 +11,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Security.Claims;
-using IdentityServer4.Configuration;
 using WebLicense.Access;
 using WebLicense.Core.Auxiliary;
 using WebLicense.Core.Models.Identity;
@@ -74,7 +76,13 @@ namespace WebLicense.Server
             services.AddControllersWithViews();
             services.AddRazorPages();
 
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(options =>
+            {
+                // Set the comments path for the Swagger JSON and UI.
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                options.IncludeXmlComments(xmlPath);
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
